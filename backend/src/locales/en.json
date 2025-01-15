@@ -35,5 +35,11 @@
     "ADD_AIRTABLE_CONNECTION_FAILURE": "Error while adding airtable connection.",
     "GET_AIRTABLE_CONNECTIONS_SUCCESS": "Airtable connections fetched successfully.",
     "GET_AIRTABLE_CONNECTIONS_FAILURE": "Error while fetching airtable connections."
+  },
+  "SYNC_MAPPING": {
+    "ADD_SYNC_MAPPING_SUCCESS": "Sync mapping added successfully.",
+    "ADD_SYNC_MAPPING_ERROR": "Error while adding sync mapping.",
+    "GET_SYNC_MAPPINGS_SUCCESS": "Sync mappings fetched successfully.",
+    "GET_SYNC_MAPPINGS_ERROR": "Error while fetching sync mappings."
   }
 }
