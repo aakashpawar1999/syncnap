@@ -24,6 +24,9 @@ export class SyncMappingService {
       const userDataFromDb = await this.prisma.user.findUnique({
         where: { email: userData.email },
       });
+      if (!userDataFromDb) {
+        return 'ERROR';
+      }
 
       const mapping = await this.prisma.syncMapping.create({
         data: {
@@ -57,6 +60,9 @@ export class SyncMappingService {
       const userDataFromDb = await this.prisma.user.findUnique({
         where: { email: userData.email },
       });
+      if (!userDataFromDb) {
+        return 'ERROR';
+      }
 
       const mappings = await this.prisma.syncMapping.findMany({
         where: { userId: userDataFromDb.id },
