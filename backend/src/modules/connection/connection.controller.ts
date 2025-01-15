@@ -6,10 +6,17 @@ import {
   UseGuards,
   Version,
   HttpCode,
+  Param,
 } from '@nestjs/common';
 import { ConnectionService } from './connection.service';
 import { AuthGuard } from 'src/common/guards/auth/auth.guard';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { STATUS_CODES } from 'src/common/status-codes';
 import { loadMessages } from 'src/utils/load-messages.util';
 import { AddSupabaseConnectionDto } from './dto';
@@ -90,6 +97,44 @@ export class ConnectionController {
     }
   }
 
+  @Get('supabase/tables')
+  @Version('1')
+  @HttpCode(STATUS_CODES.OK.code)
+  @ApiOperation({ summary: 'Get supabase tables' })
+  @ApiResponse({
+    status: STATUS_CODES.OK.code,
+    description: MESSAGES.CONNECTION.GET_SUPABASE_TABLES_SUCCESS,
+  })
+  @ApiResponse({
+    status: STATUS_CODES.BAD_REQUEST.code,
+    description: MESSAGES.CONNECTION.GET_SUPABASE_TABLES_FAILURE,
+  })
+  @ApiParam({
+    name: 'supabaseConnectionId',
+    type: String,
+    description: 'Supabase connection ID',
+    required: true,
+  })
+  async getSupabaseTables(
+    @Param('supabaseConnectionId') supabaseConnectionId: string,
+  ) {
+    const getSupabaseTables: any =
+      await this.connectionService.getSupabaseTables(supabaseConnectionId);
+
+    if (getSupabaseTables) {
+      return {
+        ...STATUS_CODES.OK,
+        data: getSupabaseTables || null,
+        message: MESSAGES.CONNECTION.GET_SUPABASE_TABLES_SUCCESS,
+      };
+    } else {
+      return {
+        ...STATUS_CODES.BAD_REQUEST,
+        message: MESSAGES.CONNECTION.GET_SUPABASE_TABLES_FAILURE,
+      };
+    }
+  }
+
   @Post('airtable')
   @Version('1')
   @HttpCode(STATUS_CODES.OK.code)
@@ -149,6 +194,44 @@ export class ConnectionController {
       return {
         ...STATUS_CODES.BAD_REQUEST,
         message: MESSAGES.CONNECTION.GET_AIRTABLE_CONNECTIONS_FAILURE,
+      };
+    }
+  }
+
+  @Get('airtable/tables')
+  @Version('1')
+  @HttpCode(STATUS_CODES.OK.code)
+  @ApiOperation({ summary: 'Get airtable tables' })
+  @ApiResponse({
+    status: STATUS_CODES.OK.code,
+    description: MESSAGES.CONNECTION.GET_AIRTABLE_TABLES_SUCCESS,
+  })
+  @ApiResponse({
+    status: STATUS_CODES.BAD_REQUEST.code,
+    description: MESSAGES.CONNECTION.GET_AIRTABLE_TABLES_FAILURE,
+  })
+  @ApiParam({
+    name: 'airtableConnectionId',
+    type: String,
+    description: 'Airtable connection ID',
+    required: true,
+  })
+  async getAirtableTables(
+    @Param('airtableConnectionId') airtableConnectionId: string,
+  ) {
+    const getAirtableTables: any =
+      await this.connectionService.getAirtableTables(airtableConnectionId);
+
+    if (getAirtableTables) {
+      return {
+        ...STATUS_CODES.OK,
+        data: getAirtableTables || null,
+        message: MESSAGES.CONNECTION.GET_AIRTABLE_TABLES_SUCCESS,
+      };
+    } else {
+      return {
+        ...STATUS_CODES.BAD_REQUEST,
+        message: MESSAGES.CONNECTION.GET_AIRTABLE_TABLES_FAILURE,
       };
     }
   }

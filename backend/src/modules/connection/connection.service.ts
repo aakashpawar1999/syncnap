@@ -1,9 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { UserService } from '../user/user.service';
+import { createClient } from '@supabase/supabase-js';
+import axios from 'axios';
 
 @Injectable()
 export class ConnectionService {
+  private readonly AirtableTablesUrl = (baseId: string) =>
+    `https://api.airtable.com/v0/meta/bases/${baseId}/tables`;
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly userService: UserService,
@@ -59,12 +64,45 @@ export class ConnectionService {
         {
           where: { userId: userDataFromDb.id },
           select: {
-            projectUrl: true,
-            anonApiKey: true,
+            id: true,
           },
         },
       );
       return { data: supabaseConnections };
+    } catch (error) {
+      return 'ERROR';
+    }
+  }
+
+  async getSupabaseTables(supabaseConnectionId: string) {
+    try {
+      const supabaseConnection =
+        await this.prisma.supabaseConnection.findUnique({
+          where: { id: supabaseConnectionId },
+          select: {
+            projectUrl: true,
+            anonApiKey: true,
+          },
+        });
+
+      if (!supabaseConnection) {
+        return 'ERROR';
+      }
+
+      const supabase = createClient(
+        supabaseConnection.projectUrl,
+        supabaseConnection.anonApiKey,
+      );
+
+      const { data: tables, error } = await supabase
+        .from('information_schema.tables')
+        .select('*');
+
+      if (error) {
+        return 'ERROR';
+      }
+
+      return { data: tables };
     } catch (error) {
       return 'ERROR';
     }
@@ -87,8 +125,7 @@ export class ConnectionService {
       const airtableConnection = await this.prisma.airtableConnection.create({
         data: { userId: userDataFromDb.id, accessToken, baseId },
         select: {
-          accessToken: true,
-          baseId: true,
+          id: true,
         },
       });
 
@@ -120,12 +157,43 @@ export class ConnectionService {
         {
           where: { userId: userDataFromDb.id },
           select: {
-            accessToken: true,
-            baseId: true,
+            id: true,
           },
         },
       );
       return { data: airtableConnections };
+    } catch (error) {
+      return 'ERROR';
+    }
+  }
+
+  async getAirtableTables(airtableConnectionId: string) {
+    try {
+      const airtableConnection =
+        await this.prisma.airtableConnection.findUnique({
+          where: { id: airtableConnectionId },
+          select: {
+            accessToken: true,
+            baseId: true,
+          },
+        });
+
+      if (!airtableConnection) {
+        return 'ERROR';
+      }
+
+      const headers = {
+        Authorization: `Bearer ${airtableConnection.accessToken}`,
+      };
+      const baseId = airtableConnection.baseId;
+      const tables = await axios.get(this.AirtableTablesUrl(baseId), {
+        headers,
+      });
+
+      return {
+        baseId: baseId,
+        tables: tables.data.tables,
+      };
     } catch (error) {
       return 'ERROR';
     }

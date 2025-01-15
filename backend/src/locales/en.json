@@ -34,7 +34,11 @@
     "ADD_AIRTABLE_CONNECTION_SUCCESS": "Airtable connection added successfully.",
     "ADD_AIRTABLE_CONNECTION_FAILURE": "Error while adding airtable connection.",
     "GET_AIRTABLE_CONNECTIONS_SUCCESS": "Airtable connections fetched successfully.",
-    "GET_AIRTABLE_CONNECTIONS_FAILURE": "Error while fetching airtable connections."
+    "GET_AIRTABLE_CONNECTIONS_FAILURE": "Error while fetching airtable connections.",
+    "GET_SUPABASE_TABLES_SUCCESS": "Supabase tables fetched successfully.",
+    "GET_SUPABASE_TABLES_FAILURE": "Error while fetching supabase tables.",
+    "GET_AIRTABLE_TABLES_SUCCESS": "Airtable tables fetched successfully.",
+    "GET_AIRTABLE_TABLES_FAILURE": "Error while fetching airtable tables."
   },
   "SYNC_MAPPING": {
     "ADD_SYNC_MAPPING_SUCCESS": "Sync mapping added successfully.",
