@@ -19,6 +19,9 @@ export class ConnectionService {
       const userDataFromDb = await this.prisma.user.findUnique({
         where: { email: userData.email },
       });
+      if (!userDataFromDb) {
+        return 'ERROR';
+      }
 
       const supabaseConnection = await this.prisma.supabaseConnection.create({
         data: { userId: userDataFromDb.id, projectUrl, anonApiKey },
@@ -48,6 +51,9 @@ export class ConnectionService {
       const userDataFromDb = await this.prisma.user.findUnique({
         where: { email: userData.email },
       });
+      if (!userDataFromDb) {
+        return 'ERROR';
+      }
 
       const supabaseConnections = await this.prisma.supabaseConnection.findMany(
         {
@@ -74,6 +80,9 @@ export class ConnectionService {
       const userDataFromDb = await this.prisma.user.findUnique({
         where: { email: userData.email },
       });
+      if (!userDataFromDb) {
+        return 'ERROR';
+      }
 
       const airtableConnection = await this.prisma.airtableConnection.create({
         data: { userId: userDataFromDb.id, accessToken, baseId },
@@ -103,6 +112,9 @@ export class ConnectionService {
       const userDataFromDb = await this.prisma.user.findUnique({
         where: { email: userData.email },
       });
+      if (!userDataFromDb) {
+        return 'ERROR';
+      }
 
       const airtableConnections = await this.prisma.airtableConnection.findMany(
         {

@@ -9,9 +9,10 @@ import {
 } from '@nestjs/common';
 import { ConnectionService } from './connection.service';
 import { AuthGuard } from 'src/common/guards/auth/auth.guard';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { STATUS_CODES } from 'src/common/status-codes';
 import { loadMessages } from 'src/utils/load-messages.util';
+import { AddSupabaseConnectionDto } from './dto';
 
 const MESSAGES = loadMessages();
 
@@ -33,7 +34,12 @@ export class ConnectionController {
     status: STATUS_CODES.BAD_REQUEST.code,
     description: MESSAGES.CONNECTION.ADD_SUPABASE_CONNECTION_FAILURE,
   })
-  async addSupabaseConnection(@Body() body: any) {
+  @ApiBody({
+    type: AddSupabaseConnectionDto,
+    description: 'Add supabase connection',
+    required: true,
+  })
+  async addSupabaseConnection(@Body() body: AddSupabaseConnectionDto) {
     const addSupabaseConnection: any =
       await this.connectionService.addSupabaseConnection(
         body.projectUrl,
