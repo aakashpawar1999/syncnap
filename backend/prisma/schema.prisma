@@ -1,0 +1,75 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearchPostgres"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum SyncStatus {
+  SUCCESS
+  FAILURE
+}
+
+model User {
+  id                  String               @id @default(uuid())
+  name                String?
+  email               String               @unique
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  deletedAt           DateTime?
+  supabaseConnections SupabaseConnection[]
+  airtableConnections AirtableConnection[]
+  syncMappings        SyncMapping[]
+  syncLogs            SyncLog[]
+}
+
+model SupabaseConnection {
+  id          String        @id @default(uuid())
+  userId      String
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  anonApiKey  String
+  projectUrl  String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  deletedAt   DateTime?
+  SyncMapping SyncMapping[]
+}
+
+model AirtableConnection {
+  id          String        @id @default(uuid())
+  userId      String
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken String
+  baseId      String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  deletedAt   DateTime?
+  SyncMapping SyncMapping[]
+}
+
+model SyncMapping {
+  id                   String             @id @default(uuid())
+  userId               String
+  user                 User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  supabaseConnectionId String
+  supabaseConnections  SupabaseConnection @relation(fields: [supabaseConnectionId], references: [id])
+  airtableConnectionId String
+  airtableConnections  AirtableConnection @relation(fields: [airtableConnectionId], references: [id])
+  supabaseTable        String
+  airtableTable        String
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+  deletedAt            DateTime?
+}
+
+model SyncLog {
+  id        String     @id @default(uuid())
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status    SyncStatus
+  details   String?
+  createdAt DateTime   @default(now())
+}
