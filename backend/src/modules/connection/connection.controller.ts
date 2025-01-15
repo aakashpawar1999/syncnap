@@ -34,10 +34,24 @@ export class ConnectionController {
     description: MESSAGES.CONNECTION.ADD_SUPABASE_CONNECTION_FAILURE,
   })
   async addSupabaseConnection(@Body() body: any) {
-    return this.connectionService.addSupabaseConnection(
-      body.projectUrl,
-      body.anonApiKey,
-    );
+    const addSupabaseConnection: any =
+      await this.connectionService.addSupabaseConnection(
+        body.projectUrl,
+        body.anonApiKey,
+      );
+
+    if (addSupabaseConnection) {
+      return {
+        ...STATUS_CODES.OK,
+        data: addSupabaseConnection || null,
+        message: MESSAGES.CONNECTION.ADD_SUPABASE_CONNECTION_SUCCESS,
+      };
+    } else {
+      return {
+        ...STATUS_CODES.BAD_REQUEST,
+        message: MESSAGES.CONNECTION.ADD_SUPABASE_CONNECTION_FAILURE,
+      };
+    }
   }
 
   @Get('supabase')
@@ -53,7 +67,21 @@ export class ConnectionController {
     description: MESSAGES.CONNECTION.GET_SUPABASE_CONNECTIONS_FAILURE,
   })
   async getSupabaseConnections() {
-    return this.connectionService.getSupabaseConnections();
+    const getSupabaseConnections: any =
+      await this.connectionService.getSupabaseConnections();
+
+    if (getSupabaseConnections) {
+      return {
+        ...STATUS_CODES.OK,
+        data: getSupabaseConnections || null,
+        message: MESSAGES.CONNECTION.GET_SUPABASE_CONNECTIONS_SUCCESS,
+      };
+    } else {
+      return {
+        ...STATUS_CODES.BAD_REQUEST,
+        message: MESSAGES.CONNECTION.GET_SUPABASE_CONNECTIONS_FAILURE,
+      };
+    }
   }
 
   @Post('airtable')
@@ -69,10 +97,24 @@ export class ConnectionController {
     description: MESSAGES.CONNECTION.ADD_AIRTABLE_CONNECTION_FAILURE,
   })
   async addAirtableConnection(@Body() body: any) {
-    return this.connectionService.addAirtableConnection(
-      body.accessToken,
-      body.baseId,
-    );
+    const addAirtableConnection: any =
+      await this.connectionService.addAirtableConnection(
+        body.accessToken,
+        body.baseId,
+      );
+
+    if (addAirtableConnection) {
+      return {
+        ...STATUS_CODES.OK,
+        data: addAirtableConnection || null,
+        message: MESSAGES.CONNECTION.ADD_AIRTABLE_CONNECTION_SUCCESS,
+      };
+    } else {
+      return {
+        ...STATUS_CODES.BAD_REQUEST,
+        message: MESSAGES.CONNECTION.ADD_AIRTABLE_CONNECTION_FAILURE,
+      };
+    }
   }
 
   @Get('airtable')
@@ -88,6 +130,20 @@ export class ConnectionController {
     description: MESSAGES.CONNECTION.GET_AIRTABLE_CONNECTIONS_FAILURE,
   })
   async getAirtableConnections() {
-    return this.connectionService.getAirtableConnections();
+    const getAirtableConnections: any =
+      await this.connectionService.getAirtableConnections();
+
+    if (getAirtableConnections) {
+      return {
+        ...STATUS_CODES.OK,
+        data: getAirtableConnections || null,
+        message: MESSAGES.CONNECTION.GET_AIRTABLE_CONNECTIONS_SUCCESS,
+      };
+    } else {
+      return {
+        ...STATUS_CODES.BAD_REQUEST,
+        message: MESSAGES.CONNECTION.GET_AIRTABLE_CONNECTIONS_FAILURE,
+      };
+    }
   }
 }

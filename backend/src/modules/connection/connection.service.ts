@@ -12,13 +12,20 @@ export class ConnectionService {
   async addSupabaseConnection(projectUrl: string, anonApiKey: string) {
     try {
       const userData: any = await this.userService.getCurrentUser();
-
       if (!userData) {
         return 'ERROR';
       }
 
+      const userDataFromDb = await this.prisma.user.findUnique({
+        where: { email: userData.email },
+      });
+
       const supabaseConnection = await this.prisma.supabaseConnection.create({
-        data: { userId: userData.user.id, projectUrl, anonApiKey },
+        data: { userId: userDataFromDb.id, projectUrl, anonApiKey },
+        select: {
+          projectUrl: true,
+          anonApiKey: true,
+        },
       });
 
       if (supabaseConnection) {
@@ -38,9 +45,17 @@ export class ConnectionService {
         return 'ERROR';
       }
 
+      const userDataFromDb = await this.prisma.user.findUnique({
+        where: { email: userData.email },
+      });
+
       const supabaseConnections = await this.prisma.supabaseConnection.findMany(
         {
-          where: { userId: userData.id },
+          where: { userId: userDataFromDb.id },
+          select: {
+            projectUrl: true,
+            anonApiKey: true,
+          },
         },
       );
       return { data: supabaseConnections };
@@ -56,8 +71,16 @@ export class ConnectionService {
         return 'ERROR';
       }
 
+      const userDataFromDb = await this.prisma.user.findUnique({
+        where: { email: userData.email },
+      });
+
       const airtableConnection = await this.prisma.airtableConnection.create({
-        data: { userId: userData.id, accessToken, baseId },
+        data: { userId: userDataFromDb.id, accessToken, baseId },
+        select: {
+          accessToken: true,
+          baseId: true,
+        },
       });
 
       if (airtableConnection) {
@@ -77,9 +100,17 @@ export class ConnectionService {
         return 'ERROR';
       }
 
+      const userDataFromDb = await this.prisma.user.findUnique({
+        where: { email: userData.email },
+      });
+
       const airtableConnections = await this.prisma.airtableConnection.findMany(
         {
-          where: { userId: userData.id },
+          where: { userId: userDataFromDb.id },
+          select: {
+            accessToken: true,
+            baseId: true,
+          },
         },
       );
       return { data: airtableConnections };
