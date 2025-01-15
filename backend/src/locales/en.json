@@ -41,5 +41,11 @@
     "ADD_SYNC_MAPPING_ERROR": "Error while adding sync mapping.",
     "GET_SYNC_MAPPINGS_SUCCESS": "Sync mappings fetched successfully.",
     "GET_SYNC_MAPPINGS_ERROR": "Error while fetching sync mappings."
+  },
+  "SYNC_LOG": {
+    "CREATE_SYNC_LOG_SUCCESS": "Sync log created successfully.",
+    "CREATE_SYNC_LOG_ERROR": "Error while creating sync log.",
+    "GET_SYNC_LOGS_SUCCESS": "Sync logs fetched successfully.",
+    "GET_SYNC_LOGS_ERROR": "Error while fetching sync logs."
   }
 }
