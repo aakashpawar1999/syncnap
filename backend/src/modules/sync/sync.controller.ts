@@ -44,10 +44,9 @@ export class SyncController {
     const { mappingId } = body;
     const syncTable: any = await this.syncService.syncTable(mappingId);
 
-    if (syncTable) {
+    if (syncTable === 'SUCCESS') {
       return {
         ...STATUS_CODES.OK,
-        data: syncTable || null,
         message: MESSAGES.SYNC.SYNC_TABLE_SUCCESS,
       };
     } else {
