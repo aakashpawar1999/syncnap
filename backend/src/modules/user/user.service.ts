@@ -10,11 +10,14 @@ export class UserService {
   ) {}
 
   async getCurrentUser() {
-    const { data, error }: any = await this.supabase.auth.getSession();
+    const {
+      data: { user },
+      error,
+    }: any = await this.supabase.auth.getUser();
     if (error) {
       return 'ERROR';
     }
-    return data.user;
+    return user;
   }
 
   async deleteCurrentUser() {
