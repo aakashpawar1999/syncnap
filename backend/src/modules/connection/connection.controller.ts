@@ -6,20 +6,20 @@ import {
   UseGuards,
   Version,
   HttpCode,
-  Param,
+  Query,
 } from '@nestjs/common';
 import { ConnectionService } from './connection.service';
 import { AuthGuard } from 'src/common/guards/auth/auth.guard';
 import {
   ApiBody,
   ApiOperation,
-  ApiParam,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { STATUS_CODES } from 'src/common/status-codes';
 import { loadMessages } from 'src/utils/load-messages.util';
-import { AddSupabaseConnectionDto } from './dto';
+import { AddSupabaseConnectionDto, AddAirtableConnectionDto } from './dto';
 
 const MESSAGES = loadMessages();
 
@@ -53,10 +53,10 @@ export class ConnectionController {
         body.anonApiKey,
       );
 
-    if (addSupabaseConnection) {
+    if (addSupabaseConnection.data) {
       return {
         ...STATUS_CODES.OK,
-        data: addSupabaseConnection || null,
+        data: addSupabaseConnection.data || null,
         message: MESSAGES.CONNECTION.ADD_SUPABASE_CONNECTION_SUCCESS,
       };
     } else {
@@ -83,10 +83,10 @@ export class ConnectionController {
     const getSupabaseConnections: any =
       await this.connectionService.getSupabaseConnections();
 
-    if (getSupabaseConnections) {
+    if (getSupabaseConnections.data) {
       return {
         ...STATUS_CODES.OK,
-        data: getSupabaseConnections || null,
+        data: getSupabaseConnections.data || null,
         message: MESSAGES.CONNECTION.GET_SUPABASE_CONNECTIONS_SUCCESS,
       };
     } else {
@@ -109,22 +109,22 @@ export class ConnectionController {
     status: STATUS_CODES.BAD_REQUEST.code,
     description: MESSAGES.CONNECTION.GET_SUPABASE_TABLES_FAILURE,
   })
-  @ApiParam({
+  @ApiQuery({
     name: 'supabaseConnectionId',
     type: String,
     description: 'Supabase connection ID',
     required: true,
   })
   async getSupabaseTables(
-    @Param('supabaseConnectionId') supabaseConnectionId: string,
+    @Query('supabaseConnectionId') supabaseConnectionId: string,
   ) {
     const getSupabaseTables: any =
       await this.connectionService.getSupabaseTables(supabaseConnectionId);
 
-    if (getSupabaseTables) {
+    if (getSupabaseTables.data) {
       return {
         ...STATUS_CODES.OK,
-        data: getSupabaseTables || null,
+        data: getSupabaseTables.data || null,
         message: MESSAGES.CONNECTION.GET_SUPABASE_TABLES_SUCCESS,
       };
     } else {
@@ -147,17 +147,22 @@ export class ConnectionController {
     status: STATUS_CODES.BAD_REQUEST.code,
     description: MESSAGES.CONNECTION.ADD_AIRTABLE_CONNECTION_FAILURE,
   })
-  async addAirtableConnection(@Body() body: any) {
+  @ApiBody({
+    type: AddAirtableConnectionDto,
+    description: 'Add airtable connection',
+    required: true,
+  })
+  async addAirtableConnection(@Body() body: AddAirtableConnectionDto) {
     const addAirtableConnection: any =
       await this.connectionService.addAirtableConnection(
         body.accessToken,
         body.baseId,
       );
 
-    if (addAirtableConnection) {
+    if (addAirtableConnection.data) {
       return {
         ...STATUS_CODES.OK,
-        data: addAirtableConnection || null,
+        data: addAirtableConnection.data || null,
         message: MESSAGES.CONNECTION.ADD_AIRTABLE_CONNECTION_SUCCESS,
       };
     } else {
@@ -184,10 +189,10 @@ export class ConnectionController {
     const getAirtableConnections: any =
       await this.connectionService.getAirtableConnections();
 
-    if (getAirtableConnections) {
+    if (getAirtableConnections.data) {
       return {
         ...STATUS_CODES.OK,
-        data: getAirtableConnections || null,
+        data: getAirtableConnections.data || null,
         message: MESSAGES.CONNECTION.GET_AIRTABLE_CONNECTIONS_SUCCESS,
       };
     } else {
@@ -210,22 +215,22 @@ export class ConnectionController {
     status: STATUS_CODES.BAD_REQUEST.code,
     description: MESSAGES.CONNECTION.GET_AIRTABLE_TABLES_FAILURE,
   })
-  @ApiParam({
+  @ApiQuery({
     name: 'airtableConnectionId',
     type: String,
     description: 'Airtable connection ID',
     required: true,
   })
   async getAirtableTables(
-    @Param('airtableConnectionId') airtableConnectionId: string,
+    @Query('airtableConnectionId') airtableConnectionId: string,
   ) {
     const getAirtableTables: any =
       await this.connectionService.getAirtableTables(airtableConnectionId);
 
-    if (getAirtableTables) {
+    if (getAirtableTables.data) {
       return {
         ...STATUS_CODES.OK,
-        data: getAirtableTables || null,
+        data: getAirtableTables.data || null,
         message: MESSAGES.CONNECTION.GET_AIRTABLE_TABLES_SUCCESS,
       };
     } else {

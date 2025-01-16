@@ -31,8 +31,7 @@ export class ConnectionService {
       const supabaseConnection = await this.prisma.supabaseConnection.create({
         data: { userId: userDataFromDb.id, projectUrl, anonApiKey },
         select: {
-          projectUrl: true,
-          anonApiKey: true,
+          id: true,
         },
       });
 
@@ -94,9 +93,13 @@ export class ConnectionService {
         supabaseConnection.anonApiKey,
       );
 
-      const { data: tables, error } = await supabase
-        .from('information_schema.tables')
-        .select('*');
+      const { data: tables, error } = await supabase.rpc('execute_sql', {
+        sql: `
+          SELECT table_name 
+          FROM information_schema.tables 
+          WHERE table_schema = 'public' AND table_type = 'BASE TABLE';
+        `,
+      });
 
       if (error) {
         return 'ERROR';
@@ -177,7 +180,6 @@ export class ConnectionService {
             baseId: true,
           },
         });
-
       if (!airtableConnection) {
         return 'ERROR';
       }
@@ -189,10 +191,8 @@ export class ConnectionService {
       const tables = await axios.get(this.AirtableTablesUrl(baseId), {
         headers,
       });
-
       return {
-        baseId: baseId,
-        tables: tables.data.tables,
+        data: tables.data.tables,
       };
     } catch (error) {
       return 'ERROR';
