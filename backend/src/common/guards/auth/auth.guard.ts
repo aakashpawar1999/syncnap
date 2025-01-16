@@ -7,7 +7,7 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(): Promise<boolean> {
     const { data, error }: any = await this.supabase.auth.getSession();
-    if (error || !data.session) {
+    if (error || !data?.session) {
       return false;
     }
     return true;
