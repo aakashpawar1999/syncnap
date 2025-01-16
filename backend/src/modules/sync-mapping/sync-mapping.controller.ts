@@ -47,10 +47,10 @@ export class SyncMappingController {
       body.airtableConnectionId,
     );
 
-    if (addMapping) {
+    if (addMapping.data) {
       return {
         ...STATUS_CODES.OK,
-        data: addMapping || null,
+        data: addMapping.data || null,
         message: MESSAGES.SYNC_MAPPING.ADD_SYNC_MAPPING_SUCCESS,
       };
     } else {
@@ -76,10 +76,10 @@ export class SyncMappingController {
   async getMappings() {
     const getMappings: any = await this.syncMappingService.getMappings();
 
-    if (getMappings) {
+    if (getMappings.data) {
       return {
         ...STATUS_CODES.OK,
-        data: getMappings || null,
+        data: getMappings.data || null,
         message: MESSAGES.SYNC_MAPPING.GET_SYNC_MAPPINGS_SUCCESS,
       };
     } else {

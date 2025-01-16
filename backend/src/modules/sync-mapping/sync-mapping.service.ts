@@ -37,10 +37,7 @@ export class SyncMappingService {
           airtableConnectionId,
         },
         select: {
-          supabaseTable: true,
-          airtableTable: true,
-          supabaseConnections: true,
-          airtableConnections: true,
+          id: true,
         },
       });
 
@@ -67,10 +64,7 @@ export class SyncMappingService {
       const mappings = await this.prisma.syncMapping.findMany({
         where: { userId: userDataFromDb.id },
         select: {
-          supabaseTable: true,
-          airtableTable: true,
-          supabaseConnections: true,
-          airtableConnections: true,
+          id: true,
         },
       });
 
