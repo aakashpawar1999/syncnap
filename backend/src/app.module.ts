@@ -8,6 +8,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ConnectionModule } from './modules/connection/connection.module';
 import { SyncMappingModule } from './modules/sync-mapping/sync-mapping.module';
 import { SyncLogModule } from './modules/sync-log/sync-log.module';
+import { SyncModule } from './modules/sync/sync.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { SyncLogModule } from './modules/sync-log/sync-log.module';
     ConnectionModule,
     SyncMappingModule,
     SyncLogModule,
+    SyncModule,
   ],
   controllers: [AppController],
   providers: [AppService],
