@@ -40,12 +40,15 @@ export class SyncLogController {
     required: true,
   })
   async createLog(@Body() body: CreateSyncLogDto) {
-    const log = await this.syncLogService.createLog(body.status, body.details);
+    const log: any = await this.syncLogService.createLog(
+      body.status,
+      body.details,
+    );
 
-    if (log) {
+    if (log.data) {
       return {
         ...STATUS_CODES.OK,
-        data: log || null,
+        data: log.data || null,
         message: MESSAGES.SYNC_LOG.CREATE_SYNC_LOG_SUCCESS,
       };
     } else {
@@ -69,12 +72,12 @@ export class SyncLogController {
     description: MESSAGES.SYNC_LOG.GET_SYNC_LOGS_FAILURE,
   })
   async getLogs() {
-    const logs = await this.syncLogService.getLogs();
+    const logs: any = await this.syncLogService.getLogs();
 
-    if (logs) {
+    if (logs.data) {
       return {
         ...STATUS_CODES.OK,
-        data: logs || null,
+        data: logs.data || null,
         message: MESSAGES.SYNC_LOG.GET_SYNC_LOGS_SUCCESS,
       };
     } else {

@@ -30,8 +30,7 @@ export class SyncLogService {
 
       return { data: log };
     } catch (error) {
-      console.error(error);
-      throw error;
+      return 'ERROR';
     }
   }
 
@@ -56,8 +55,7 @@ export class SyncLogService {
 
       return { data: logs };
     } catch (error) {
-      console.error(error);
-      throw error;
+      return 'ERROR';
     }
   }
 }
