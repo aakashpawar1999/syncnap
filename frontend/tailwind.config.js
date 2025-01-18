@@ -41,6 +41,7 @@ export const theme = {
   },
   extend: {
     colors: {
+      neutral: colors.neutral,
       slate: colors.slate,
       gray: colors.gray,
       red: colors.red,

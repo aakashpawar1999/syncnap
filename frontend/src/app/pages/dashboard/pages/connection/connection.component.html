@@ -1,0 +1,172 @@
+<section class="grid grid-cols-1 md:grid-cols-2 gap-5">
+  <form [formGroup]="supabaseForm" (ngSubmit)="connectSupabase()">
+    <div
+      class="flex flex-col bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70"
+    >
+      <div
+        class="flex flex-auto flex-col justify-center items-start p-4 md:p-5"
+      >
+        <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4">
+          Connect to Supabase
+        </h3>
+        <div class="grid gap-4 grid-cols-1 w-full">
+          <div class="max-w-full">
+            <label
+              for="connectionName"
+              class="block text-sm font-medium mb-2 dark:text-white"
+              >Connection Name</label
+            >
+            <input
+              type="text"
+              id="connectionName"
+              formControlName="connectionName"
+              class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+              placeholder="Connection Name"
+              aria-describedby="hs-input-helper-text"
+            />
+            <p
+              class="mt-2 text-sm text-gray-500 dark:text-neutral-500"
+              id="hs-input-helper-text"
+            >
+              Connection Name is the name of your connection.
+            </p>
+          </div>
+          <div class="max-w-full">
+            <label
+              for="supabaseUrl"
+              class="block text-sm font-medium mb-2 dark:text-white"
+              >Supabase URL</label
+            >
+            <input
+              type="text"
+              id="supabaseUrl"
+              formControlName="supabaseUrl"
+              class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+              placeholder="Supabase URL"
+              aria-describedby="hs-input-helper-text"
+            />
+            <p
+              class="mt-2 text-sm text-gray-500 dark:text-neutral-500"
+              id="hs-input-helper-text"
+            >
+              Supabase URL is the URL of your Supabase instance.
+            </p>
+          </div>
+          <div class="max-w-full">
+            <label
+              for="supabaseAnonKey"
+              class="block text-sm font-medium mb-2 dark:text-white"
+              >Supabase Anon Key</label
+            >
+            <input
+              type="text"
+              id="supabaseAnonKey"
+              formControlName="supabaseAnonKey"
+              class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+              placeholder="Supabase Anon Key"
+              aria-describedby="hs-input-helper-text"
+            />
+            <p
+              class="mt-2 text-sm text-gray-500 dark:text-neutral-500"
+              id="hs-input-helper-text"
+            >
+              Supabase Anon Key is the key of your Supabase instance.
+            </p>
+          </div>
+        </div>
+        <button
+          type="submit"
+          class="mt-5 py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-gray-800 text-white hover:bg-gray-900 focus:outline-none focus:bg-gray-900 disabled:opacity-50 disabled:pointer-events-none dark:bg-white dark:text-neutral-800"
+        >
+          Connect Supabase
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <form [formGroup]="airtableForm" (ngSubmit)="connectAirtable()">
+    <div
+      class="flex flex-col bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70"
+    >
+      <div
+        class="flex flex-auto flex-col justify-center items-start p-4 md:p-5"
+      >
+        <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4">
+          Connect to Airtable
+        </h3>
+        <div class="grid gap-4 grid-cols-1 w-full">
+          <div class="max-w-full">
+            <label
+              for="connectionName"
+              class="block text-sm font-medium mb-2 dark:text-white"
+              >Connection Name</label
+            >
+            <input
+              type="text"
+              id="connectionName"
+              formControlName="connectionName"
+              class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+              placeholder="Connection Name"
+              aria-describedby="hs-input-helper-text"
+            />
+            <p
+              class="mt-2 text-sm text-gray-500 dark:text-neutral-500"
+              id="hs-input-helper-text"
+            >
+              Connection Name is the name of your connection.
+            </p>
+          </div>
+          <div class="max-w-full">
+            <label
+              for="airtableApiKey"
+              class="block text-sm font-medium mb-2 dark:text-white"
+              >Airtable API Key</label
+            >
+            <input
+              type="text"
+              id="airtableApiKey"
+              formControlName="airtableApiKey"
+              class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+              placeholder="Airtable API Key"
+              aria-describedby="hs-input-helper-text"
+            />
+            <p
+              class="mt-2 text-sm text-gray-500 dark:text-neutral-500"
+              id="hs-input-helper-text"
+            >
+              Airtable API Key is the key of your Airtable instance.
+            </p>
+          </div>
+
+          <div class="max-w-full">
+            <label
+              for="airtableBaseId"
+              class="block text-sm font-medium mb-2 dark:text-white"
+              >Airtable Base ID</label
+            >
+            <input
+              type="text"
+              id="airtableBaseId"
+              formControlName="airtableBaseId"
+              class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+              placeholder="Airtable Base ID"
+              aria-describedby="hs-input-helper-text"
+            />
+            <p
+              class="mt-2 text-sm text-gray-500 dark:text-neutral-500"
+              id="hs-input-helper-text"
+            >
+              Airtable Base ID is the ID of your Airtable base.
+            </p>
+          </div>
+        </div>
+        <button
+          type="submit"
+          class="mt-5 py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-gray-800 text-white hover:bg-gray-900 focus:outline-none focus:bg-gray-900 disabled:opacity-50 disabled:pointer-events-none dark:bg-white dark:text-neutral-800"
+        >
+          Connect Airtable
+        </button>
+      </div>
+    </div>
+  </form>
+</section>

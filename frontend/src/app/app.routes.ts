@@ -28,6 +28,20 @@ export const routes: Routes = [
       ),
     children: [
       {
+        path: '',
+        loadComponent: () =>
+          import('./pages/dashboard/pages/main/main.component').then(
+            (c) => c.MainComponent,
+          ),
+      },
+      {
+        path: 'connections',
+        loadComponent: () =>
+          import(
+            './pages/dashboard/pages/connection/connection.component'
+          ).then((c) => c.ConnectionComponent),
+      },
+      {
         path: 'settings',
         loadComponent: () =>
           import('./pages/dashboard/pages/setting/setting.component').then(
