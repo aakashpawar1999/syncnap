@@ -73,6 +73,7 @@ export class ConnectionService {
           where: { userId: userDataFromDb.id },
           select: {
             id: true,
+            connectionName: true,
           },
         },
       );
@@ -179,6 +180,7 @@ export class ConnectionService {
           where: { userId: userDataFromDb.id },
           select: {
             id: true,
+            connectionName: true,
           },
         },
       );
