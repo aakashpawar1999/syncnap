@@ -9,7 +9,7 @@ export class UserService {
     private readonly prisma: PrismaService,
   ) {}
 
-  async getCurrentUser() {
+  async getCurrentUser(): Promise<any> {
     const {
       data: { user },
       error,
@@ -17,12 +17,16 @@ export class UserService {
     if (error) {
       return 'ERROR';
     }
-    return user;
+    return {
+      avatar_url: user?.user_metadata.avatar_url,
+      full_name: user?.user_metadata.full_name,
+      email: user?.user_metadata.email,
+    };
   }
 
   async deleteCurrentUser() {
     const { data, error }: any = await this.prisma.user.update({
-      where: { id: (await this.getCurrentUser()).id },
+      where: { email: (await this.getCurrentUser()).email },
       data: { deletedAt: new Date() },
     });
     if (error) {

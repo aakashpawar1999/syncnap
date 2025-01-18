@@ -14,13 +14,13 @@ import { AuthGuard } from 'src/common/guards/auth/auth.guard';
 
 const MESSAGES = loadMessages();
 
-@ApiTags('users')
-@Controller('users')
+@ApiTags('user')
+@Controller('user')
 @UseGuards(AuthGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get()
+  @Get('details')
   @Version('1')
   @HttpCode(STATUS_CODES.OK.code)
   @ApiOperation({ summary: 'Get current user details' })
@@ -35,7 +35,7 @@ export class UserController {
   async getCurrentUser() {
     const getUser: any = await this.userService.getCurrentUser();
 
-    if (getUser) {
+    if (getUser !== 'ERROR') {
       return {
         ...STATUS_CODES.OK,
         data: getUser || null,
@@ -49,7 +49,7 @@ export class UserController {
     }
   }
 
-  @Delete()
+  @Delete('delete')
   @Version('1')
   @HttpCode(STATUS_CODES.OK.code)
   @ApiOperation({ summary: 'Delete current user' })
