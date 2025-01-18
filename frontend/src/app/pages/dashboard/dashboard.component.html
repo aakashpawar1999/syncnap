@@ -40,7 +40,10 @@
         >
           <img
             class="shrink-0 size-[38px] rounded-full"
-            src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80"
+            [src]="
+              userDetails?.avatar_url ||
+              'https://ui-avatars.com/api/?name=' + userDetails?.full_name
+            "
             alt="Avatar"
           />
         </button>
@@ -56,7 +59,7 @@
               Signed in as
             </p>
             <p class="text-sm font-medium text-gray-800 dark:text-neutral-200">
-              james&#64;site.com
+              {{ userDetails?.email }}
             </p>
           </div>
           <div class="p-1.5 space-y-0.5">

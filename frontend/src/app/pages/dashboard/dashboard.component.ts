@@ -4,6 +4,7 @@ import { AuthService } from '../../shared/services/auth.service';
 import { isPlatformBrowser } from '@angular/common';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { DashboardService } from './dashboard.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,17 +15,31 @@ import { CommonModule } from '@angular/common';
 })
 export class DashboardComponent implements OnInit {
   private subscriptions: Subscription[] = [];
+  userDetails: any = null;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private readonly authService: AuthService,
+    private readonly dashboardService: DashboardService,
     private router: Router,
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getUserDetails();
+  }
 
   activeLink(link: string) {
     return this.router.url === link;
+  }
+
+  getUserDetails() {
+    this.subscriptions.push(
+      this.dashboardService.getUserDetails().subscribe((res: any) => {
+        if (res.code === 200) {
+          this.userDetails = res.data;
+        }
+      }),
+    );
   }
 
   logout() {
