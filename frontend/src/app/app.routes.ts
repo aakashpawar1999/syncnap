@@ -26,6 +26,15 @@ export const routes: Routes = [
       import('./pages/dashboard/dashboard.component').then(
         (c) => c.DashboardComponent,
       ),
+    children: [
+      {
+        path: 'settings',
+        loadComponent: () =>
+          import('./pages/dashboard/pages/setting/setting.component').then(
+            (c) => c.SettingComponent,
+          ),
+      },
+    ],
   },
   { path: '**', component: PageNotFoundComponent },
 ];

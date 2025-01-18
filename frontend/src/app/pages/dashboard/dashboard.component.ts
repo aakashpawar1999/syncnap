@@ -2,12 +2,13 @@ import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../shared/services/auth.service';
 import { isPlatformBrowser } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [],
+  imports: [RouterOutlet, RouterModule, CommonModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
@@ -21,6 +22,10 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {}
+
+  activeLink(link: string) {
+    return this.router.url === link;
+  }
 
   logout() {
     if (isPlatformBrowser(this.platformId)) {
