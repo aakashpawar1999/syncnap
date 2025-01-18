@@ -47,6 +47,7 @@ export const theme = {
       orange: colors.orange,
       yellow: colors.yellow,
       green: colors.green,
+      emerald: colors.emerald,
       blue: colors.blue,
       violet: colors.violet,
     },
