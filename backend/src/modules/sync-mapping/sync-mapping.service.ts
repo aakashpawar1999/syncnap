@@ -65,6 +65,18 @@ export class SyncMappingService {
         where: { userId: userDataFromDb.id },
         select: {
           id: true,
+          supabaseTable: true,
+          airtableTable: true,
+          supabaseConnections: {
+            select: {
+              connectionName: true,
+            },
+          },
+          airtableConnections: {
+            select: {
+              connectionName: true,
+            },
+          },
         },
       });
 
