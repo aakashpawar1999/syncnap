@@ -1,24 +1,36 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ConnectionService } from './connection.service';
 import { ApiResponse } from '../../../../shared/dto/api-response.dto';
+import { ToastrService, ToastrModule } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-connection',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule,
+    ToastrModule,
+  ],
   templateUrl: './connection.component.html',
   styleUrl: './connection.component.css',
 })
 export class ConnectionComponent implements OnInit {
+  private subscriptions: Subscription[] = [];
   supabaseForm!: FormGroup;
   airtableForm!: FormGroup;
 
-  constructor(private connectionService: ConnectionService) {}
+  constructor(
+    private connectionService: ConnectionService,
+    private toastr: ToastrService,
+  ) {}
 
   ngOnInit() {
     this.supabaseForm = new FormGroup({
@@ -35,38 +47,56 @@ export class ConnectionComponent implements OnInit {
   }
 
   connectSupabase() {
-    // Logic to connect to Supabase
-    console.log(
-      'Connecting to Supabase with URL:',
-      this.supabaseForm.value.connectionName,
-      this.supabaseForm.value.projectUrl,
-      this.supabaseForm.value.anonApiKey,
+    this.subscriptions.push(
+      this.connectionService
+        .connectSupabase(this.supabaseForm.value)
+        .subscribe({
+          next: (response: ApiResponse) => {
+            if (response.code === 200) {
+              this.supabaseForm.reset();
+              this.toastr.success(response.message, 'Success!');
+            } else {
+              this.toastr.error(response.message, 'Error!');
+            }
+          },
+          error: (error: any) => {
+            this.toastr.error(
+              error.error.message.length > 0
+                ? error.error.message[0]
+                : 'Unknown error occurred!',
+              'Error!',
+            );
+          },
+        }),
     );
-    this.connectionService.connectSupabase(this.supabaseForm.value).subscribe({
-      next: (response: ApiResponse) => {
-        console.log(response);
-      },
-      error: (error: any) => {
-        console.error(error);
-      },
-    });
   }
 
   connectAirtable() {
-    // Logic to connect to Airtable
-    console.log(
-      'Connecting to Airtable with API Key:',
-      this.airtableForm.value.connectionName,
-      this.airtableForm.value.accessToken,
-      this.airtableForm.value.baseId,
+    this.subscriptions.push(
+      this.connectionService
+        .connectAirtable(this.airtableForm.value)
+        .subscribe({
+          next: (response: ApiResponse) => {
+            if (response.code === 200) {
+              this.airtableForm.reset();
+              this.toastr.success(response.message, 'Success!');
+            } else {
+              this.toastr.error(response.message, 'Error!');
+            }
+          },
+          error: (error: any) => {
+            this.toastr.error(
+              error.error.message.length > 0
+                ? error.error.message[0]
+                : 'Unknown error occurred!',
+              'Error!',
+            );
+          },
+        }),
     );
-    this.connectionService.connectAirtable(this.airtableForm.value).subscribe({
-      next: (response: ApiResponse) => {
-        console.log(response);
-      },
-      error: (error: any) => {
-        console.error(error);
-      },
-    });
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

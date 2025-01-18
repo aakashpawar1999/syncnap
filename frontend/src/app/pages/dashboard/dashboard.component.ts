@@ -6,11 +6,12 @@ import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { DashboardService } from './dashboard.service';
 import { ApiResponse } from '../../shared/dto/api-response.dto';
+import { ToastrService, ToastrModule } from 'ngx-toastr';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [RouterOutlet, RouterModule, CommonModule],
+  imports: [RouterOutlet, RouterModule, CommonModule, ToastrModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
@@ -23,6 +24,7 @@ export class DashboardComponent implements OnInit {
     private readonly authService: AuthService,
     private readonly dashboardService: DashboardService,
     private router: Router,
+    private toastr: ToastrService,
   ) {}
 
   ngOnInit(): void {
@@ -39,10 +41,17 @@ export class DashboardComponent implements OnInit {
         next: (res: ApiResponse) => {
           if (res.code === 200) {
             this.userDetails = res.data;
+          } else {
+            this.toastr.error(res.message, 'Error!');
           }
         },
         error: (error: any) => {
-          console.error(error);
+          this.toastr.error(
+            error.error.message.length > 0
+              ? error.error.message[0]
+              : 'Unknown error occurred!',
+            'Error!',
+          );
         },
         complete: () => {},
       }),
@@ -56,10 +65,17 @@ export class DashboardComponent implements OnInit {
           next: (res: ApiResponse) => {
             if (res.code === 200) {
               this.router.navigate(['/']);
+            } else {
+              this.toastr.error(res.message, 'Error!');
             }
           },
           error: (error: any) => {
-            console.error(error);
+            this.toastr.error(
+              error.error.message.length > 0
+                ? error.error.message[0]
+                : 'Unknown error occurred!',
+              'Error!',
+            );
           },
           complete: () => {},
         }),

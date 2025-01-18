@@ -7,11 +7,18 @@ import { MainService } from './main.service';
 import { Subscription } from 'rxjs';
 import { ApiResponse } from '../../../../shared/dto/api-response.dto';
 import { SyncMappingDto } from './dto';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule,
+    ToastrModule,
+  ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css',
 })
@@ -26,7 +33,10 @@ export class MainComponent implements OnInit {
   supabaseConnectionId: string = '';
   airtableConnectionId: string = '';
 
-  constructor(private mainService: MainService) {}
+  constructor(
+    private mainService: MainService,
+    private toastr: ToastrService,
+  ) {}
 
   ngOnInit() {
     this.getSupabaseConnections();
@@ -40,11 +50,17 @@ export class MainComponent implements OnInit {
         next: (res: ApiResponse) => {
           if (res.code === 200) {
             this.supabaseConnectionList = res.data;
-            console.log(this.supabaseConnectionList, 'supabase');
+          } else {
+            this.toastr.error(res.message, 'Error!');
           }
         },
         error: (error: any) => {
-          console.error(error);
+          this.toastr.error(
+            error.error.message.length > 0
+              ? error.error.message[0]
+              : 'Unknown error occurred!',
+            'Error!',
+          );
         },
         complete: () => {},
       }),
@@ -61,11 +77,17 @@ export class MainComponent implements OnInit {
         next: (res: ApiResponse) => {
           if (res.code === 200) {
             this.airtableConnectionList = res.data;
-            console.log(this.airtableConnectionList, 'airtable');
+          } else {
+            this.toastr.error(res.message, 'Error!');
           }
         },
         error: (error: any) => {
-          console.error(error);
+          this.toastr.error(
+            error.error.message.length > 0
+              ? error.error.message[0]
+              : 'Unknown error occurred!',
+            'Error!',
+          );
         },
         complete: () => {},
       }),
@@ -83,11 +105,17 @@ export class MainComponent implements OnInit {
         next: (res: ApiResponse) => {
           if (res.code === 200) {
             this.airtableTableList = res.data;
-            console.log(this.airtableTableList, 'airtable list');
+          } else {
+            this.toastr.error(res.message, 'Error!');
           }
         },
         error: (error: any) => {
-          console.error(error);
+          this.toastr.error(
+            error.error.message.length > 0
+              ? error.error.message[0]
+              : 'Unknown error occurred!',
+            'Error!',
+          );
         },
         complete: () => {},
       }),
@@ -105,29 +133,50 @@ export class MainComponent implements OnInit {
       supabaseConnectionId: this.supabaseConnectionId,
       airtableConnectionId: this.airtableConnectionId,
     };
-    this.mainService.addMapping(payload).subscribe({
-      next: (res: ApiResponse) => {
-        if (res.code === 200) {
-          console.log(res);
-          this.getMappings();
-        }
-      },
-      error: (error: any) => {
-        console.error(error);
-      },
-      complete: () => {},
-    });
+    this.subscriptions.push(
+      this.mainService.addMapping(payload).subscribe({
+        next: (res: ApiResponse) => {
+          if (res.code === 200) {
+            this.supabaseTable = '';
+            this.airtableTable = '';
+            this.supabaseConnectionId = '';
+            this.airtableConnectionId = '';
+            this.getMappings();
+            this.toastr.success(res.message, 'Success!');
+          } else {
+            this.toastr.error(res.message, 'Error!');
+          }
+        },
+        error: (error: any) => {
+          this.toastr.error(
+            error.error.message.length > 0
+              ? error.error.message[0]
+              : 'Unknown error occurred!',
+            'Error!',
+          );
+        },
+        complete: () => {},
+      }),
+    );
   }
 
   getMappings() {
     this.subscriptions.push(
       this.mainService.getMappings().subscribe({
         next: (res: ApiResponse) => {
-          console.log(res);
-          this.mappingList = res.data;
+          if (res.code === 200) {
+            this.mappingList = res.data;
+          } else {
+            this.toastr.error(res.message, 'Error!');
+          }
         },
         error: (error: any) => {
-          console.error(error);
+          this.toastr.error(
+            error.error.message.length > 0
+              ? error.error.message[0]
+              : 'Unknown error occurred!',
+            'Error!',
+          );
         },
         complete: () => {},
       }),

@@ -3,11 +3,13 @@ import { Subscription } from 'rxjs';
 import { AuthService } from '../../../shared/services/auth.service';
 import { isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService, ToastrModule } from 'ngx-toastr';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, ToastrModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
@@ -19,18 +21,22 @@ export class HeaderComponent implements OnInit {
     private readonly authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
+    private toastr: ToastrService,
   ) {}
 
   ngOnInit(): void {
     const currentUrl = this.router.url;
-    this.route.queryParamMap.subscribe((params) => {
-      const code = params.get('code');
-      if (currentUrl.includes('auth/callback') && code) {
-        this.verify(code || '');
-      } else {
-        this.router.navigate(['/']);
-      }
-    });
+
+    this.subscriptions.push(
+      this.route.queryParamMap.subscribe((params) => {
+        const code = params.get('code');
+        if (currentUrl.includes('auth/callback') && code) {
+          this.verify(code || '');
+        } else {
+          this.router.navigate(['/']);
+        }
+      }),
+    );
   }
 
   login() {
@@ -39,13 +45,16 @@ export class HeaderComponent implements OnInit {
         this.authService.login().subscribe({
           next: (res: any) => {
             if (res.code === 200) {
-              console.log(res, 'res');
-
               window.location.href = res.data.url;
             }
           },
           error: (error: any) => {
-            console.error(error);
+            this.toastr.error(
+              error.error.message.length > 0
+                ? error.error.message[0]
+                : 'Unknown error occurred!',
+              'Error!',
+            );
           },
           complete: () => {},
         }),
@@ -64,12 +73,19 @@ export class HeaderComponent implements OnInit {
           next: (res: any) => {
             if (res.code === 200) {
               this.router.navigate(['/dashboard']);
+              this.toastr.success(res.message, 'Success!');
             } else {
+              this.toastr.error(res.message, 'Error!');
               this.router.navigate(['/']);
             }
           },
           error: (error: any) => {
-            console.error(error);
+            this.toastr.error(
+              error.error.message.length > 0
+                ? error.error.message[0]
+                : 'Unknown error occurred!',
+              'Error!',
+            );
             this.router.navigate(['/']);
           },
           complete: () => {},
