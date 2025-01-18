@@ -17,6 +17,7 @@ CREATE TABLE "User" (
 CREATE TABLE "SupabaseConnection" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
+    "connectionName" TEXT NOT NULL,
     "anonApiKey" TEXT NOT NULL,
     "projectUrl" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -30,6 +31,7 @@ CREATE TABLE "SupabaseConnection" (
 CREATE TABLE "AirtableConnection" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
+    "connectionName" TEXT NOT NULL,
     "accessToken" TEXT NOT NULL,
     "baseId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

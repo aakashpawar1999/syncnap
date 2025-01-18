@@ -27,27 +27,29 @@ model User {
 }
 
 model SupabaseConnection {
-  id          String        @id @default(uuid())
-  userId      String
-  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  anonApiKey  String
-  projectUrl  String
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  deletedAt   DateTime?
-  SyncMapping SyncMapping[]
+  id             String        @id @default(uuid())
+  userId         String
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  connectionName String
+  anonApiKey     String
+  projectUrl     String
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  deletedAt      DateTime?
+  SyncMapping    SyncMapping[]
 }
 
 model AirtableConnection {
-  id          String        @id @default(uuid())
-  userId      String
-  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  accessToken String
-  baseId      String
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  deletedAt   DateTime?
-  SyncMapping SyncMapping[]
+  id             String        @id @default(uuid())
+  userId         String
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  connectionName String
+  accessToken    String
+  baseId         String
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  deletedAt      DateTime?
+  SyncMapping    SyncMapping[]
 }
 
 model SyncMapping {

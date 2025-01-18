@@ -49,6 +49,7 @@ export class ConnectionController {
   async addSupabaseConnection(@Body() body: AddSupabaseConnectionDto) {
     const addSupabaseConnection: any =
       await this.connectionService.addSupabaseConnection(
+        body.connectionName,
         body.projectUrl,
         body.anonApiKey,
       );
@@ -155,6 +156,7 @@ export class ConnectionController {
   async addAirtableConnection(@Body() body: AddAirtableConnectionDto) {
     const addAirtableConnection: any =
       await this.connectionService.addAirtableConnection(
+        body.connectionName,
         body.accessToken,
         body.baseId,
       );

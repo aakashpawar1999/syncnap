@@ -14,7 +14,11 @@ export class ConnectionService {
     private readonly userService: UserService,
   ) {}
 
-  async addSupabaseConnection(projectUrl: string, anonApiKey: string) {
+  async addSupabaseConnection(
+    connectionName: string,
+    projectUrl: string,
+    anonApiKey: string,
+  ) {
     try {
       const userData: any = await this.userService.getCurrentUser();
       if (!userData) {
@@ -29,7 +33,12 @@ export class ConnectionService {
       }
 
       const supabaseConnection = await this.prisma.supabaseConnection.create({
-        data: { userId: userDataFromDb.id, projectUrl, anonApiKey },
+        data: {
+          userId: userDataFromDb.id,
+          connectionName,
+          projectUrl,
+          anonApiKey,
+        },
         select: {
           id: true,
         },
@@ -111,7 +120,11 @@ export class ConnectionService {
     }
   }
 
-  async addAirtableConnection(accessToken: string, baseId: string) {
+  async addAirtableConnection(
+    connectionName: string,
+    accessToken: string,
+    baseId: string,
+  ) {
     try {
       const userData: any = await this.userService.getCurrentUser();
       if (!userData) {
@@ -126,7 +139,12 @@ export class ConnectionService {
       }
 
       const airtableConnection = await this.prisma.airtableConnection.create({
-        data: { userId: userDataFromDb.id, accessToken, baseId },
+        data: {
+          userId: userDataFromDb.id,
+          connectionName,
+          accessToken,
+          baseId,
+        },
         select: {
           id: true,
         },

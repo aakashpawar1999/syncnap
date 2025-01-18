@@ -2,6 +2,11 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsNotEmpty } from 'class-validator';
 
 export class AddSupabaseConnectionDto {
+  @ApiProperty({ description: 'Supabase connection name' })
+  @IsString()
+  @IsNotEmpty()
+  connectionName: string;
+
   @ApiProperty({ description: 'Supabase project url' })
   @IsString()
   @IsNotEmpty()
