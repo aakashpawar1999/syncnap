@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
+import { SyncLogService } from '../sync-log/sync-log.service';
 import { createClient } from '@supabase/supabase-js';
 import { SupabaseClient } from '@supabase/supabase-js';
+import { SyncStatus } from '@prisma/client';
 import axios from 'axios';
 
 @Injectable()
@@ -13,7 +15,10 @@ export class SyncService {
   private readonly AirtableDeleteFieldUrl = (baseId: string, tableId: string) =>
     `https://api.airtable.com/v0/meta/bases/${baseId}/tables/${tableId}/fields/{fieldId}`;
 
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private syncLogService: SyncLogService,
+  ) {}
 
   inferDataType(value: any): string {
     if (typeof value === 'number') {
@@ -311,6 +316,10 @@ export class SyncService {
       });
 
       if (!mapping) {
+        await this.syncLogService.createLog(
+          SyncStatus.FAILURE,
+          `Error fetching mapping.`,
+        );
         return 'ERROR';
       }
 
@@ -322,6 +331,10 @@ export class SyncService {
       } = mapping;
 
       if (!supabaseConnections || !airtableConnections) {
+        await this.syncLogService.createLog(
+          SyncStatus.FAILURE,
+          `Error fetching Supabase or Airtable connections.`,
+        );
         return 'ERROR';
       }
 
@@ -353,6 +366,10 @@ export class SyncService {
 
       if (supabaseError) {
         console.log(supabaseError, 'supabaseError');
+        await this.syncLogService.createLog(
+          SyncStatus.FAILURE,
+          `Error fetching data from Supabase.`,
+        );
         return 'ERROR';
       }
 
@@ -384,6 +401,10 @@ export class SyncService {
         } while (offset);
       } catch (error) {
         console.error('Error fetching existing Airtable records:', error);
+        await this.syncLogService.createLog(
+          SyncStatus.FAILURE,
+          `Error fetching existing Airtable records.`,
+        );
         throw new Error('Failed to fetch Airtable records.');
       }
 
@@ -415,10 +436,18 @@ export class SyncService {
         try {
           await axios.post(airtableUrl, { records }, { headers });
         } catch (error) {
+          await this.syncLogService.createLog(
+            SyncStatus.FAILURE,
+            `Error syncing table "${supabaseTable}" to Airtable.`,
+          );
           return 'ERROR';
         }
       }
 
+      await this.syncLogService.createLog(
+        SyncStatus.SUCCESS,
+        `The total of ${newRecords.length} records were added to Airtable.`,
+      );
       return 'SUCCESS';
     } catch (error) {
       return 'ERROR';
