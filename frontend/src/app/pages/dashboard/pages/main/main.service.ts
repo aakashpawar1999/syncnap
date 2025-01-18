@@ -48,4 +48,18 @@ export class MainService {
   getMappings(): Observable<ApiResponse> {
     return this.http.get<ApiResponse>(this.resolveApiUrl('v1', 'sync-mapping'));
   }
+
+  syncTable(mappingId: string): Observable<ApiResponse> {
+    const payload = {
+      mappingId,
+    };
+    return this.http.post<ApiResponse>(
+      this.resolveApiUrl('v1', `sync`),
+      payload,
+    );
+  }
+
+  getSyncLogs(): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(this.resolveApiUrl('v1', `sync-log`));
+  }
 }

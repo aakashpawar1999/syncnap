@@ -187,6 +187,18 @@
                     </th>
                     <th
                       scope="col"
+                      class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400"
+                    >
+                      Last Sync At
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400"
+                    >
+                      Sync Status
+                    </th>
+                    <th
+                      scope="col"
                       class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase dark:text-neutral-400"
                     >
                       Action
@@ -216,14 +228,351 @@
                       {{ mapping.airtableConnections.connectionName }}
                     </td>
                     <td
+                      class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-neutral-200"
+                    >
+                      {{
+                        mapping.syncLogs.length > 0
+                          ? (mapping.syncLogs[0]?.createdAt
+                            | date : 'dd/MM/YYYY (hh:mm a)')
+                          : 'N/A'
+                      }}
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-neutral-200"
+                    >
+                      <span
+                        *ngIf="mapping.syncLogs.length > 0"
+                        [ngClass]="{
+                          'bg-green-100 text-green-800':
+                            mapping.syncLogs[0]?.status === 'SUCCESS',
+                          'bg-yellow-100 text-yellow-800':
+                            mapping.syncLogs[0]?.status === 'PROGRESS',
+                          'bg-red-100 text-red-800':
+                            mapping.syncLogs[0]?.status === 'FAILED'
+                        }"
+                        class="py-1 px-2 inline-flex items-center gap-x-1 text-xs font-medium rounded-full"
+                      >
+                        <svg
+                          *ngIf="mapping.syncLogs[0]?.status === 'SUCCESS'"
+                          class="shrink-0 size-3"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path
+                            d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"
+                          ></path>
+                          <path d="m9 12 2 2 4-4"></path>
+                        </svg>
+                        <svg
+                          *ngIf="mapping.syncLogs[0]?.status === 'FAILED'"
+                          class="shrink-0 size-3"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path
+                            d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"
+                          ></path>
+                          <path d="M12 9v4"></path>
+                          <path d="M12 17h.01"></path>
+                        </svg>
+                        <svg
+                          *ngIf="mapping.syncLogs[0]?.status === 'PROGRESS'"
+                          class="shrink-0 size-3"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <line x1="12" x2="12" y1="2" y2="6"></line>
+                          <line x1="12" x2="12" y1="18" y2="22"></line>
+                          <line x1="4.93" x2="7.76" y1="4.93" y2="7.76"></line>
+                          <line
+                            x1="16.24"
+                            x2="19.07"
+                            y1="16.24"
+                            y2="19.07"
+                          ></line>
+                          <line x1="2" x2="6" y1="12" y2="12"></line>
+                          <line x1="18" x2="22" y1="12" y2="12"></line>
+                          <line
+                            x1="4.93"
+                            x2="7.76"
+                            y1="19.07"
+                            y2="16.24"
+                          ></line>
+                          <line
+                            x1="16.24"
+                            x2="19.07"
+                            y1="7.76"
+                            y2="4.93"
+                          ></line>
+                        </svg>
+                        {{ mapping.syncLogs[0]?.status }}
+                      </span>
+                      <span
+                        *ngIf="mapping.syncLogs.length === 0"
+                        class="py-1 px-2 inline-flex items-center gap-x-1 text-xs bg-gray-100 text-gray-800 rounded-full dark:bg-neutral-500/20 dark:text-neutral-400"
+                      >
+                        NOT SYNCED
+                      </span>
+                    </td>
+                    <td
                       class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium"
                     >
                       <button
+                        *ngIf="
+                          !isLoadingSyncTable ||
+                          mapping.syncLogs[0]?.status === 'SUCCESS'
+                        "
                         type="button"
-                        class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400"
+                        class="inline-flex items-center gap-x-2 p-1.5 text-sm font-semibold rounded-lg border border-gray-200 text-gray-600 hover:text-gray-800 focus:outline-none focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none dark:text-gray-500 dark:hover:text-gray-400 dark:focus:text-gray-400"
+                        (click)="syncTable(mapping.id)"
                       >
-                        Sync
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          height="24px"
+                          viewBox="0 -960 960 960"
+                          width="24px"
+                          fill="currentColor"
+                          class="text-gray-800 hover:text-gray-900"
+                        >
+                          <path
+                            d="M160-160v-80h110l-16-14q-52-46-73-105t-21-119q0-111 66.5-197.5T400-790v84q-72 26-116 88.5T240-478q0 45 17 87.5t53 78.5l10 10v-98h80v240H160Zm400-10v-84q72-26 116-88.5T720-482q0-45-17-87.5T650-648l-10-10v98h-80v-240h240v80H690l16 14q49 49 71.5 106.5T800-482q0 111-66.5 197.5T560-170Z"
+                            fill="currentColor"
+                          />
+                        </svg>
                       </button>
+                      <button
+                        *ngIf="
+                          isLoadingSyncTable ||
+                          mapping.syncLogs[0]?.status === 'PROGRESS'
+                        "
+                        type="button"
+                        class="inline-flex items-center gap-x-2 p-1.5 text-sm font-semibold rounded-lg border border-gray-200 text-gray-600 hover:text-gray-800 focus:outline-none focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none dark:text-gray-500 dark:hover:text-gray-400 dark:focus:text-gray-400"
+                        [ngClass]="{
+                          'opacity-50 cursor-not-allowed ':
+                            isLoadingSyncTable ||
+                            mapping.syncLogs[0]?.status === 'PROGRESS'
+                        }"
+                      >
+                        <span
+                          class="animate-spin inline-block size-4 border-[3px] border-current border-t-gray-800 text-gray-800 rounded-full"
+                          role="status"
+                          aria-label="loading"
+                        ></span>
+                        Loading
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="flex flex-col bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70"
+  >
+    <div class="flex flex-auto flex-col justify-center items-start p-4">
+      <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-5">
+        Sync Logs
+      </h3>
+      <div class="flex flex-col w-full">
+        <div class="-m-1.5 overflow-x-auto">
+          <div class="p-1.5 min-w-full inline-block align-middle">
+            <div
+              class="border rounded-lg overflow-hidden dark:border-neutral-700"
+            >
+              <table
+                class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700"
+              >
+                <thead class="bg-gray-50 dark:bg-neutral-700">
+                  <tr>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400"
+                    >
+                      Connection
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400"
+                    >
+                      Last Sync At
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400"
+                    >
+                      Sync Status
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400"
+                    >
+                      Details
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
+                  <tr *ngFor="let log of syncLogList">
+                    <td
+                      class="px-6 py-4 whitespace-nowrap flex items-center justify-between text-sm font-medium text-gray-800 dark:text-neutral-200"
+                    >
+                      <span
+                        class="inline-flex justify-center items-center gap-x-1.5 py-1.5 px-5 rounded-lg text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-800/30 dark:text-blue-500"
+                      >
+                        <img
+                          src="assets/images/supabase-logo-icon.png"
+                          alt="supabase logo"
+                          class="w-4 h-4 rounded-full"
+                        />
+                        {{ log.SyncMapping.supabaseConnections.connectionName }}
+                      </span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24px"
+                        viewBox="0 -960 960 960"
+                        width="24px"
+                        fill="currentColor"
+                        class="text-gray-800 hover:text-gray-900 mx-2"
+                      >
+                        <path
+                          d="m700-300-57-56 84-84H120v-80h607l-83-84 57-56 179 180-180 180Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                      <span
+                        class="inline-flex justify-center items-center gap-x-1.5 py-1.5 px-5 rounded-lg text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-800/30 dark:text-blue-500"
+                      >
+                        <img
+                          src="assets/images/airtable-logo-icon.png"
+                          alt="airtable logo"
+                          class="w-4 h-4 rounded-full"
+                        />
+                        {{ log.SyncMapping.airtableConnections.connectionName }}
+                      </span>
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-neutral-200"
+                    >
+                      {{ log.createdAt | date : 'dd/MM/YYYY (hh:mm a)' }}
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-neutral-200"
+                    >
+                      <span
+                        [ngClass]="{
+                          'bg-green-100 text-green-800':
+                            log.status === 'SUCCESS',
+                          'bg-yellow-100 text-yellow-800':
+                            log.status === 'PROGRESS',
+                          'bg-red-100 text-red-800': log.status === 'FAILED'
+                        }"
+                        class="py-1 px-2 inline-flex items-center gap-x-1 text-xs font-medium rounded-full"
+                      >
+                        <svg
+                          *ngIf="log.status === 'SUCCESS'"
+                          class="shrink-0 size-3"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path
+                            d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"
+                          ></path>
+                          <path d="m9 12 2 2 4-4"></path>
+                        </svg>
+                        <svg
+                          *ngIf="log.status === 'FAILED'"
+                          class="shrink-0 size-3"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path
+                            d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"
+                          ></path>
+                          <path d="M12 9v4"></path>
+                          <path d="M12 17h.01"></path>
+                        </svg>
+                        <svg
+                          *ngIf="log.status === 'PROGRESS'"
+                          class="shrink-0 size-3"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <line x1="12" x2="12" y1="2" y2="6"></line>
+                          <line x1="12" x2="12" y1="18" y2="22"></line>
+                          <line x1="4.93" x2="7.76" y1="4.93" y2="7.76"></line>
+                          <line
+                            x1="16.24"
+                            x2="19.07"
+                            y1="16.24"
+                            y2="19.07"
+                          ></line>
+                          <line x1="2" x2="6" y1="12" y2="12"></line>
+                          <line x1="18" x2="22" y1="12" y2="12"></line>
+                          <line
+                            x1="4.93"
+                            x2="7.76"
+                            y1="19.07"
+                            y2="16.24"
+                          ></line>
+                          <line
+                            x1="16.24"
+                            x2="19.07"
+                            y1="7.76"
+                            y2="4.93"
+                          ></line>
+                        </svg>
+                        {{ log.status }}
+                      </span>
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-neutral-200"
+                    >
+                      {{ log.details }}
                     </td>
                   </tr>
                 </tbody>

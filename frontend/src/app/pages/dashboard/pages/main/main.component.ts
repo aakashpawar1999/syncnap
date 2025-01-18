@@ -28,12 +28,14 @@ export class MainComponent implements OnInit {
   airtableConnectionList: any = [];
   airtableTableList: any = [];
   mappingList: any = [];
+  syncLogList: any = [];
   supabaseTable: string = '';
   airtableTable: string = '';
   supabaseConnectionId: string = '';
   airtableConnectionId: string = '';
   isLoadingAirtableTables: boolean = false;
   isLoadingAddMapping: boolean = false;
+  isLoadingSyncTable: boolean = false;
 
   constructor(
     private mainService: MainService,
@@ -44,6 +46,7 @@ export class MainComponent implements OnInit {
     this.getSupabaseConnections();
     this.getAirtableConnections();
     this.getMappings();
+    this.getSyncLogs();
   }
 
   getSupabaseConnections() {
@@ -186,6 +189,54 @@ export class MainComponent implements OnInit {
         error: (error: any) => {
           this.toastr.error(
             error.error.message.length > 0
+              ? error.error.message[0]
+              : 'Unknown error occurred!',
+            'Error!',
+          );
+        },
+        complete: () => {},
+      }),
+    );
+  }
+
+  syncTable(mappingId: string) {
+    this.isLoadingSyncTable = true;
+
+    this.subscriptions.push(
+      this.mainService.syncTable(mappingId).subscribe({
+        next: (res: ApiResponse) => {
+          if (res.code === 200) {
+            this.toastr.success(res.message, 'Success!');
+          } else {
+            this.toastr.error(res.message, 'Error!');
+          }
+        },
+        error: (error: any) => {
+          this.toastr.error(
+            error.error.message.length > 0
+              ? error.error.message[0]
+              : 'Unknown error occurred!',
+            'Error!',
+          );
+          this.isLoadingSyncTable = false;
+        },
+        complete: () => {
+          this.isLoadingSyncTable = false;
+        },
+      }),
+    );
+  }
+
+  getSyncLogs() {
+    this.subscriptions.push(
+      this.mainService.getSyncLogs().subscribe({
+        next: (res: ApiResponse) => {
+          this.syncLogList = res.data;
+        },
+        error: (error: any) => {
+          console.log(error, 'error');
+          this.toastr.error(
+            Array.isArray(error.error.message) && error.error.message.length > 0
               ? error.error.message[0]
               : 'Unknown error occurred!',
             'Error!',

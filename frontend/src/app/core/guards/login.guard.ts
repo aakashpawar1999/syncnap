@@ -19,7 +19,7 @@ class AuthenticationService {
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): any {
     return this.authService.isAuthenticated().subscribe({
       next: (res: any) => {
-        if (res.code === 200) {
+        if (res) {
           this.router.navigate(['/dashboard']);
         } else {
           this.router.navigate(['/']);
