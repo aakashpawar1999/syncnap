@@ -20,6 +20,7 @@ export class MainComponent implements OnInit {
   supabaseConnectionList: any = [];
   airtableConnectionList: any = [];
   airtableTableList: any = [];
+  mappingList: any = [];
   supabaseTable: string = '';
   airtableTable: string = '';
   supabaseConnectionId: string = '';
@@ -30,6 +31,7 @@ export class MainComponent implements OnInit {
   ngOnInit() {
     this.getSupabaseConnections();
     this.getAirtableConnections();
+    this.getMappings();
   }
 
   getSupabaseConnections() {
@@ -107,7 +109,7 @@ export class MainComponent implements OnInit {
       next: (res: ApiResponse) => {
         if (res.code === 200) {
           console.log(res);
-          // this.getSyncMappingList();
+          this.getMappings();
         }
       },
       error: (error: any) => {
@@ -115,6 +117,21 @@ export class MainComponent implements OnInit {
       },
       complete: () => {},
     });
+  }
+
+  getMappings() {
+    this.subscriptions.push(
+      this.mainService.getMappings().subscribe({
+        next: (res: ApiResponse) => {
+          console.log(res);
+          this.mappingList = res.data;
+        },
+        error: (error: any) => {
+          console.error(error);
+        },
+        complete: () => {},
+      }),
+    );
   }
 
   ngOnDestroy() {

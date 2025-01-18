@@ -44,4 +44,8 @@ export class MainService {
       payload,
     );
   }
+
+  getMappings(): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(this.resolveApiUrl('v1', 'sync-mapping'));
+  }
 }
