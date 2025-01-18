@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ConnectionService } from './connection.service';
+import { ApiResponse } from '../../../../shared/dto/api-response.dto';
 
 @Component({
   selector: 'app-connection',
@@ -41,14 +42,14 @@ export class ConnectionComponent implements OnInit {
       this.supabaseForm.value.projectUrl,
       this.supabaseForm.value.anonApiKey,
     );
-    this.connectionService.connectSupabase(this.supabaseForm.value).subscribe(
-      (response) => {
+    this.connectionService.connectSupabase(this.supabaseForm.value).subscribe({
+      next: (response: ApiResponse) => {
         console.log(response);
       },
-      (error) => {
+      error: (error: any) => {
         console.error(error);
       },
-    );
+    });
   }
 
   connectAirtable() {
@@ -59,13 +60,13 @@ export class ConnectionComponent implements OnInit {
       this.airtableForm.value.accessToken,
       this.airtableForm.value.baseId,
     );
-    this.connectionService.connectAirtable(this.airtableForm.value).subscribe(
-      (response) => {
+    this.connectionService.connectAirtable(this.airtableForm.value).subscribe({
+      next: (response: ApiResponse) => {
         console.log(response);
       },
-      (error) => {
+      error: (error: any) => {
         console.error(error);
       },
-    );
+    });
   }
 }

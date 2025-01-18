@@ -5,6 +5,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { DashboardService } from './dashboard.service';
+import { ApiResponse } from '../../shared/dto/api-response.dto';
 
 @Component({
   selector: 'app-dashboard',
@@ -34,10 +35,16 @@ export class DashboardComponent implements OnInit {
 
   getUserDetails() {
     this.subscriptions.push(
-      this.dashboardService.getUserDetails().subscribe((res: any) => {
-        if (res.code === 200) {
-          this.userDetails = res.data;
-        }
+      this.dashboardService.getUserDetails().subscribe({
+        next: (res: ApiResponse) => {
+          if (res.code === 200) {
+            this.userDetails = res.data;
+          }
+        },
+        error: (error: any) => {
+          console.error(error);
+        },
+        complete: () => {},
       }),
     );
   }
@@ -46,7 +53,7 @@ export class DashboardComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       this.subscriptions.push(
         this.authService.logout().subscribe({
-          next: (res: any) => {
+          next: (res: ApiResponse) => {
             if (res.code === 200) {
               this.router.navigate(['/']);
             }

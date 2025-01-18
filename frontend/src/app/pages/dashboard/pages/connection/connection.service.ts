@@ -17,14 +17,14 @@ export class ConnectionService {
     return this.apiUrl + '/api/' + version + '/' + path;
   }
 
-  connectSupabase(payload: SupabaseConnectionDto): Observable<any> {
+  connectSupabase(payload: SupabaseConnectionDto): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(
       this.resolveApiUrl('v1', `connections/supabase`),
       payload,
     );
   }
 
-  connectAirtable(payload: AirtableConnectionDto): Observable<any> {
+  connectAirtable(payload: AirtableConnectionDto): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(
       this.resolveApiUrl('v1', `connections/airtable`),
       payload,
