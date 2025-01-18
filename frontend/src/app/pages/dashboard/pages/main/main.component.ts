@@ -32,6 +32,8 @@ export class MainComponent implements OnInit {
   airtableTable: string = '';
   supabaseConnectionId: string = '';
   airtableConnectionId: string = '';
+  isLoadingAirtableTables: boolean = false;
+  isLoadingAddMapping: boolean = false;
 
   constructor(
     private mainService: MainService,
@@ -100,6 +102,9 @@ export class MainComponent implements OnInit {
   }
 
   getAirtableTables(airtableConnectionId: string) {
+    this.isLoadingAirtableTables = true;
+    this.airtableTableList = [];
+
     this.subscriptions.push(
       this.mainService.getAirtableTables(airtableConnectionId).subscribe({
         next: (res: ApiResponse) => {
@@ -116,8 +121,11 @@ export class MainComponent implements OnInit {
               : 'Unknown error occurred!',
             'Error!',
           );
+          this.isLoadingAirtableTables = false;
         },
-        complete: () => {},
+        complete: () => {
+          this.isLoadingAirtableTables = false;
+        },
       }),
     );
   }
@@ -127,6 +135,8 @@ export class MainComponent implements OnInit {
   }
 
   addMapping() {
+    this.isLoadingAddMapping = true;
+
     const payload: SyncMappingDto = {
       supabaseTable: this.supabaseTable,
       airtableTable: this.airtableTable,
@@ -154,8 +164,11 @@ export class MainComponent implements OnInit {
               : 'Unknown error occurred!',
             'Error!',
           );
+          this.isLoadingAddMapping = false;
         },
-        complete: () => {},
+        complete: () => {
+          this.isLoadingAddMapping = false;
+        },
       }),
     );
   }

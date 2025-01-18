@@ -75,10 +75,26 @@
           </div>
         </div>
         <button
+          *ngIf="!isLoadingSupabaseConnection"
           type="submit"
           class="mt-5 py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-gray-800 text-white hover:bg-gray-900 focus:outline-none focus:bg-gray-900 disabled:opacity-50 disabled:pointer-events-none dark:bg-white dark:text-neutral-800"
         >
           Connect Supabase
+        </button>
+        <button
+          *ngIf="isLoadingSupabaseConnection"
+          type="button"
+          class="mt-5 py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-gray-800 text-white hover:bg-gray-900 focus:outline-none focus:bg-gray-900 disabled:opacity-50 disabled:pointer-events-none dark:bg-white dark:text-neutral-800"
+          [ngClass]="{
+            'opacity-50 cursor-not-allowed ': isLoadingSupabaseConnection
+          }"
+        >
+          <span
+            class="animate-spin inline-block size-4 border-[3px] border-current border-t-transparent text-white rounded-full"
+            role="status"
+            aria-label="loading"
+          ></span>
+          Loading
         </button>
       </div>
     </div>
@@ -161,10 +177,26 @@
           </div>
         </div>
         <button
+          *ngIf="!isLoadingAirtableConnection"
           type="submit"
           class="mt-5 py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-gray-800 text-white hover:bg-gray-900 focus:outline-none focus:bg-gray-900 disabled:opacity-50 disabled:pointer-events-none dark:bg-white dark:text-neutral-800"
         >
           Connect Airtable
+        </button>
+        <button
+          *ngIf="isLoadingAirtableConnection"
+          type="button"
+          class="mt-5 py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-gray-800 text-white hover:bg-gray-900 focus:outline-none focus:bg-gray-900 disabled:opacity-50 disabled:pointer-events-none dark:bg-white dark:text-neutral-800"
+          [ngClass]="{
+            'opacity-50 cursor-not-allowed ': isLoadingAirtableConnection
+          }"
+        >
+          <span
+            class="animate-spin inline-block size-4 border-[3px] border-current border-t-transparent text-white rounded-full"
+            role="status"
+            aria-label="loading"
+          ></span>
+          Loading
         </button>
       </div>
     </div>

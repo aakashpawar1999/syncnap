@@ -26,6 +26,8 @@ export class ConnectionComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   supabaseForm!: FormGroup;
   airtableForm!: FormGroup;
+  isLoadingSupabaseConnection: boolean = false;
+  isLoadingAirtableConnection: boolean = false;
 
   constructor(
     private connectionService: ConnectionService,
@@ -47,6 +49,8 @@ export class ConnectionComponent implements OnInit {
   }
 
   connectSupabase() {
+    this.isLoadingSupabaseConnection = true;
+
     this.subscriptions.push(
       this.connectionService
         .connectSupabase(this.supabaseForm.value)
@@ -66,12 +70,18 @@ export class ConnectionComponent implements OnInit {
                 : 'Unknown error occurred!',
               'Error!',
             );
+            this.isLoadingSupabaseConnection = false;
+          },
+          complete: () => {
+            this.isLoadingSupabaseConnection = false;
           },
         }),
     );
   }
 
   connectAirtable() {
+    this.isLoadingAirtableConnection = true;
+
     this.subscriptions.push(
       this.connectionService
         .connectAirtable(this.airtableForm.value)
@@ -91,6 +101,10 @@ export class ConnectionComponent implements OnInit {
                 : 'Unknown error occurred!',
               'Error!',
             );
+            this.isLoadingAirtableConnection = false;
+          },
+          complete: () => {
+            this.isLoadingAirtableConnection = false;
           },
         }),
     );

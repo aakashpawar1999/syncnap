@@ -17,9 +17,10 @@
             <select
               id="hs-select-label"
               class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-gray-500 focus:ring-gray-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+              [(ngModel)]="supabaseConnectionId"
               (change)="onSupabaseConnectionChange($event)"
             >
-              <option selected="">Select connection</option>
+              <option value="" selected>Select connection</option>
               <option
                 *ngFor="let supabaseConnection of supabaseConnectionList"
                 value="{{ supabaseConnection.id }}"
@@ -63,9 +64,10 @@
             <select
               id="hs-select-label"
               class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-gray-500 focus:ring-gray-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+              [(ngModel)]="airtableConnectionId"
               (change)="onAirtableConnectionChange($event)"
             >
-              <option selected="">Select connection</option>
+              <option value="" selected>Select connection</option>
               <option
                 *ngFor="let airtableConnection of airtableConnectionList"
                 value="{{ airtableConnection.id }}"
@@ -82,19 +84,28 @@
           >
             <label
               for="hs-select-label"
-              class="block text-sm font-medium mb-2 dark:text-white"
-              >Airtable Tables</label
-            >
+              class="flex items-center justify-start text-sm font-medium mb-2 dark:text-white"
+              >Airtable Tables
+              <span
+                *ngIf="isLoadingAirtableTables"
+                class="animate-spin inline-block size-4 border-[3px] border-current border-t-gray-800 text-gray-800 rounded-full ms-2"
+                role="status"
+                aria-label="loading"
+              >
+                <span class="sr-only">Loading...</span>
+              </span>
+            </label>
             <select
               id="hs-select-label"
               class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-gray-500 focus:ring-gray-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+              [(ngModel)]="airtableTable"
               (change)="onAirtableTableChange($event)"
               [ngClass]="{
                 'opacity-50 cursor-not-allowed': airtableTableList.length === 0
               }"
               [disabled]="airtableTableList.length === 0"
             >
-              <option selected="">Select table</option>
+              <option value="" selected>Select table</option>
               <option
                 *ngFor="let airtableTable of airtableTableList"
                 value="{{ airtableTable.id }}"
@@ -106,11 +117,27 @@
         </div>
         <div class="w-full">
           <button
+            *ngIf="!isLoadingAddMapping"
             type="button"
             class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-gray-800 text-white hover:bg-gray-900 focus:outline-none focus:bg-gray-900 disabled:opacity-50 disabled:pointer-events-none dark:bg-white dark:text-neutral-800"
             (click)="addMapping()"
           >
             Add Mapping
+          </button>
+          <button
+            *ngIf="isLoadingAddMapping"
+            type="button"
+            class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-gray-800 text-white hover:bg-gray-900 focus:outline-none focus:bg-gray-900 disabled:opacity-50 disabled:pointer-events-none dark:bg-white dark:text-neutral-800"
+            [ngClass]="{
+              'opacity-50 cursor-not-allowed ': isLoadingAddMapping
+            }"
+          >
+            <span
+              class="animate-spin inline-block size-4 border-[3px] border-current border-t-transparent text-white rounded-full"
+              role="status"
+              aria-label="loading"
+            ></span>
+            Loading
           </button>
         </div>
       </div>
