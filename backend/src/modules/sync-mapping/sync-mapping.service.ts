@@ -77,6 +77,16 @@ export class SyncMappingService {
               connectionName: true,
             },
           },
+          syncLogs: {
+            select: {
+              status: true,
+              details: true,
+              createdAt: true,
+            },
+            orderBy: {
+              createdAt: 'desc',
+            },
+          },
         },
       });
 

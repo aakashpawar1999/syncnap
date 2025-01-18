@@ -10,7 +10,7 @@ export class SyncLogService {
     private readonly userService: UserService,
   ) {}
 
-  async createLog(status: SyncStatus, details?: string) {
+  async createLog(mappingId: string, status: SyncStatus, details?: string) {
     try {
       const userData: any = await this.userService.getCurrentUser();
       if (!userData) {
@@ -25,7 +25,12 @@ export class SyncLogService {
       }
 
       const log = await this.prisma.syncLog.create({
-        data: { userId: userDataFromDb.id, status, details },
+        data: {
+          userId: userDataFromDb.id,
+          syncMappingId: mappingId,
+          status,
+          details,
+        },
       });
 
       return { data: log };
@@ -51,6 +56,25 @@ export class SyncLogService {
       const logs = await this.prisma.syncLog.findMany({
         where: { userId: userDataFromDb.id },
         orderBy: { createdAt: 'desc' },
+        select: {
+          status: true,
+          details: true,
+          createdAt: true,
+          SyncMapping: {
+            select: {
+              supabaseConnections: {
+                select: {
+                  connectionName: true,
+                },
+              },
+              airtableConnections: {
+                select: {
+                  connectionName: true,
+                },
+              },
+            },
+          },
+        },
       });
 
       return { data: logs };

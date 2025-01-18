@@ -317,6 +317,7 @@ export class SyncService {
 
       if (!mapping) {
         await this.syncLogService.createLog(
+          mappingId,
           SyncStatus.FAILURE,
           `Error fetching mapping.`,
         );
@@ -332,6 +333,7 @@ export class SyncService {
 
       if (!supabaseConnections || !airtableConnections) {
         await this.syncLogService.createLog(
+          mappingId,
           SyncStatus.FAILURE,
           `Error fetching Supabase or Airtable connections.`,
         );
@@ -367,6 +369,7 @@ export class SyncService {
       if (supabaseError) {
         console.log(supabaseError, 'supabaseError');
         await this.syncLogService.createLog(
+          mappingId,
           SyncStatus.FAILURE,
           `Error fetching data from Supabase.`,
         );
@@ -402,6 +405,7 @@ export class SyncService {
       } catch (error) {
         console.error('Error fetching existing Airtable records:', error);
         await this.syncLogService.createLog(
+          mappingId,
           SyncStatus.FAILURE,
           `Error fetching existing Airtable records.`,
         );
@@ -437,6 +441,7 @@ export class SyncService {
           await axios.post(airtableUrl, { records }, { headers });
         } catch (error) {
           await this.syncLogService.createLog(
+            mappingId,
             SyncStatus.FAILURE,
             `Error syncing table "${supabaseTable}" to Airtable.`,
           );
@@ -445,6 +450,7 @@ export class SyncService {
       }
 
       await this.syncLogService.createLog(
+        mappingId,
         SyncStatus.SUCCESS,
         `The total of ${newRecords.length} records were added to Airtable.`,
       );

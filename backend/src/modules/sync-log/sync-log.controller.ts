@@ -41,6 +41,7 @@ export class SyncLogController {
   })
   async createLog(@Body() body: CreateSyncLogDto) {
     const log: any = await this.syncLogService.createLog(
+      body.mappingId,
       body.status,
       body.details,
     );

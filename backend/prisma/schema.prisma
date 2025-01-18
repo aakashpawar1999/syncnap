@@ -10,6 +10,7 @@ datasource db {
 
 enum SyncStatus {
   SUCCESS
+  PROGRESS
   FAILURE
 }
 
@@ -65,13 +66,16 @@ model SyncMapping {
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @updatedAt
   deletedAt            DateTime?
+  syncLogs             SyncLog[]
 }
 
 model SyncLog {
-  id        String     @id @default(uuid())
-  userId    String
-  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  status    SyncStatus
-  details   String?
-  createdAt DateTime   @default(now())
+  id            String      @id @default(uuid())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  syncMappingId String
+  SyncMapping   SyncMapping @relation(fields: [syncMappingId], references: [id])
+  status        SyncStatus
+  details       String?
+  createdAt     DateTime    @default(now())
 }

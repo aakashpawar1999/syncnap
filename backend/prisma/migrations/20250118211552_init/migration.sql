@@ -60,6 +60,7 @@ CREATE TABLE "SyncMapping" (
 CREATE TABLE "SyncLog" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
+    "syncMappingId" TEXT NOT NULL,
     "status" "SyncStatus" NOT NULL,
     "details" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -87,3 +88,6 @@ ALTER TABLE "SyncMapping" ADD CONSTRAINT "SyncMapping_airtableConnectionId_fkey"
 
 -- AddForeignKey
 ALTER TABLE "SyncLog" ADD CONSTRAINT "SyncLog_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SyncLog" ADD CONSTRAINT "SyncLog_syncMappingId_fkey" FOREIGN KEY ("syncMappingId") REFERENCES "SyncMapping"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
