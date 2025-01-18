@@ -1,0 +1,117 @@
+<div
+  class="flex flex-col bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70"
+>
+  <div class="flex flex-auto flex-col justify-center items-start p-4 md:p-">
+    <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-5">
+      Map Tables
+    </h3>
+    <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="w-full grid grid-cols-1 gap-4">
+        <div class="w-full">
+          <label
+            for="hs-select-label"
+            class="block text-sm font-medium mb-2 dark:text-white"
+            >Supabase Connections</label
+          >
+          <select
+            id="hs-select-label"
+            class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-gray-500 focus:ring-gray-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+            (change)="onSupabaseConnectionChange($event)"
+          >
+            <option selected="">Select connection</option>
+            <option
+              *ngFor="let supabaseConnection of supabaseConnectionList"
+              value="{{ supabaseConnection.id }}"
+            >
+              {{ supabaseConnection.connectionName }}
+            </option>
+          </select>
+        </div>
+        <div
+          class="w-full"
+          [ngClass]="{
+            'cursor-not-allowed': supabaseConnectionId === ''
+          }"
+        >
+          <label
+            for="supabaseTable"
+            class="block text-sm font-medium mb-2 dark:text-white"
+            >Supabase Table</label
+          >
+          <input
+            type="text"
+            id="supabaseTable"
+            [(ngModel)]="supabaseTable"
+            class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-gray-500 focus:ring-gray-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+            placeholder="Supabase Table"
+            aria-describedby="hs-input-helper-text"
+            [disabled]="supabaseConnectionId === ''"
+            [ngClass]="{
+              'opacity-50 cursor-not-allowed': supabaseConnectionId === ''
+            }"
+          />
+        </div>
+      </div>
+      <div class="w-full grid grid-cols-1 gap-4">
+        <div class="w-full">
+          <label
+            for="hs-select-label"
+            class="block text-sm font-medium mb-2 dark:text-white"
+            >Airtable Connections</label
+          >
+          <select
+            id="hs-select-label"
+            class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-gray-500 focus:ring-gray-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+            (change)="onAirtableConnectionChange($event)"
+          >
+            <option selected="">Select connection</option>
+            <option
+              *ngFor="let airtableConnection of airtableConnectionList"
+              value="{{ airtableConnection.id }}"
+            >
+              {{ airtableConnection.connectionName }}
+            </option>
+          </select>
+        </div>
+        <div
+          class="w-full"
+          [ngClass]="{
+            'cursor-not-allowed': airtableTableList.length === 0
+          }"
+        >
+          <label
+            for="hs-select-label"
+            class="block text-sm font-medium mb-2 dark:text-white"
+            >Airtable Tables</label
+          >
+          <select
+            id="hs-select-label"
+            class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-gray-500 focus:ring-gray-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+            (change)="onAirtableTableChange($event)"
+            [ngClass]="{
+              'opacity-50 cursor-not-allowed': airtableTableList.length === 0
+            }"
+            [disabled]="airtableTableList.length === 0"
+          >
+            <option selected="">Select table</option>
+            <option
+              *ngFor="let airtableTable of airtableTableList"
+              value="{{ airtableTable.id }}"
+            >
+              {{ airtableTable.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="w-full">
+        <button
+          type="button"
+          class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-gray-800 text-white hover:bg-gray-900 focus:outline-none focus:bg-gray-900 disabled:opacity-50 disabled:pointer-events-none dark:bg-white dark:text-neutral-800"
+          (click)="addMapping()"
+        >
+          Add Mapping
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
