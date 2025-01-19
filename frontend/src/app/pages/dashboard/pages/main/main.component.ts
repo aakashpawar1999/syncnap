@@ -31,6 +31,7 @@ export class MainComponent implements OnInit {
   syncLogList: any = [];
   supabaseTable: string = '';
   airtableTable: string = '';
+  airtableDisplayName: string = '';
   supabaseConnectionId: string = '';
   airtableConnectionId: string = '';
   isLoadingAirtableTables: boolean = false;
@@ -134,6 +135,11 @@ export class MainComponent implements OnInit {
 
   onAirtableTableChange(event: any) {
     this.airtableTable = event.target.value;
+    this.airtableTableList.forEach((table: any) => {
+      if (table.id === this.airtableTable) {
+        this.airtableDisplayName = table.name;
+      }
+    });
   }
 
   addMapping() {
@@ -142,6 +148,7 @@ export class MainComponent implements OnInit {
     const payload: SyncMappingDto = {
       supabaseTable: this.supabaseTable,
       airtableTable: this.airtableTable,
+      airtableDisplayName: this.airtableDisplayName,
       supabaseConnectionId: this.supabaseConnectionId,
       airtableConnectionId: this.airtableConnectionId,
     };
@@ -151,6 +158,7 @@ export class MainComponent implements OnInit {
           if (res.code === 200) {
             this.supabaseTable = '';
             this.airtableTable = '';
+            this.airtableDisplayName = '';
             this.supabaseConnectionId = '';
             this.airtableConnectionId = '';
             this.getMappings();
