@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-hero',
@@ -18,6 +19,7 @@ export class HeroComponent {
     @Inject(PLATFORM_ID) private platformId: Object,
     private readonly authService: AuthService,
     private toastr: ToastrService,
+    private router: Router,
   ) {}
 
   login() {
@@ -32,12 +34,21 @@ export class HeroComponent {
             }
           },
           error: (error: any) => {
-            this.toastr.error(
-              error.error.message.length > 0
-                ? error.error.message[0]
-                : 'Unknown error occurred!',
-              'Error!',
-            );
+            if (error.error.statusCode === 403) {
+              this.toastr.error(
+                'Your session has expired. Please login again.',
+                'Error!',
+              );
+              this.router.navigate(['/']);
+            } else {
+              this.toastr.error(
+                Array.isArray(error.error.message) &&
+                  error.error.message.length > 0
+                  ? error.error.message[0]
+                  : 'Unknown error occurred!',
+                'Error!',
+              );
+            }
           },
           complete: () => {},
         }),

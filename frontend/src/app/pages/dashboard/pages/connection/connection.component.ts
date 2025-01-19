@@ -3,7 +3,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { ConnectionService } from './connection.service';
 import { ApiResponse } from '../../../../shared/dto/api-response.dto';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
@@ -32,6 +32,7 @@ export class ConnectionComponent implements OnInit {
   constructor(
     private connectionService: ConnectionService,
     private toastr: ToastrService,
+    private router: Router,
   ) {}
 
   ngOnInit() {
@@ -84,12 +85,21 @@ export class ConnectionComponent implements OnInit {
             }
           },
           error: (error: any) => {
-            this.toastr.error(
-              error.error.message.length > 0
-                ? error.error.message[0]
-                : 'Unknown error occurred!',
-              'Error!',
-            );
+            if (error.error.statusCode === 403) {
+              this.toastr.error(
+                'Your session has expired. Please login again.',
+                'Error!',
+              );
+              this.router.navigate(['/']);
+            } else {
+              this.toastr.error(
+                Array.isArray(error.error.message) &&
+                  error.error.message.length > 0
+                  ? error.error.message[0]
+                  : 'Unknown error occurred!',
+                'Error!',
+              );
+            }
             this.isLoadingSupabaseConnection = false;
           },
           complete: () => {
@@ -115,12 +125,21 @@ export class ConnectionComponent implements OnInit {
             }
           },
           error: (error: any) => {
-            this.toastr.error(
-              error.error.message.length > 0
-                ? error.error.message[0]
-                : 'Unknown error occurred!',
-              'Error!',
-            );
+            if (error.error.statusCode === 403) {
+              this.toastr.error(
+                'Your session has expired. Please login again.',
+                'Error!',
+              );
+              this.router.navigate(['/']);
+            } else {
+              this.toastr.error(
+                Array.isArray(error.error.message) &&
+                  error.error.message.length > 0
+                  ? error.error.message[0]
+                  : 'Unknown error occurred!',
+                'Error!',
+              );
+            }
             this.isLoadingAirtableConnection = false;
           },
           complete: () => {

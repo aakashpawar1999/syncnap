@@ -10,12 +10,12 @@
         <div class="w-full grid grid-cols-1 gap-4">
           <div class="w-full">
             <label
-              for="hs-select-label"
+              for="supabaseConnectionId"
               class="block text-sm font-medium mb-2 dark:text-white"
               >Supabase Connections</label
             >
             <select
-              id="hs-select-label"
+              id="supabaseConnectionId"
               class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-gray-500 focus:ring-gray-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
               [(ngModel)]="supabaseConnectionId"
               (change)="onSupabaseConnectionChange($event)"
@@ -57,12 +57,12 @@
         <div class="w-full grid grid-cols-1 gap-4">
           <div class="w-full">
             <label
-              for="hs-select-label"
+              for="airtableConnectionId"
               class="block text-sm font-medium mb-2 dark:text-white"
               >Airtable Connections</label
             >
             <select
-              id="hs-select-label"
+              id="airtableConnectionId"
               class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-gray-500 focus:ring-gray-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
               [(ngModel)]="airtableConnectionId"
               (change)="onAirtableConnectionChange($event)"
@@ -83,7 +83,7 @@
             }"
           >
             <label
-              for="hs-select-label"
+              for="airtableTable"
               class="flex items-center justify-start text-sm font-medium mb-2 dark:text-white"
               >Airtable Tables
               <span
@@ -96,7 +96,7 @@
               </span>
             </label>
             <select
-              id="hs-select-label"
+              id="airtableTable"
               class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-gray-500 focus:ring-gray-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
               [(ngModel)]="airtableTable"
               (change)="onAirtableTableChange($event)"
