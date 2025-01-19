@@ -147,9 +147,38 @@
     class="flex flex-col bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70"
   >
     <div class="flex flex-auto flex-col justify-center items-start p-4">
-      <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-5">
-        Mapping List
-      </h3>
+      <div class="flex justify-between items-center w-full mb-5">
+        <h3 class="text-lg font-bold text-gray-800 dark:text-white">
+          Mapping List
+        </h3>
+        <div class="hs-tooltip [--placement:left] inline-block">
+          <button
+            type="button"
+            class="hs-tooltip-toggle inline-flex items-center gap-x-2 p-1.5 text-sm font-semibold rounded-lg border border-gray-200 text-gray-600 hover:text-gray-800 focus:outline-none focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none dark:text-gray-500 dark:hover:text-gray-400 dark:focus:text-gray-400"
+            (click)="getMappings()"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+              fill="currentColor"
+              class="text-gray-800 hover:text-gray-900"
+            >
+              <path
+                d="M440-122q-121-15-200.5-105.5T160-440q0-66 26-126.5T260-672l57 57q-38 34-57.5 79T240-440q0 88 56 155.5T440-202v80Zm80 0v-80q87-16 143.5-83T720-440q0-100-70-170t-170-70h-3l44 44-56 56-140-140 140-140 56 56-44 44h3q134 0 227 93t93 227q0 121-79.5 211.5T520-122v80Z"
+                fill="currentColor"
+              />
+            </svg>
+            <span
+              class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded shadow-sm dark:bg-neutral-700"
+              role="tooltip"
+            >
+              Reload
+            </span>
+          </button>
+        </div>
+      </div>
       <div class="flex flex-col w-full">
         <div class="-m-1.5 overflow-x-auto">
           <div class="p-1.5 min-w-full inline-block align-middle">
@@ -248,7 +277,7 @@
                           'bg-yellow-100 text-yellow-800':
                             mapping.syncLogs[0]?.status === 'PROGRESS',
                           'bg-red-100 text-red-800':
-                            mapping.syncLogs[0]?.status === 'FAILED'
+                            mapping.syncLogs[0]?.status === 'FAILURE'
                         }"
                         class="py-1 px-2 inline-flex items-center gap-x-1 text-xs font-medium rounded-full"
                       >
@@ -271,7 +300,7 @@
                           <path d="m9 12 2 2 4-4"></path>
                         </svg>
                         <svg
-                          *ngIf="mapping.syncLogs[0]?.status === 'FAILED'"
+                          *ngIf="mapping.syncLogs[0]?.status === 'FAILURE'"
                           class="shrink-0 size-3"
                           xmlns="http://www.w3.org/2000/svg"
                           width="24"
@@ -339,10 +368,7 @@
                       class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium"
                     >
                       <button
-                        *ngIf="
-                          !isLoadingSyncTable ||
-                          mapping.syncLogs[0]?.status === 'SUCCESS'
-                        "
+                        *ngIf="mapping.syncLogs[0]?.status !== 'PROGRESS'"
                         type="button"
                         class="inline-flex items-center gap-x-2 p-1.5 text-sm font-semibold rounded-lg border border-gray-200 text-gray-600 hover:text-gray-800 focus:outline-none focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none dark:text-gray-500 dark:hover:text-gray-400 dark:focus:text-gray-400"
                         (click)="syncTable(mapping.id)"
@@ -362,15 +388,11 @@
                         </svg>
                       </button>
                       <button
-                        *ngIf="
-                          isLoadingSyncTable ||
-                          mapping.syncLogs[0]?.status === 'PROGRESS'
-                        "
+                        *ngIf="mapping.syncLogs[0]?.status === 'PROGRESS'"
                         type="button"
                         class="inline-flex items-center gap-x-2 p-1.5 text-sm font-semibold rounded-lg border border-gray-200 text-gray-600 hover:text-gray-800 focus:outline-none focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none dark:text-gray-500 dark:hover:text-gray-400 dark:focus:text-gray-400"
                         [ngClass]="{
                           'opacity-50 cursor-not-allowed ':
-                            isLoadingSyncTable ||
                             mapping.syncLogs[0]?.status === 'PROGRESS'
                         }"
                       >
@@ -395,9 +417,38 @@
     class="flex flex-col bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70"
   >
     <div class="flex flex-auto flex-col justify-center items-start p-4">
-      <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-5">
-        Sync Logs
-      </h3>
+      <div class="flex justify-between items-center w-full mb-5">
+        <h3 class="text-lg font-bold text-gray-800 dark:text-white">
+          Sync Logs
+        </h3>
+        <div class="hs-tooltip [--placement:left] inline-block">
+          <button
+            type="button"
+            class="hs-tooltip-toggle inline-flex items-center gap-x-2 p-1.5 text-sm font-semibold rounded-lg border border-gray-200 text-gray-600 hover:text-gray-800 focus:outline-none focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none dark:text-gray-500 dark:hover:text-gray-400 dark:focus:text-gray-400"
+            (click)="getSyncLogs()"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+              fill="currentColor"
+              class="text-gray-800 hover:text-gray-900"
+            >
+              <path
+                d="M440-122q-121-15-200.5-105.5T160-440q0-66 26-126.5T260-672l57 57q-38 34-57.5 79T240-440q0 88 56 155.5T440-202v80Zm80 0v-80q87-16 143.5-83T720-440q0-100-70-170t-170-70h-3l44 44-56 56-140-140 140-140 56 56-44 44h3q134 0 227 93t93 227q0 121-79.5 211.5T520-122v80Z"
+                fill="currentColor"
+              />
+            </svg>
+            <span
+              class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded shadow-sm dark:bg-neutral-700"
+              role="tooltip"
+            >
+              Reload
+            </span>
+          </button>
+        </div>
+      </div>
       <div class="flex flex-col w-full">
         <div class="-m-1.5 overflow-x-auto">
           <div class="p-1.5 min-w-full inline-block align-middle">
@@ -488,7 +539,7 @@
                             log.status === 'SUCCESS',
                           'bg-yellow-100 text-yellow-800':
                             log.status === 'PROGRESS',
-                          'bg-red-100 text-red-800': log.status === 'FAILED'
+                          'bg-red-100 text-red-800': log.status === 'FAILURE'
                         }"
                         class="py-1 px-2 inline-flex items-center gap-x-1 text-xs font-medium rounded-full"
                       >
@@ -511,7 +562,7 @@
                           <path d="m9 12 2 2 4-4"></path>
                         </svg>
                         <svg
-                          *ngIf="log.status === 'FAILED'"
+                          *ngIf="log.status === 'FAILURE'"
                           class="shrink-0 size-3"
                           xmlns="http://www.w3.org/2000/svg"
                           width="24"

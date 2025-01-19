@@ -35,7 +35,6 @@ export class MainComponent implements OnInit {
   airtableConnectionId: string = '';
   isLoadingAirtableTables: boolean = false;
   isLoadingAddMapping: boolean = false;
-  isLoadingSyncTable: boolean = false;
 
   constructor(
     private mainService: MainService,
@@ -200,8 +199,6 @@ export class MainComponent implements OnInit {
   }
 
   syncTable(mappingId: string) {
-    this.isLoadingSyncTable = true;
-
     this.subscriptions.push(
       this.mainService.syncTable(mappingId).subscribe({
         next: (res: ApiResponse) => {
@@ -218,13 +215,18 @@ export class MainComponent implements OnInit {
               : 'Unknown error occurred!',
             'Error!',
           );
-          this.isLoadingSyncTable = false;
         },
         complete: () => {
-          this.isLoadingSyncTable = false;
+          this.getMappings();
+          this.getSyncLogs();
         },
       }),
     );
+
+    setTimeout(() => {
+      this.getMappings();
+      this.getSyncLogs();
+    }, 1000);
   }
 
   getSyncLogs() {
@@ -234,7 +236,6 @@ export class MainComponent implements OnInit {
           this.syncLogList = res.data;
         },
         error: (error: any) => {
-          console.log(error, 'error');
           this.toastr.error(
             Array.isArray(error.error.message) && error.error.message.length > 0
               ? error.error.message[0]
