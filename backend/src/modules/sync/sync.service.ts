@@ -307,6 +307,12 @@ export class SyncService {
 
   async syncTable(mappingId: string) {
     try {
+      const log: any = await this.syncLogService.createLog(
+        mappingId,
+        SyncStatus.PROGRESS,
+        `Syncing table.`,
+      );
+
       const mapping = await this.prisma.syncMapping.findUnique({
         where: { id: mappingId },
         include: {
@@ -316,8 +322,8 @@ export class SyncService {
       });
 
       if (!mapping) {
-        await this.syncLogService.createLog(
-          mappingId,
+        await this.syncLogService.updateLog(
+          log.data.id,
           SyncStatus.FAILURE,
           `Error fetching mapping.`,
         );
@@ -332,8 +338,8 @@ export class SyncService {
       } = mapping;
 
       if (!supabaseConnections || !airtableConnections) {
-        await this.syncLogService.createLog(
-          mappingId,
+        await this.syncLogService.updateLog(
+          log.data.id,
           SyncStatus.FAILURE,
           `Error fetching Supabase or Airtable connections.`,
         );
@@ -368,8 +374,8 @@ export class SyncService {
 
       if (supabaseError) {
         console.log(supabaseError, 'supabaseError');
-        await this.syncLogService.createLog(
-          mappingId,
+        await this.syncLogService.updateLog(
+          log.data.id,
           SyncStatus.FAILURE,
           `Error fetching data from Supabase.`,
         );
@@ -404,8 +410,8 @@ export class SyncService {
         } while (offset);
       } catch (error) {
         console.error('Error fetching existing Airtable records:', error);
-        await this.syncLogService.createLog(
-          mappingId,
+        await this.syncLogService.updateLog(
+          log.data.id,
           SyncStatus.FAILURE,
           `Error fetching existing Airtable records.`,
         );
@@ -421,7 +427,6 @@ export class SyncService {
       const newRecords = supabaseData.filter(
         (row) => !existingFieldValues.includes(row[uniqueField]),
       );
-      console.log(newRecords, 'newRecords');
 
       const airtableData = this.convertDataForAirtable(
         newRecords,
@@ -440,8 +445,8 @@ export class SyncService {
         try {
           await axios.post(airtableUrl, { records }, { headers });
         } catch (error) {
-          await this.syncLogService.createLog(
-            mappingId,
+          await this.syncLogService.updateLog(
+            log.data.id,
             SyncStatus.FAILURE,
             `Error syncing table "${supabaseTable}" to Airtable.`,
           );
@@ -449,8 +454,8 @@ export class SyncService {
         }
       }
 
-      await this.syncLogService.createLog(
-        mappingId,
+      await this.syncLogService.updateLog(
+        log.data.id,
         SyncStatus.SUCCESS,
         `The total of ${newRecords.length} records were added to Airtable.`,
       );
