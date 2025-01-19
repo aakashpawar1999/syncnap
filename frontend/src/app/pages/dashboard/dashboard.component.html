@@ -104,9 +104,9 @@
         class="size-8 flex justify-center items-center gap-x-2 border border-gray-200 text-gray-800 hover:text-gray-500 rounded-lg focus:outline-none focus:text-gray-500 disabled:opacity-50 disabled:pointer-events-none dark:border-neutral-700 dark:text-neutral-200 dark:hover:text-neutral-500 dark:focus:text-neutral-500"
         aria-haspopup="dialog"
         aria-expanded="false"
-        aria-controls="hs-application-sidebar"
+        aria-controls="hs-offcanvas-sidemenu"
         aria-label="Toggle navigation"
-        data-hs-overlay="#hs-application-sidebar"
+        data-hs-overlay="#hs-offcanvas-sidemenu"
       >
         <span class="sr-only">Toggle Navigation</span>
         <svg
@@ -165,7 +165,7 @@
 
 <!-- Sidebar -->
 <div
-  id="hs-application-sidebar"
+  id="hs-offcanvas-sidemenu"
   class="hs-overlay [--auto-close:lg] hs-overlay-open:translate-x-0 -translate-x-full transition-all duration-300 transform w-[260px] h-full hidden fixed inset-y-0 start-0 z-[60] bg-white border-e border-gray-200 lg:block lg:translate-x-0 lg:end-auto lg:bottom-0 dark:bg-neutral-800 dark:border-neutral-700"
   role="dialog"
   tabindex="-1"
@@ -198,10 +198,7 @@
     <div
       class="h-full overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500"
     >
-      <nav
-        class="hs-accordion-group p-3 w-full flex flex-col flex-wrap"
-        data-hs-accordion-always-open
-      >
+      <nav class="hs-accordion-group p-3 w-full flex flex-col flex-wrap">
         <ul class="flex flex-col space-y-1">
           <li>
             <a
@@ -211,6 +208,7 @@
               }"
               href="javascript:void(0)"
               routerLink="/dashboard"
+              data-hs-overlay="#hs-offcanvas-sidemenu"
             >
               <svg
                 class="shrink-0 size-4"
@@ -236,6 +234,7 @@
               }"
               href="javascript:void(0)"
               routerLink="/dashboard/connections"
+              data-hs-overlay="#hs-offcanvas-sidemenu"
             >
               <svg
                 class="shrink-0 size-4"
@@ -261,6 +260,7 @@
               }"
               href="javascript:void(0)"
               routerLink="/dashboard/settings"
+              data-hs-overlay="#hs-offcanvas-sidemenu"
             >
               <svg
                 class="shrink-0 mt-0.5 size-4"
