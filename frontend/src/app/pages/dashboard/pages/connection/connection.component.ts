@@ -48,6 +48,26 @@ export class ConnectionComponent implements OnInit {
     });
   }
 
+  extractBaseIdFromUrl(): void {
+    const input = this.airtableForm.value.baseId;
+    const isValidUrl = this.checkIfValidUrl(input);
+    if (isValidUrl) {
+      const appParts = input
+        .split('/')
+        .filter((part: string) => part.startsWith('app'));
+      this.airtableForm.controls['baseId'].setValue(appParts[0]);
+    }
+  }
+
+  checkIfValidUrl(value: string): boolean {
+    try {
+      new URL(value);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
   connectSupabase() {
     this.isLoadingSupabaseConnection = true;
 
