@@ -82,4 +82,36 @@ export class SyncLogService {
       return 'ERROR';
     }
   }
+
+  async updateLog(logId: string, status: SyncStatus, details?: string) {
+    try {
+      const userData: any = await this.userService.getCurrentUser();
+      if (!userData) {
+        return 'ERROR';
+      }
+
+      const userDataFromDb = await this.prisma.user.findUnique({
+        where: { email: userData.email },
+      });
+      if (!userDataFromDb) {
+        return 'ERROR';
+      }
+
+      const log = await this.prisma.syncLog.findUnique({
+        where: { id: logId, userId: userDataFromDb.id },
+      });
+      if (!log) {
+        return 'ERROR';
+      }
+
+      await this.prisma.syncLog.update({
+        where: { id: logId, userId: userDataFromDb.id },
+        data: { status, details },
+      });
+
+      return 'SUCCESS';
+    } catch (error) {
+      return 'ERROR';
+    }
+  }
 }

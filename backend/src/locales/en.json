@@ -50,7 +50,9 @@
     "CREATE_SYNC_LOG_SUCCESS": "Sync log created successfully.",
     "CREATE_SYNC_LOG_ERROR": "Error while creating sync log.",
     "GET_SYNC_LOGS_SUCCESS": "Sync logs fetched successfully.",
-    "GET_SYNC_LOGS_ERROR": "Error while fetching sync logs."
+    "GET_SYNC_LOGS_ERROR": "Error while fetching sync logs.",
+    "UPDATE_SYNC_LOG_SUCCESS": "Sync log updated successfully.",
+    "UPDATE_SYNC_LOG_ERROR": "Error while updating sync log."
   },
   "SYNC": {
     "SYNC_TABLE_SUCCESS": "Sync table successfully.",

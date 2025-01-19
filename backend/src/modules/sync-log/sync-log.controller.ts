@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   Post,
+  Put,
   UseGuards,
   Version,
 } from '@nestjs/common';
@@ -12,7 +13,7 @@ import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/common/guards/auth/auth.guard';
 import { STATUS_CODES } from 'src/common/status-codes';
 import { loadMessages } from 'src/utils/load-messages.util';
-import { CreateSyncLogDto } from './dto';
+import { CreateSyncLogDto, UpdateSyncLogDto } from './dto';
 
 const MESSAGES = loadMessages();
 
@@ -85,6 +86,43 @@ export class SyncLogController {
       return {
         ...STATUS_CODES.BAD_REQUEST,
         message: MESSAGES.SYNC_LOG.GET_SYNC_LOGS_FAILURE,
+      };
+    }
+  }
+
+  @Put()
+  @Version('1')
+  @HttpCode(STATUS_CODES.OK.code)
+  @ApiOperation({ summary: 'Update sync log' })
+  @ApiResponse({
+    status: STATUS_CODES.OK.code,
+    description: MESSAGES.SYNC_LOG.UPDATE_SYNC_LOG_SUCCESS,
+  })
+  @ApiResponse({
+    status: STATUS_CODES.BAD_REQUEST.code,
+    description: MESSAGES.SYNC_LOG.UPDATE_SYNC_LOG_FAILURE,
+  })
+  @ApiBody({
+    type: UpdateSyncLogDto,
+    description: 'Update sync log',
+    required: true,
+  })
+  async updateLog(@Body() body: UpdateSyncLogDto) {
+    const log: any = await this.syncLogService.updateLog(
+      body.id,
+      body.status,
+      body.details,
+    );
+
+    if (log === 'SUCCESS') {
+      return {
+        ...STATUS_CODES.OK,
+        message: MESSAGES.SYNC_LOG.UPDATE_SYNC_LOG_SUCCESS,
+      };
+    } else {
+      return {
+        ...STATUS_CODES.BAD_REQUEST,
+        message: MESSAGES.SYNC_LOG.UPDATE_SYNC_LOG_FAILURE,
       };
     }
   }
