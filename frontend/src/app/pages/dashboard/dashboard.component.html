@@ -131,10 +131,35 @@
       <!-- Breadcrumb -->
       <ol class="ms-3 flex items-center whitespace-nowrap">
         <li
-          class="flex items-center text-sm text-gray-800 dark:text-neutral-400"
+          class="flex items-center text-sm text-gray-500 dark:text-neutral-400"
+          [ngClass]="{
+            'text-gray-800': pageTitles.length === 1
+          }"
         >
-          Application Layout
           <svg
+            class="me-2"
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="currentColor"
+          >
+            <path
+              d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"
+            />
+          </svg>
+        </li>
+        <li
+          class="flex items-center text-sm font-semibold text-gray-500 truncate dark:text-neutral-400"
+          aria-current="page"
+          *ngFor="let pageTitle of pageTitles; let index = index"
+          [ngClass]="{
+            'text-gray-800': index === pageTitles.length - 1
+          }"
+        >
+          {{ pageTitle.charAt(0).toUpperCase() + pageTitle.slice(1) }}
+          <svg
+            *ngIf="pageTitles.length > 1 && index < pageTitles.length - 1"
             class="shrink-0 mx-3 overflow-visible size-2.5 text-gray-400 dark:text-neutral-500"
             width="16"
             height="16"
@@ -149,12 +174,6 @@
               stroke-linecap="round"
             />
           </svg>
-        </li>
-        <li
-          class="text-sm font-semibold text-gray-800 truncate dark:text-neutral-400"
-          aria-current="page"
-        >
-          Dashboard
         </li>
       </ol>
       <!-- End Breadcrumb -->

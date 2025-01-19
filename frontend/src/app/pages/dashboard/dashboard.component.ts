@@ -2,7 +2,12 @@ import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../shared/services/auth.service';
 import { isPlatformBrowser } from '@angular/common';
-import { Router, RouterModule, RouterOutlet } from '@angular/router';
+import {
+  NavigationEnd,
+  Router,
+  RouterModule,
+  RouterOutlet,
+} from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { DashboardService } from './dashboard.service';
 import { ApiResponse } from '../../shared/dto/api-response.dto';
@@ -18,6 +23,7 @@ import { ToastrService, ToastrModule } from 'ngx-toastr';
 export class DashboardComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   userDetails: any = null;
+  pageTitles: string[] = [];
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -25,7 +31,13 @@ export class DashboardComponent implements OnInit {
     private readonly dashboardService: DashboardService,
     private router: Router,
     private toastr: ToastrService,
-  ) {}
+  ) {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.pageTitles = event.url.split('/').filter((page) => page !== '');
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.getUserDetails();
