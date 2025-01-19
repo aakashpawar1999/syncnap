@@ -63,6 +63,7 @@ model SyncMapping {
   airtableConnections  AirtableConnection @relation(fields: [airtableConnectionId], references: [id])
   supabaseTable        String
   airtableTable        String
+  airtableDisplayName  String
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @updatedAt
   deletedAt            DateTime?

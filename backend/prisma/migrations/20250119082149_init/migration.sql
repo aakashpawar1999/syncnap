@@ -49,6 +49,7 @@ CREATE TABLE "SyncMapping" (
     "airtableConnectionId" TEXT NOT NULL,
     "supabaseTable" TEXT NOT NULL,
     "airtableTable" TEXT NOT NULL,
+    "airtableDisplayName" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "deletedAt" TIMESTAMP(3),

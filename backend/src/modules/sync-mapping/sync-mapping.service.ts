@@ -12,6 +12,7 @@ export class SyncMappingService {
   async addMapping(
     supabaseTable: string,
     airtableTable: string,
+    airtableDisplayName: string,
     supabaseConnectionId: string,
     airtableConnectionId: string,
   ) {
@@ -33,6 +34,7 @@ export class SyncMappingService {
           userId: userDataFromDb.id,
           supabaseTable,
           airtableTable,
+          airtableDisplayName,
           supabaseConnectionId,
           airtableConnectionId,
         },
@@ -67,6 +69,7 @@ export class SyncMappingService {
           id: true,
           supabaseTable: true,
           airtableTable: true,
+          airtableDisplayName: true,
           supabaseConnections: {
             select: {
               connectionName: true,

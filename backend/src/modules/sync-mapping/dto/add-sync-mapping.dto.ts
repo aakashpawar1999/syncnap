@@ -12,6 +12,11 @@ export class AddSyncMappingDto {
   @IsString()
   airtableTable: string;
 
+  @ApiProperty({ description: 'Airtable display name' })
+  @IsNotEmpty()
+  @IsString()
+  airtableDisplayName: string;
+
   @ApiProperty({ description: 'Supabase connection id' })
   @IsNotEmpty()
   @IsString()

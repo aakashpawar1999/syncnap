@@ -43,6 +43,7 @@ export class SyncMappingController {
     const addMapping: any = await this.syncMappingService.addMapping(
       body.supabaseTable,
       body.airtableTable,
+      body.airtableDisplayName,
       body.supabaseConnectionId,
       body.airtableConnectionId,
     );
