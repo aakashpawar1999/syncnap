@@ -1,4 +1,10 @@
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
@@ -12,7 +18,7 @@ import { Router } from '@angular/router';
   templateUrl: './hero.component.html',
   styleUrl: './hero.component.css',
 })
-export class HeroComponent {
+export class HeroComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -21,6 +27,8 @@ export class HeroComponent {
     private toastr: ToastrService,
     private router: Router,
   ) {}
+
+  ngOnInit(): void {}
 
   login() {
     if (isPlatformBrowser(this.platformId)) {

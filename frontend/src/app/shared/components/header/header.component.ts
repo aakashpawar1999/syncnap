@@ -1,4 +1,10 @@
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../shared/services/auth.service';
 import { isPlatformBrowser } from '@angular/common';
@@ -13,7 +19,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   constructor(
