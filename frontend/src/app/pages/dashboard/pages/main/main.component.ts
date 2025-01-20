@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -22,7 +22,7 @@ import { ToastrModule, ToastrService } from 'ngx-toastr';
   templateUrl: './main.component.html',
   styleUrl: './main.component.css',
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   supabaseConnectionList: any = [];
   airtableConnectionList: any = [];

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ApiResponse } from '../../../../shared/dto/api-response.dto';
 import { Router } from '@angular/router';
@@ -12,7 +12,7 @@ import { SettingService } from './setting.service';
   templateUrl: './setting.component.html',
   styleUrl: './setting.component.css',
 })
-export class SettingComponent implements OnInit {
+export class SettingComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   userDetails: any = null;
 

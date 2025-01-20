@@ -22,7 +22,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './connection.component.html',
   styleUrl: './connection.component.css',
 })
-export class ConnectionComponent implements OnInit {
+export class ConnectionComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   supabaseForm!: FormGroup;
   airtableForm!: FormGroup;
