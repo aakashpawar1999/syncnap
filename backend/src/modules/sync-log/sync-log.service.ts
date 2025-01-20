@@ -62,6 +62,9 @@ export class SyncLogService {
           createdAt: true,
           SyncMapping: {
             select: {
+              supabaseTable: true,
+              airtableTable: true,
+              airtableDisplayName: true,
               supabaseConnections: {
                 select: {
                   connectionName: true,
