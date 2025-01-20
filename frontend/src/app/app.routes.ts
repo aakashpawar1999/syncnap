@@ -42,6 +42,13 @@ export const routes: Routes = [
           ).then((c) => c.ConnectionComponent),
       },
       {
+        path: 'sync-logs',
+        loadComponent: () =>
+          import('./pages/dashboard/pages/sync-log/sync-log.component').then(
+            (c) => c.SyncLogComponent,
+          ),
+      },
+      {
         path: 'settings',
         loadComponent: () =>
           import('./pages/dashboard/pages/setting/setting.component').then(

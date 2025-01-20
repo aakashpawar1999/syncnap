@@ -28,7 +28,6 @@ export class MainComponent implements OnInit, OnDestroy {
   airtableConnectionList: any = [];
   airtableTableList: any = [];
   mappingList: any = [];
-  syncLogList: any = [];
   supabaseTable: string = '';
   airtableTable: string = '';
   airtableDisplayName: string = '';
@@ -47,7 +46,6 @@ export class MainComponent implements OnInit, OnDestroy {
     this.getSupabaseConnections();
     this.getAirtableConnections();
     this.getMappings();
-    this.getSyncLogs();
   }
 
   getSupabaseConnections() {
@@ -281,44 +279,13 @@ export class MainComponent implements OnInit, OnDestroy {
         },
         complete: () => {
           this.getMappings();
-          this.getSyncLogs();
         },
       }),
     );
 
     setTimeout(() => {
       this.getMappings();
-      this.getSyncLogs();
     }, 1000);
-  }
-
-  getSyncLogs() {
-    this.subscriptions.push(
-      this.mainService.getSyncLogs().subscribe({
-        next: (res: ApiResponse) => {
-          this.syncLogList = res.data;
-        },
-        error: (error: any) => {
-          console.log(error, 'error');
-          if (error.error.statusCode === 403) {
-            this.toastr.error(
-              'Your session has expired. Please login again.',
-              'Error!',
-            );
-            this.router.navigate(['/']);
-          } else {
-            this.toastr.error(
-              Array.isArray(error.error.message) &&
-                error.error.message.length > 0
-                ? error.error.message[0]
-                : 'Unknown error occurred!',
-              'Error!',
-            );
-          }
-        },
-        complete: () => {},
-      }),
-    );
   }
 
   ngOnDestroy() {

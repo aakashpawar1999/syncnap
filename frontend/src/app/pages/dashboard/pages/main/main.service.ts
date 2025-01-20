@@ -58,8 +58,4 @@ export class MainService {
       payload,
     );
   }
-
-  getSyncLogs(): Observable<ApiResponse> {
-    return this.http.get<ApiResponse>(this.resolveApiUrl('v1', `sync-log`));
-  }
 }
