@@ -8,6 +8,7 @@ import { ConnectionService } from './connection.service';
 import { ApiResponse } from '../../../../shared/dto/api-response.dto';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
+import { FaqDto } from './dto/faq.dto';
 
 @Component({
   selector: 'app-connection',
@@ -28,6 +29,7 @@ export class ConnectionComponent implements OnInit, OnDestroy {
   airtableForm!: FormGroup;
   isLoadingSupabaseConnection: boolean = false;
   isLoadingAirtableConnection: boolean = false;
+  faq: FaqDto[] = [];
 
   constructor(
     private connectionService: ConnectionService,
@@ -47,6 +49,54 @@ export class ConnectionComponent implements OnInit, OnDestroy {
       accessToken: new FormControl('', Validators.required),
       baseId: new FormControl('', Validators.required),
     });
+
+    this.getFaq();
+  }
+
+  getFaq(): void {
+    this.faq = [
+      {
+        question: 'Why do I need to share my Supabase Table URL and Anon Key?',
+        answer:
+          'We require your Supabase Table URL and Anon Key to establish a connection between your database and Airtable. This allows us to sync your data seamlessly. Rest assured, we only use these details for the intended purpose of syncing your tables.',
+      },
+      {
+        question: 'Why do I need to provide my Airtable Access Token?',
+        answer:
+          'Your Airtable Access Token is necessary to authenticate with your Airtable workspace and enable syncing of data. This token gives us access to only the tables you choose to connect, ensuring that we never access or modify unauthorized data.',
+      },
+      {
+        question: 'Is it safe to share my Supabase and Airtable credentials?',
+        answer:
+          'Absolutely. Security is our top priority. We use industry-standard encryption to store your credentials securely and only access them when syncing your data. Your credentials are never shared with third parties.',
+      },
+      {
+        question:
+          'Does sharing my Supabase Anonymous Key make my data vulnerable?',
+        answer:
+          'No. The Anonymous Key is designed for public access scenarios in Supabase. It has limited permissions, and we strictly adhere to using it within those permissions. We recommend configuring database rules to ensure the right level of access.',
+      },
+      {
+        question: 'Will my data be exposed or shared with others?',
+        answer:
+          'No. Your data remains yours, and we only process it as needed for syncing between Supabase and Airtable. We never expose or share your data with third parties.',
+      },
+      {
+        question: 'Can I choose which tables to sync?',
+        answer:
+          'Yes. You have complete control over which Supabase tables you want to sync with Airtable. Our platform will only access the tables you explicitly configure.',
+      },
+      {
+        question: 'How do you protect my credentials?',
+        answer:
+          'We use advanced security measures like end-to-end encryption to protect your credentials. All sensitive information is securely stored and accessed only when necessary for syncing.',
+      },
+      {
+        question: 'What should I do if I have more questions or concerns?',
+        answer:
+          'We’re here to help! If you have any questions or concerns, feel free to contact us at [support email/contact page link].',
+      },
+    ];
   }
 
   extractBaseIdFromUrl(): void {
