@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { UserService } from '../user/user.service';
+import { createClient } from '@supabase/supabase-js';
 
 @Injectable()
 export class SyncMappingService {
@@ -26,6 +27,28 @@ export class SyncMappingService {
         where: { email: userData.email },
       });
       if (!userDataFromDb) {
+        return 'ERROR';
+      }
+
+      const supabaseConnections =
+        await this.prisma.supabaseConnection.findUnique({
+          where: { id: supabaseConnectionId },
+        });
+      if (!supabaseConnections) {
+        return 'ERROR';
+      }
+      const supabase = createClient(
+        supabaseConnections.projectUrl,
+        supabaseConnections.anonApiKey,
+      );
+      const { data: supabaseData, error: supabaseError } = await supabase
+        .from(supabaseTable)
+        .select('*')
+        .limit(1);
+      if (supabaseError) {
+        return 'ERROR';
+      }
+      if (!supabaseData || supabaseData.length === 0) {
         return 'ERROR';
       }
 
