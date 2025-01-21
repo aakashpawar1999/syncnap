@@ -92,41 +92,50 @@ export class SyncService {
     }
   }
 
-  async getSupabaseSchema(supabase: SupabaseClient, tableName: string) {
+  async getSupabaseSchema(
+    logId: string,
+    supabase: SupabaseClient,
+    tableName: string,
+  ) {
     try {
       const { data: supabaseData, error: supabaseError } = await supabase
         .from(tableName)
         .select('*')
         .limit(1);
 
-      console.log(supabaseData, 'supabaseData');
-
       if (supabaseError) {
-        console.error(
-          'Error fetching data from Supabase:',
-          supabaseError.message,
+        await this.syncLogService.updateLog(
+          logId,
+          SyncStatus.FAILURE,
+          `Error fetching data from table "${tableName}" in Supabase.`,
         );
-        throw new Error('Failed to fetch table data.');
+        return [];
       }
 
       if (!supabaseData || supabaseData.length === 0) {
-        console.warn(`Table "${tableName}" is empty. Using an empty schema.`);
+        await this.syncLogService.updateLog(
+          logId,
+          SyncStatus.FAILURE,
+          `Table "${tableName}" is empty. Using an empty schema.`,
+        );
         return [];
       }
 
       // Extract column names and infer data types from the first record
       const firstRecord = supabaseData[0];
-      console.log(firstRecord, 'firstRecord');
       const schema = Object.keys(firstRecord).map((key) => ({
         column_name: key,
         data_type: this.inferDataType(firstRecord[key]),
       }));
 
-      console.log(`Fetched schema for table "${tableName}":`, schema);
       return schema;
     } catch (error) {
-      console.error('Error fetching Supabase schema:', error.message);
-      throw new Error('Failed to fetch Supabase schema.');
+      await this.syncLogService.updateLog(
+        logId,
+        SyncStatus.FAILURE,
+        `Error fetching schema from table "${tableName}" in Supabase.`,
+      );
+      return [];
     }
   }
 
@@ -149,12 +158,12 @@ export class SyncService {
       // Extract fields from the first record
       return Object.keys(records[0].fields);
     } catch (error) {
-      console.error('Error fetching Airtable schema:', error.message);
-      throw new Error('Failed to fetch Airtable schema.');
+      return [];
     }
   }
 
   async updateAirtableSchema(
+    logId: string,
     airtableBaseId: string,
     airtableTableId: string,
     airtableAccessToken: string,
@@ -184,13 +193,11 @@ export class SyncService {
             deleteFieldUrl.replace('{fieldId}', airtableField.id),
             { headers },
           );
-          console.log(
-            `Removed unused field "${airtableField.name}" from Airtable.`,
-          );
         } catch (error) {
-          console.error(
-            `Error removing field "${airtableField.name}" from Airtable:`,
-            error.message,
+          await this.syncLogService.updateLog(
+            logId,
+            SyncStatus.FAILURE,
+            `Error removing field "${airtableField.name}" from Airtable.`,
           );
         }
       }
@@ -217,17 +224,18 @@ export class SyncService {
           },
           { headers },
         );
-        console.log(`Added field "${column_name}" to Airtable.`);
       } catch (error) {
-        console.error(
-          `Error adding field "${column_name}" to Airtable:`,
-          error.message,
+        await this.syncLogService.updateLog(
+          logId,
+          SyncStatus.FAILURE,
+          `Error adding field "${column_name}" to Airtable.`,
         );
       }
     }
   }
 
   async getAirtableSchemaWithIds(
+    logId: string,
     airtableBaseId: string,
     airtableTableId: string,
     airtableAccessToken: string,
@@ -245,8 +253,12 @@ export class SyncService {
         name: field.name,
       }));
     } catch (error) {
-      console.error('Error fetching Airtable schema:', error.message);
-      throw new Error('Failed to fetch Airtable schema.');
+      await this.syncLogService.updateLog(
+        logId,
+        SyncStatus.FAILURE,
+        `Error fetching schema from Airtable.`,
+      );
+      return [];
     }
   }
 
@@ -351,16 +363,19 @@ export class SyncService {
         supabaseConnections.anonApiKey,
       );
       const supabaseSchema = await this.getSupabaseSchema(
+        log.data.id,
         supabase,
         supabaseTable,
       );
       const airtableSchema = await this.getAirtableSchemaWithIds(
+        log.data.id,
         airtableConnections.baseId,
         airtableTable,
         airtableConnections.accessToken,
       );
 
       await this.updateAirtableSchema(
+        log.data.id,
         airtableConnections.baseId,
         airtableTable,
         airtableConnections.accessToken,
@@ -373,11 +388,10 @@ export class SyncService {
         .select('*');
 
       if (supabaseError) {
-        console.log(supabaseError, 'supabaseError');
         await this.syncLogService.updateLog(
           log.data.id,
           SyncStatus.FAILURE,
-          `Error fetching data from Supabase.`,
+          `Error fetching data from table "${supabaseTable}" in Supabase.`,
         );
         return 'ERROR';
       }
@@ -409,13 +423,12 @@ export class SyncService {
           offset = nextOffset;
         } while (offset);
       } catch (error) {
-        console.error('Error fetching existing Airtable records:', error);
         await this.syncLogService.updateLog(
           log.data.id,
           SyncStatus.FAILURE,
           `Error fetching existing Airtable records.`,
         );
-        throw new Error('Failed to fetch Airtable records.');
+        return 'ERROR';
       }
 
       // Extract unique field values from Airtable records
