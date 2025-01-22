@@ -6,9 +6,17 @@ import {
   UseGuards,
   Version,
   HttpCode,
+  Delete,
+  Param,
 } from '@nestjs/common';
 import { SyncMappingService } from './sync-mapping.service';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { AuthGuard } from 'src/common/guards/auth/auth.guard';
 import { STATUS_CODES } from 'src/common/status-codes';
 import { loadMessages } from 'src/utils/load-messages.util';
@@ -87,6 +95,39 @@ export class SyncMappingController {
       return {
         ...STATUS_CODES.BAD_REQUEST,
         message: MESSAGES.SYNC_MAPPING.GET_SYNC_MAPPINGS_ERROR,
+      };
+    }
+  }
+
+  @Delete(':id')
+  @Version('1')
+  @HttpCode(STATUS_CODES.OK.code)
+  @ApiOperation({ summary: 'Delete sync mapping' })
+  @ApiResponse({
+    status: STATUS_CODES.OK.code,
+    description: MESSAGES.SYNC_MAPPING.DELETE_SYNC_MAPPING_SUCCESS,
+  })
+  @ApiResponse({
+    status: STATUS_CODES.BAD_REQUEST.code,
+    description: MESSAGES.SYNC_MAPPING.DELETE_SYNC_MAPPING_ERROR,
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Sync mapping id',
+    required: true,
+  })
+  async deleteMapping(@Param('id') id: string) {
+    const deleteMapping: any = await this.syncMappingService.deleteMapping(id);
+
+    if (deleteMapping === 'SUCCESS') {
+      return {
+        ...STATUS_CODES.OK,
+        message: MESSAGES.SYNC_MAPPING.DELETE_SYNC_MAPPING_SUCCESS,
+      };
+    } else {
+      return {
+        ...STATUS_CODES.BAD_REQUEST,
+        message: MESSAGES.SYNC_MAPPING.DELETE_SYNC_MAPPING_ERROR,
       };
     }
   }

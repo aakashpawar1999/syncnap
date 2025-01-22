@@ -46,7 +46,9 @@
     "ADD_SYNC_MAPPING_SUCCESS": "Sync mapping added successfully.",
     "ADD_SYNC_MAPPING_ERROR": "Error while adding sync mapping.",
     "GET_SYNC_MAPPINGS_SUCCESS": "Sync mappings fetched successfully.",
-    "GET_SYNC_MAPPINGS_ERROR": "Error while fetching sync mappings."
+    "GET_SYNC_MAPPINGS_ERROR": "Error while fetching sync mappings.",
+    "DELETE_SYNC_MAPPING_SUCCESS": "Sync mapping deleted successfully.",
+    "DELETE_SYNC_MAPPING_ERROR": "Error while deleting sync mapping."
   },
   "SYNC_LOG": {
     "CREATE_SYNC_LOG_SUCCESS": "Sync log created successfully.",

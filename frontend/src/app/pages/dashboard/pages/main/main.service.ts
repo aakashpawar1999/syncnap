@@ -58,4 +58,10 @@ export class MainService {
       payload,
     );
   }
+
+  deleteMapping(mappingId: string): Observable<ApiResponse> {
+    return this.http.delete<ApiResponse>(
+      this.resolveApiUrl('v1', `sync-mapping/${mappingId}`),
+    );
+  }
 }

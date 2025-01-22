@@ -89,7 +89,7 @@ export class SyncMappingService {
       }
 
       const mappings = await this.prisma.syncMapping.findMany({
-        where: { userId: userDataFromDb.id },
+        where: { userId: userDataFromDb.id, deletedAt: null },
         select: {
           id: true,
           supabaseTable: true,
@@ -119,6 +119,30 @@ export class SyncMappingService {
       });
 
       return { data: mappings };
+    } catch (error) {
+      return 'ERROR';
+    }
+  }
+
+  async deleteMapping(id: string) {
+    try {
+      const userData: any = await this.userService.getCurrentUser();
+      if (!userData) {
+        return 'ERROR';
+      }
+
+      const userDataFromDb = await this.prisma.user.findUnique({
+        where: { email: userData.email },
+      });
+      if (!userDataFromDb) {
+        return 'ERROR';
+      }
+
+      await this.prisma.syncMapping.update({
+        where: { id, userId: userDataFromDb.id },
+        data: { deletedAt: new Date() },
+      });
+      return 'SUCCESS';
     } catch (error) {
       return 'ERROR';
     }

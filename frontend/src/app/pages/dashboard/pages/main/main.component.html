@@ -432,7 +432,7 @@
                       </div>
                     </td>
                     <td
-                      class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium"
+                      class="flex gap-2 px-6 py-4 whitespace-nowrap text-end text-sm font-medium"
                     >
                       <div class="hs-tooltip [--placement:left] inline-block">
                         <button
@@ -453,7 +453,6 @@
                               fill="currentColor"
                             />
                           </svg>
-
                           <span
                             class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded shadow-sm dark:bg-neutral-700"
                             role="tooltip"
@@ -461,22 +460,48 @@
                             Sync
                           </span>
                         </button>
+                        <button
+                          *ngIf="mapping.syncLogs[0]?.status === 'PROGRESS'"
+                          type="button"
+                          class="inline-flex items-center gap-x-2 p-1.5 text-sm font-semibold rounded-lg border border-gray-200 text-gray-600 hover:text-gray-800 focus:outline-none focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none dark:text-gray-500 dark:hover:text-gray-400 dark:focus:text-gray-400"
+                          [ngClass]="{
+                            'opacity-50 cursor-not-allowed ':
+                              mapping.syncLogs[0]?.status === 'PROGRESS'
+                          }"
+                        >
+                          <span
+                            class="animate-spin inline-block size-4 border-[3px] m-1 border-current border-t-transparent text-gray-800 rounded-full"
+                            role="status"
+                            aria-label="loading"
+                          ></span>
+                        </button>
                       </div>
-                      <button
-                        *ngIf="mapping.syncLogs[0]?.status === 'PROGRESS'"
-                        type="button"
-                        class="inline-flex items-center gap-x-2 p-1.5 text-sm font-semibold rounded-lg border border-gray-200 text-gray-600 hover:text-gray-800 focus:outline-none focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none dark:text-gray-500 dark:hover:text-gray-400 dark:focus:text-gray-400"
-                        [ngClass]="{
-                          'opacity-50 cursor-not-allowed ':
-                            mapping.syncLogs[0]?.status === 'PROGRESS'
-                        }"
-                      >
-                        <span
-                          class="animate-spin inline-block size-4 border-[3px] m-1 border-current border-t-transparent text-gray-800 rounded-full"
-                          role="status"
-                          aria-label="loading"
-                        ></span>
-                      </button>
+                      <div class="hs-tooltip [--placement:left] inline-block">
+                        <button
+                          type="button"
+                          class="hs-tooltip-toggle inline-flex items-center gap-x-2 p-1.5 text-sm font-semibold rounded-lg border border-gray-200 text-gray-600 hover:text-gray-800 focus:outline-none focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none dark:text-gray-500 dark:hover:text-gray-400 dark:focus:text-gray-400"
+                          (click)="deleteMapping(mapping.id)"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            height="24px"
+                            viewBox="0 -960 960 960"
+                            width="24px"
+                            fill="currentColor"
+                          >
+                            <path
+                              d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"
+                              fill="currentColor"
+                            />
+                          </svg>
+                          <span
+                            class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded shadow-sm dark:bg-neutral-700"
+                            role="tooltip"
+                          >
+                            Delete
+                          </span>
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 </tbody>
