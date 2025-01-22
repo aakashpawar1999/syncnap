@@ -77,4 +77,33 @@ export class UserController {
       };
     }
   }
+
+  @Get('public-key')
+  @Version('1')
+  @HttpCode(STATUS_CODES.OK.code)
+  @ApiOperation({ summary: 'Get public key' })
+  @ApiResponse({
+    status: STATUS_CODES.OK.code,
+    description: MESSAGES.USER.GET_PUBLIC_KEY_SUCCESS,
+  })
+  @ApiResponse({
+    status: STATUS_CODES.BAD_REQUEST.code,
+    description: MESSAGES.USER.GET_PUBLIC_KEY_FAILURE,
+  })
+  async getPublicKey() {
+    const publicKey: any = await this.userService.getPublicKey();
+
+    if (publicKey.data) {
+      return {
+        ...STATUS_CODES.OK,
+        data: publicKey.data,
+        message: MESSAGES.USER.GET_PUBLIC_KEY_SUCCESS,
+      };
+    } else {
+      return {
+        ...STATUS_CODES.BAD_REQUEST,
+        message: MESSAGES.USER.GET_PUBLIC_KEY_FAILURE,
+      };
+    }
+  }
 }

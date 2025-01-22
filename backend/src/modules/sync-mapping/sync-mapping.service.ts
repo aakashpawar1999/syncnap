@@ -2,12 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { UserService } from '../user/user.service';
 import { createClient } from '@supabase/supabase-js';
+import { CryptoService } from 'src/common/services/crypto/crypto.service';
 
 @Injectable()
 export class SyncMappingService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly userService: UserService,
+    private readonly cryptoService: CryptoService,
   ) {}
 
   async addMapping(
@@ -38,8 +40,8 @@ export class SyncMappingService {
         return 'ERROR';
       }
       const supabase = createClient(
-        supabaseConnections.projectUrl,
-        supabaseConnections.anonApiKey,
+        this.cryptoService.decrypt(supabaseConnections.projectUrl),
+        this.cryptoService.decrypt(supabaseConnections.anonApiKey),
       );
       const { data: supabaseData, error: supabaseError } = await supabase
         .from(supabaseTable)

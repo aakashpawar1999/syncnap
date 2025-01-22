@@ -24,7 +24,9 @@
     "GET_CURRENT_USER_SUCCESS": "Get current user details successfully.",
     "GET_CURRENT_USER_FAILURE": "Error while getting current user details.",
     "DELETE_CURRENT_USER_SUCCESS": "User deleted successfully.",
-    "DELETE_CURRENT_USER_FAILURE": "Error while deleting user."
+    "DELETE_CURRENT_USER_FAILURE": "Error while deleting user.",
+    "GET_PUBLIC_KEY_SUCCESS": "Get public key successfully.",
+    "GET_PUBLIC_KEY_FAILURE": "Error while getting public key."
   },
   "CONNECTION": {
     "ADD_SUPABASE_CONNECTION_SUCCESS": "Supabase connection added successfully.",

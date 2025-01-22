@@ -171,6 +171,16 @@ export class MainComponent implements OnInit, OnDestroy {
   addMapping() {
     this.isLoadingAddMapping = true;
 
+    if (!this.supabaseConnectionId || !this.airtableConnectionId) {
+      this.toastr.error('Please select a connection', 'Error!');
+      return;
+    }
+
+    if (!this.supabaseTable || !this.airtableTable) {
+      this.toastr.error('Please select a table', 'Error!');
+      return;
+    }
+
     const payload: SyncMappingDto = {
       supabaseTable: this.supabaseTable,
       airtableTable: this.airtableTable,

@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { ConnectionService } from './connection.service';
 import { ApiResponse } from '../../../../shared/dto/api-response.dto';
+import { CryptoService } from '../../../../shared/services/crypto.service';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { FaqDto } from './dto/faq.dto';
@@ -35,6 +36,7 @@ export class ConnectionComponent implements OnInit, OnDestroy {
     private connectionService: ConnectionService,
     private toastr: ToastrService,
     private router: Router,
+    private cryptoService: CryptoService,
   ) {}
 
   ngOnInit() {
@@ -119,8 +121,27 @@ export class ConnectionComponent implements OnInit, OnDestroy {
     }
   }
 
-  connectSupabase() {
+  async connectSupabase() {
     this.isLoadingSupabaseConnection = true;
+
+    if (!this.supabaseForm.valid) {
+      this.isLoadingSupabaseConnection = false;
+      this.toastr.error('Please fill all the fields', 'Error!');
+      return;
+    }
+
+    try {
+      this.supabaseForm.value.anonApiKey = await this.cryptoService.encryptData(
+        this.supabaseForm.value.anonApiKey,
+      );
+      this.supabaseForm.value.projectUrl = await this.cryptoService.encryptData(
+        this.supabaseForm.value.projectUrl,
+      );
+    } catch (error) {
+      this.isLoadingSupabaseConnection = false;
+      this.toastr.error('Error encrypting data', 'Error!');
+      return;
+    }
 
     this.subscriptions.push(
       this.connectionService
@@ -159,8 +180,20 @@ export class ConnectionComponent implements OnInit, OnDestroy {
     );
   }
 
-  connectAirtable() {
+  async connectAirtable() {
     this.isLoadingAirtableConnection = true;
+
+    if (!this.airtableForm.valid) {
+      this.toastr.error('Please fill all the fields', 'Error!');
+      return;
+    }
+
+    this.airtableForm.value.accessToken = await this.cryptoService.encryptData(
+      this.airtableForm.value.accessToken,
+    );
+    this.airtableForm.value.baseId = await this.cryptoService.encryptData(
+      this.airtableForm.value.baseId,
+    );
 
     this.subscriptions.push(
       this.connectionService

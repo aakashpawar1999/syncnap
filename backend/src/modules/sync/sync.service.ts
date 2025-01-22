@@ -5,6 +5,7 @@ import { createClient } from '@supabase/supabase-js';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { SyncStatus } from '@prisma/client';
 import axios from 'axios';
+import { CryptoService } from 'src/common/services/crypto/crypto.service';
 
 @Injectable()
 export class SyncService {
@@ -16,14 +17,16 @@ export class SyncService {
     `https://api.airtable.com/v0/meta/bases/${baseId}/tables/${tableId}/fields/{fieldId}`;
 
   constructor(
-    private prisma: PrismaService,
-    private syncLogService: SyncLogService,
+    private readonly prisma: PrismaService,
+    private readonly syncLogService: SyncLogService,
+    private readonly cryptoService: CryptoService,
   ) {}
 
   inferDataType(value: any): string {
     if (typeof value === 'number') {
       // Distinguish between integers and floating-point numbers
-      return Number.isInteger(value) ? 'integer' : 'numeric';
+      // return Number.isInteger(value) ? 'integer' : 'numeric';
+      return 'text';
     }
 
     if (typeof value === 'string') {
@@ -32,10 +35,10 @@ export class SyncService {
         return 'text';
       }
       if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
-        return 'date'; // Matches YYYY-MM-DD
+        return 'text'; // Matches YYYY-MM-DD
       }
       if (/^\d+$/.test(value)) {
-        return 'integer'; // Strings containing only digits
+        return 'text'; // Strings containing only digits
       }
       return 'text';
     }
@@ -49,11 +52,11 @@ export class SyncService {
     }
 
     if (Array.isArray(value)) {
-      return 'array'; // Supabase supports arrays
+      return 'text'; // Supabase supports arrays
     }
 
     if (typeof value === 'object' && value !== null) {
-      return 'json'; // Match for JSON or object values
+      return 'text'; // Match for JSON or object values
     }
 
     return 'text'; // Default to text for unmapped types
@@ -65,12 +68,12 @@ export class SyncService {
       case 'bigint':
       case 'smallint':
       case 'serial':
-        return 'number';
+        return 'singleLineText';
       case 'numeric':
       case 'decimal':
       case 'real':
       case 'double precision':
-        return 'number';
+        return 'singleLineText';
       case 'text':
       case 'character varying':
       case 'varchar':
@@ -79,14 +82,14 @@ export class SyncService {
       case 'boolean':
         return 'singleLineText';
       case 'date':
-        return 'date';
+        return 'singleLineText';
       case 'timestamp':
       case 'timestamp without time zone':
       case 'timestamp with time zone':
         return 'singleLineText';
       case 'json':
       case 'jsonb':
-        return 'multilineText';
+        return 'singleLineText';
       default:
         return 'singleLineText'; // Default to text for unmapped types
     }
@@ -144,8 +147,14 @@ export class SyncService {
     airtableTableId: string,
     airtableAccessToken: string,
   ) {
-    const url = this.AirtableTablesUrl(airtableBaseId, airtableTableId);
-    const headers = { Authorization: `Bearer ${airtableAccessToken}` };
+    const url = this.AirtableTablesUrl(
+      this.cryptoService.decrypt(airtableBaseId),
+      airtableTableId,
+    );
+    const headers = {
+      Authorization: `Bearer ${this.cryptoService.decrypt(airtableAccessToken)}`,
+      'Content-Type': 'application/json',
+    };
 
     try {
       const response = await axios.get(url, { headers });
@@ -170,13 +179,16 @@ export class SyncService {
     supabaseSchema: any[],
     airtableSchema: any[],
   ) {
-    const addFieldUrl = this.AirtableFieldsUrl(airtableBaseId, airtableTableId);
+    const addFieldUrl = this.AirtableFieldsUrl(
+      this.cryptoService.decrypt(airtableBaseId),
+      airtableTableId,
+    );
     const deleteFieldUrl = this.AirtableDeleteFieldUrl(
-      airtableBaseId,
+      this.cryptoService.decrypt(airtableBaseId),
       airtableTableId,
     );
     const headers = {
-      Authorization: `Bearer ${airtableAccessToken}`,
+      Authorization: `Bearer ${this.cryptoService.decrypt(airtableAccessToken)}`,
       'Content-Type': 'application/json',
     };
 
@@ -240,8 +252,14 @@ export class SyncService {
     airtableTableId: string,
     airtableAccessToken: string,
   ) {
-    const url = this.AirtableTablesUrl(airtableBaseId, airtableTableId);
-    const headers = { Authorization: `Bearer ${airtableAccessToken}` };
+    const url = this.AirtableTablesUrl(
+      this.cryptoService.decrypt(airtableBaseId),
+      airtableTableId,
+    );
+    const headers = {
+      Authorization: `Bearer ${this.cryptoService.decrypt(airtableAccessToken)}`,
+      'Content-Type': 'application/json',
+    };
 
     try {
       const response = await axios.get(url, { headers });
@@ -301,6 +319,8 @@ export class SyncService {
             break;
           case 'json':
           case 'jsonb':
+            console.log(JSON.stringify(value), 'value');
+            console.log(typeof value, 'typeof value');
             convertedRow[column_name] =
               typeof value === 'string' ? value : JSON.stringify(value); // Ensure JSON format
             break;
@@ -359,8 +379,8 @@ export class SyncService {
       }
 
       const supabase = createClient(
-        supabaseConnections.projectUrl,
-        supabaseConnections.anonApiKey,
+        this.cryptoService.decrypt(supabaseConnections.projectUrl),
+        this.cryptoService.decrypt(supabaseConnections.anonApiKey),
       );
       const supabaseSchema = await this.getSupabaseSchema(
         log.data.id,
@@ -397,11 +417,11 @@ export class SyncService {
       }
 
       const airtableUrl = this.AirtableTablesUrl(
-        airtableConnections.baseId,
+        this.cryptoService.decrypt(airtableConnections.baseId),
         airtableTable,
       );
       const headers = {
-        Authorization: `Bearer ${airtableConnections.accessToken}`,
+        Authorization: `Bearer ${this.cryptoService.decrypt(airtableConnections.accessToken)}`,
         'Content-Type': 'application/json',
       };
 
@@ -458,6 +478,7 @@ export class SyncService {
         try {
           await axios.post(airtableUrl, { records }, { headers });
         } catch (error) {
+          console.log(error, 'error to sync table');
           await this.syncLogService.updateLog(
             log.data.id,
             SyncStatus.FAILURE,

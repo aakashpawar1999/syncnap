@@ -34,4 +34,12 @@ export class UserService {
     }
     return 'SUCCESS';
   }
+
+  async getPublicKey() {
+    const data = process.env.PUBLIC_KEY;
+    if (!data) {
+      return 'ERROR';
+    }
+    return { data };
+  }
 }

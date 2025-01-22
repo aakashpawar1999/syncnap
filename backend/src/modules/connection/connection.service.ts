@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { UserService } from '../user/user.service';
 import { createClient } from '@supabase/supabase-js';
+import { CryptoService } from 'src/common/services/crypto/crypto.service';
 import axios from 'axios';
 
 @Injectable()
@@ -12,6 +13,7 @@ export class ConnectionService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly userService: UserService,
+    private readonly cryptoService: CryptoService,
   ) {}
 
   async addSupabaseConnection(
@@ -99,8 +101,8 @@ export class ConnectionService {
       }
 
       const supabase = createClient(
-        supabaseConnection.projectUrl,
-        supabaseConnection.anonApiKey,
+        this.cryptoService.decrypt(supabaseConnection.projectUrl),
+        this.cryptoService.decrypt(supabaseConnection.anonApiKey),
       );
 
       const { data: tables, error } = await supabase.rpc('execute_sql', {
@@ -201,20 +203,26 @@ export class ConnectionService {
           },
         });
       if (!airtableConnection) {
+        console.log(airtableConnection, 'airtableConnection not found');
         return 'ERROR';
       }
 
       const headers = {
-        Authorization: `Bearer ${airtableConnection.accessToken}`,
+        Authorization: `Bearer ${this.cryptoService.decrypt(airtableConnection.accessToken)}`,
+        'Content-Type': 'application/json',
       };
-      const baseId = airtableConnection.baseId;
+      const baseId = this.cryptoService.decrypt(airtableConnection.baseId);
       const tables = await axios.get(this.AirtableTablesUrl(baseId), {
         headers,
       });
+      const tablesData = tables.data.tables.map((table: any) => {
+        return { id: table.id, name: table.name };
+      });
       return {
-        data: tables.data.tables,
+        data: tablesData,
       };
     } catch (error) {
+      console.log(error, 'error to get airtable tables');
       return 'ERROR';
     }
   }
