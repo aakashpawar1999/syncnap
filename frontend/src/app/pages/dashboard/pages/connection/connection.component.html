@@ -6,14 +6,14 @@
       <div
         class="flex flex-auto flex-col justify-center items-start p-4 md:p-5"
       >
-        <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4">
+        <h3 class="text-lg font-bold text-gray-800 dark:text-neutral-200 mb-4">
           Connect to Supabase
         </h3>
         <div class="grid gap-4 grid-cols-1 w-full">
           <div class="max-w-full">
             <label
               for="connectionName"
-              class="block text-sm font-medium mb-2 dark:text-white"
+              class="block text-sm font-medium mb-2 dark:text-neutral-200"
               >Connection Name</label
             >
             <input
@@ -34,13 +34,13 @@
           <div class="max-w-full">
             <label
               for="projectUrl"
-              class="flex justify-between items-center text-sm font-medium mb-2 dark:text-white"
+              class="flex justify-between items-center text-sm font-medium mb-2 dark:text-neutral-200"
             >
               Project URL
               <a
                 href="https://supabase.com/dashboard/project/_/settings/api"
                 target="_blank"
-                class="inline-flex justify-center items-center gap-x-2 px-1.5 py-0.5 text-xs font-semibold rounded-lg border border-gray-200 text-gray-600 hover:text-gray-800 focus:outline-none focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none dark:text-gray-500 dark:hover:text-gray-400 dark:focus:text-gray-400"
+                class="inline-flex justify-center items-center gap-x-2 px-1.5 py-0.5 text-xs font-semibold rounded-lg border border-gray-200 text-gray-600 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none dark:border-neutral-700 dark:text-white dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
               >
                 Where to find?
                 <svg
@@ -49,7 +49,6 @@
                   viewBox="0 -960 960 960"
                   width="18px"
                   fill="currentColor"
-                  class="text-gray-800 hover:text-gray-900"
                 >
                   <path
                     d="m256-240-56-56 384-384H240v-80h480v480h-80v-344L256-240Z"
@@ -76,13 +75,13 @@
           <div class="max-w-full">
             <label
               for="anonApiKey"
-              class="flex justify-between items-center text-sm font-medium mb-2 dark:text-white"
+              class="flex justify-between items-center text-sm font-medium mb-2 dark:text-neutral-200"
             >
               Anon API Key
               <a
                 href="https://supabase.com/dashboard/project/_/settings/api"
                 target="_blank"
-                class="inline-flex justify-center items-center gap-x-2 px-1.5 py-0.5 text-xs font-semibold rounded-lg border border-gray-200 text-gray-600 hover:text-gray-800 focus:outline-none focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none dark:text-gray-500 dark:hover:text-gray-400 dark:focus:text-gray-400"
+                class="inline-flex justify-center items-center gap-x-2 px-1.5 py-0.5 text-xs font-semibold rounded-lg border border-gray-200 text-gray-600 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none dark:border-neutral-700 dark:text-white dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
               >
                 Where to find?
                 <svg
@@ -91,7 +90,6 @@
                   viewBox="0 -960 960 960"
                   width="18px"
                   fill="currentColor"
-                  class="text-gray-800 hover:text-gray-900"
                 >
                   <path
                     d="m256-240-56-56 384-384H240v-80h480v480h-80v-344L256-240Z"
@@ -119,14 +117,14 @@
         <button
           *ngIf="!isLoadingSupabaseConnection"
           type="submit"
-          class="mt-5 py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-gray-800 text-white hover:bg-gray-900 focus:outline-none focus:bg-gray-900 disabled:opacity-50 disabled:pointer-events-none dark:bg-white dark:text-neutral-800"
+          class="mt-5 py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-gray-800 text-white hover:bg-gray-900 focus:outline-none focus:bg-gray-900 disabled:opacity-50 disabled:pointer-events-none dark:bg-white dark:text-neutral-800 dark:hover:bg-neutral-200 dark:focus:bg-neutral-800"
         >
           Connect Supabase
         </button>
         <button
           *ngIf="isLoadingSupabaseConnection"
           type="button"
-          class="mt-5 py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-gray-800 text-white hover:bg-gray-900 focus:outline-none focus:bg-gray-900 disabled:opacity-50 disabled:pointer-events-none dark:bg-white dark:text-neutral-800"
+          class="mt-5 py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-gray-800 text-white hover:bg-gray-900 focus:outline-none focus:bg-gray-900 disabled:opacity-50 disabled:pointer-events-none dark:bg-white dark:text-neutral-800 dark:hover:bg-neutral-200 dark:focus:bg-neutral-800"
           [ngClass]="{
             'opacity-50 cursor-not-allowed ': isLoadingSupabaseConnection
           }"
@@ -148,14 +146,14 @@
       <div
         class="flex flex-auto flex-col justify-center items-start p-4 md:p-5"
       >
-        <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4">
+        <h3 class="text-lg font-bold text-gray-800 dark:text-neutral-200 mb-4">
           Connect to Airtable
         </h3>
         <div class="grid gap-4 grid-cols-1 w-full">
           <div class="max-w-full">
             <label
               for="connectionName"
-              class="block text-sm font-medium mb-2 dark:text-white"
+              class="block text-sm font-medium mb-2 dark:text-neutral-200"
               >Connection Name</label
             >
             <input
@@ -176,13 +174,13 @@
           <div class="max-w-full">
             <label
               for="accessToken"
-              class="flex justify-between items-center text-sm font-medium mb-2 dark:text-white"
+              class="flex justify-between items-center text-sm font-medium mb-2 dark:text-neutral-200"
             >
               Access Token
               <a
                 href="https://airtable.com/create/tokens"
                 target="_blank"
-                class="inline-flex justify-center items-center gap-x-2 px-1.5 py-0.5 text-xs font-semibold rounded-lg border border-gray-200 text-gray-600 hover:text-gray-800 focus:outline-none focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none dark:text-gray-500 dark:hover:text-gray-400 dark:focus:text-gray-400"
+                class="inline-flex justify-center items-center gap-x-2 px-1.5 py-0.5 text-xs font-semibold rounded-lg border border-gray-200 text-gray-600 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none dark:border-neutral-700 dark:text-white dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
               >
                 Where to find?
                 <svg
@@ -191,7 +189,6 @@
                   viewBox="0 -960 960 960"
                   width="18px"
                   fill="currentColor"
-                  class="text-gray-800 hover:text-gray-900"
                 >
                   <path
                     d="m256-240-56-56 384-384H240v-80h480v480h-80v-344L256-240Z"
@@ -219,13 +216,13 @@
           <div class="max-w-full">
             <label
               for="baseId"
-              class="flex justify-between items-center text-sm font-medium mb-2 dark:text-white"
+              class="flex justify-between items-center text-sm font-medium mb-2 dark:text-neutral-200"
             >
               Base ID
               <a
                 href="https://airtable.com"
                 target="_blank"
-                class="inline-flex justify-center items-center gap-x-2 px-1.5 py-0.5 text-xs font-semibold rounded-lg border border-gray-200 text-gray-600 hover:text-gray-800 focus:outline-none focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none dark:text-gray-500 dark:hover:text-gray-400 dark:focus:text-gray-400"
+                class="inline-flex justify-center items-center gap-x-2 px-1.5 py-0.5 text-xs font-semibold rounded-lg border border-gray-200 text-gray-600 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 disabled:opacity-50 disabled:pointer-events-none dark:border-neutral-700 dark:text-white dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
               >
                 Where to find?
                 <svg
@@ -234,7 +231,6 @@
                   viewBox="0 -960 960 960"
                   width="18px"
                   fill="currentColor"
-                  class="text-gray-800 hover:text-gray-900"
                 >
                   <path
                     d="m256-240-56-56 384-384H240v-80h480v480h-80v-344L256-240Z"
@@ -263,14 +259,14 @@
         <button
           *ngIf="!isLoadingAirtableConnection"
           type="submit"
-          class="mt-5 py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-gray-800 text-white hover:bg-gray-900 focus:outline-none focus:bg-gray-900 disabled:opacity-50 disabled:pointer-events-none dark:bg-white dark:text-neutral-800"
+          class="mt-5 py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-gray-800 text-white hover:bg-gray-900 focus:outline-none focus:bg-gray-900 disabled:opacity-50 disabled:pointer-events-none dark:bg-white dark:text-neutral-800 dark:hover:bg-neutral-200 dark:focus:bg-neutral-800"
         >
           Connect Airtable
         </button>
         <button
           *ngIf="isLoadingAirtableConnection"
           type="button"
-          class="mt-5 py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-gray-800 text-white hover:bg-gray-900 focus:outline-none focus:bg-gray-900 disabled:opacity-50 disabled:pointer-events-none dark:bg-white dark:text-neutral-800"
+          class="mt-5 py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-gray-800 text-white hover:bg-gray-900 focus:outline-none focus:bg-gray-900 disabled:opacity-50 disabled:pointer-events-none dark:bg-white dark:text-neutral-800 dark:hover:bg-neutral-200 dark:focus:bg-neutral-800"
           [ngClass]="{
             'opacity-50 cursor-not-allowed ': isLoadingAirtableConnection
           }"

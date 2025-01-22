@@ -35,6 +35,7 @@ export class MainComponent implements OnInit, OnDestroy {
   airtableConnectionId: string = '';
   isLoadingAirtableTables: boolean = false;
   isLoadingAddMapping: boolean = false;
+  isLoadingMappings: boolean = false;
 
   constructor(
     private mainService: MainService,
@@ -128,6 +129,7 @@ export class MainComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.mainService.getAirtableTables(airtableConnectionId).subscribe({
         next: (res: ApiResponse) => {
+          this.isLoadingAirtableTables = false;
           if (res.code === 200) {
             this.airtableTableList = res.data;
           } else {
@@ -135,6 +137,7 @@ export class MainComponent implements OnInit, OnDestroy {
           }
         },
         error: (error: any) => {
+          this.isLoadingAirtableTables = false;
           if (error.error.statusCode === 403) {
             this.toastr.error(
               'Your session has expired. Please login again.',
@@ -150,7 +153,6 @@ export class MainComponent implements OnInit, OnDestroy {
               'Error!',
             );
           }
-          this.isLoadingAirtableTables = false;
         },
         complete: () => {
           this.isLoadingAirtableTables = false;
@@ -191,6 +193,7 @@ export class MainComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.mainService.addMapping(payload).subscribe({
         next: (res: ApiResponse) => {
+          this.isLoadingAddMapping = false;
           if (res.code === 200) {
             this.supabaseTable = '';
             this.airtableTable = '';
@@ -204,6 +207,7 @@ export class MainComponent implements OnInit, OnDestroy {
           }
         },
         error: (error: any) => {
+          this.isLoadingAddMapping = false;
           if (error.error.statusCode === 403) {
             this.toastr.error(
               'Your session has expired. Please login again.',
@@ -219,7 +223,6 @@ export class MainComponent implements OnInit, OnDestroy {
               'Error!',
             );
           }
-          this.isLoadingAddMapping = false;
         },
         complete: () => {
           this.isLoadingAddMapping = false;
@@ -229,9 +232,11 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   getMappings() {
+    this.isLoadingMappings = true;
     this.subscriptions.push(
       this.mainService.getMappings().subscribe({
         next: (res: ApiResponse) => {
+          this.isLoadingMappings = false;
           if (res.code === 200) {
             this.mappingList = res.data;
           } else {
@@ -239,6 +244,7 @@ export class MainComponent implements OnInit, OnDestroy {
           }
         },
         error: (error: any) => {
+          this.isLoadingMappings = false;
           if (error.error.statusCode === 403) {
             this.toastr.error(
               'Your session has expired. Please login again.',
@@ -255,7 +261,9 @@ export class MainComponent implements OnInit, OnDestroy {
             );
           }
         },
-        complete: () => {},
+        complete: () => {
+          this.isLoadingMappings = false;
+        },
       }),
     );
   }

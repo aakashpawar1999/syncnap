@@ -15,6 +15,7 @@ import { SyncLogService } from './sync-log.service';
 })
 export class SyncLogComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
+  isLoadingSyncLog: boolean = false;
   syncLogList: any = [];
 
   constructor(
@@ -28,6 +29,7 @@ export class SyncLogComponent implements OnInit, OnDestroy {
   }
 
   getSyncLogs() {
+    this.isLoadingSyncLog = true;
     this.subscriptions.push(
       this.syncLogService.getSyncLogs().subscribe({
         next: (res: ApiResponse) => {
@@ -36,12 +38,14 @@ export class SyncLogComponent implements OnInit, OnDestroy {
         error: (error: any) => {
           console.log(error, 'error');
           if (error.error.statusCode === 403) {
+            this.isLoadingSyncLog = false;
             this.toastr.error(
               'Your session has expired. Please login again.',
               'Error!',
             );
             this.router.navigate(['/']);
           } else {
+            this.isLoadingSyncLog = false;
             this.toastr.error(
               Array.isArray(error.error.message) &&
                 error.error.message.length > 0
@@ -51,7 +55,9 @@ export class SyncLogComponent implements OnInit, OnDestroy {
             );
           }
         },
-        complete: () => {},
+        complete: () => {
+          this.isLoadingSyncLog = false;
+        },
       }),
     );
   }

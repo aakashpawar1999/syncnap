@@ -5,7 +5,7 @@
     <div class="me-5 lg:me-0 lg:hidden">
       <!-- Logo -->
       <a
-        class="flex items-center font-bold text-2xl text-black focus:outline-none focus:opacity-80 dark:text-white"
+        class="flex items-center font-bold text-2xl text-black focus:outline-none dark:text-white"
         href="javascript:void(0)"
         aria-label="SyncNap"
         routerLink="/"
@@ -241,7 +241,7 @@
     <div class="px-6 pt-4 flex items-center">
       <!-- Logo -->
       <a
-        class="flex items-center font-bold text-2xl text-black focus:outline-none focus:opacity-80 dark:text-white"
+        class="flex items-center font-bold text-2xl text-black focus:outline-none dark:text-white"
         href="javascript:void(0)"
         aria-label="SyncNap"
         routerLink="/"
@@ -268,9 +268,9 @@
         <ul class="flex flex-col space-y-1">
           <li>
             <a
-              class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:bg-neutral-700 dark:text-white"
+              class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-neutral-700"
               [ngClass]="{
-                'bg-gray-100': activeLink('/dashboard'),
+                'bg-gray-100 dark:bg-neutral-700': activeLink('/dashboard'),
               }"
               href="javascript:void(0)"
               routerLink="/dashboard"
@@ -293,9 +293,9 @@
           </li>
           <li>
             <a
-              class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:bg-neutral-700 dark:text-white"
+              class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-neutral-700"
               [ngClass]="{
-                'bg-gray-100': activeLink('/dashboard/connections'),
+                'bg-gray-100 dark:bg-neutral-700': activeLink('/dashboard/connections'),
               }"
               href="javascript:void(0)"
               routerLink="/dashboard/connections"
@@ -318,9 +318,9 @@
           </li>
           <li>
             <a
-              class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:bg-neutral-700 dark:text-white"
+              class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none dark:text-white dark:hover:bg-neutral-700"
               [ngClass]="{
-                'bg-gray-100': activeLink('/dashboard/sync-logs'),
+                'bg-gray-100 dark:bg-neutral-700': activeLink('/dashboard/sync-logs'),
               }"
               href="javascript:void(0)"
               routerLink="/dashboard/sync-logs"
@@ -343,9 +343,9 @@
           </li>
           <li>
             <a
-              class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:bg-neutral-700 dark:text-white"
+              class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-neutral-700"
               [ngClass]="{
-                'bg-gray-100': activeLink('/dashboard/settings'),
+                'bg-gray-100 dark:bg-neutral-700': activeLink('/dashboard/settings'),
               }"
               href="javascript:void(0)"
               routerLink="/dashboard/settings"
