@@ -184,16 +184,24 @@ export class ConnectionComponent implements OnInit, OnDestroy {
     this.isLoadingAirtableConnection = true;
 
     if (!this.airtableForm.valid) {
+      this.isLoadingAirtableConnection = false;
       this.toastr.error('Please fill all the fields', 'Error!');
       return;
     }
 
-    this.airtableForm.value.accessToken = await this.cryptoService.encryptData(
-      this.airtableForm.value.accessToken,
-    );
-    this.airtableForm.value.baseId = await this.cryptoService.encryptData(
-      this.airtableForm.value.baseId,
-    );
+    try {
+      this.airtableForm.value.accessToken =
+        await this.cryptoService.encryptData(
+          this.airtableForm.value.accessToken,
+        );
+      this.airtableForm.value.baseId = await this.cryptoService.encryptData(
+        this.airtableForm.value.baseId,
+      );
+    } catch (error) {
+      this.isLoadingAirtableConnection = false;
+      this.toastr.error('Error encrypting data', 'Error!');
+      return;
+    }
 
     this.subscriptions.push(
       this.connectionService

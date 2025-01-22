@@ -174,11 +174,13 @@ export class MainComponent implements OnInit, OnDestroy {
     this.isLoadingAddMapping = true;
 
     if (!this.supabaseConnectionId || !this.airtableConnectionId) {
+      this.isLoadingAddMapping = false;
       this.toastr.error('Please select a connection', 'Error!');
       return;
     }
 
     if (!this.supabaseTable || !this.airtableTable) {
+      this.isLoadingAddMapping = false;
       this.toastr.error('Please select a table', 'Error!');
       return;
     }
@@ -238,7 +240,14 @@ export class MainComponent implements OnInit, OnDestroy {
         next: (res: ApiResponse) => {
           this.isLoadingMappings = false;
           if (res.code === 200) {
-            this.mappingList = res.data;
+            const mappingList: any = res.data;
+            this.mappingList = mappingList.map((mapping: any) => {
+              return {
+                ...mapping,
+                isLoading: false,
+                isSyncing: false,
+              };
+            });
           } else {
             this.toastr.error(res.message, 'Error!');
           }
@@ -269,6 +278,12 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   syncTable(mappingId: string) {
+    this.mappingList.forEach((mapping: any) => {
+      if (mapping.id === mappingId) {
+        mapping.isSyncing = true;
+      }
+    });
+
     this.subscriptions.push(
       this.mainService.syncTable(mappingId).subscribe({
         next: (res: ApiResponse) => {
@@ -307,6 +322,12 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   deleteMapping(mappingId: string) {
+    this.mappingList.forEach((mapping: any) => {
+      if (mapping.id === mappingId) {
+        mapping.isLoading = true;
+      }
+    });
+
     this.subscriptions.push(
       this.mainService.deleteMapping(mappingId).subscribe({
         next: (res: ApiResponse) => {
