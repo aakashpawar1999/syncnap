@@ -1,6 +1,7 @@
 import { afterNextRender, Component } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 
+import { NgxLoadingBar } from '@ngx-loading-bar/core';
 import { IStaticMethods } from 'preline/preline';
 declare global {
   interface Window {
@@ -11,7 +12,7 @@ declare global {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, NgxLoadingBar],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })

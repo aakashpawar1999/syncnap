@@ -3,9 +3,15 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withFetch,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
+import { provideLoadingBarInterceptor } from '@ngx-loading-bar/http-client';
+import { provideLoadingBarRouter } from '@ngx-loading-bar/router';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -20,5 +26,8 @@ export const appConfig: ApplicationConfig = {
       positionClass: 'toast-top-right',
       preventDuplicates: true,
     }),
+    provideHttpClient(withInterceptorsFromDi()),
+    provideLoadingBarInterceptor(),
+    provideLoadingBarRouter(),
   ],
 };
