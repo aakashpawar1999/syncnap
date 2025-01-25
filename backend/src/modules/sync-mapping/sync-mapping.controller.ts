@@ -39,7 +39,7 @@ export class SyncMappingController {
     description: MESSAGES.SYNC_MAPPING.ADD_SYNC_MAPPING_SUCCESS,
   })
   @ApiResponse({
-    status: STATUS_CODES.NOT_FOUND.code,
+    status: STATUS_CODES.UNAUTHORIZED.code,
     description: MESSAGES.SYNC_MAPPING.ADD_SYNC_MAPPING_ERROR_USER_NOT_FOUND,
   })
   @ApiResponse({
@@ -79,7 +79,7 @@ export class SyncMappingController {
       };
     } else if (addMapping === 'ERROR_USER_NOT_FOUND') {
       return {
-        ...STATUS_CODES.NOT_FOUND,
+        ...STATUS_CODES.UNAUTHORIZED,
         message: MESSAGES.SYNC_MAPPING.ADD_SYNC_MAPPING_ERROR_USER_NOT_FOUND,
       };
     } else if (addMapping === 'ERROR_SUPABASE_CONNECTION_NOT_FOUND') {
@@ -112,7 +112,7 @@ export class SyncMappingController {
     description: MESSAGES.SYNC_MAPPING.GET_SYNC_MAPPINGS_SUCCESS,
   })
   @ApiResponse({
-    status: STATUS_CODES.NOT_FOUND.code,
+    status: STATUS_CODES.UNAUTHORIZED.code,
     description: MESSAGES.SYNC_MAPPING.GET_SYNC_MAPPINGS_ERROR_USER_NOT_FOUND,
   })
   @ApiResponse({
@@ -130,7 +130,7 @@ export class SyncMappingController {
       };
     } else if (getMappings === 'ERROR_USER_NOT_FOUND') {
       return {
-        ...STATUS_CODES.NOT_FOUND,
+        ...STATUS_CODES.UNAUTHORIZED,
         message: MESSAGES.SYNC_MAPPING.GET_SYNC_MAPPINGS_ERROR_USER_NOT_FOUND,
       };
     } else {
@@ -150,7 +150,7 @@ export class SyncMappingController {
     description: MESSAGES.SYNC_MAPPING.DELETE_SYNC_MAPPING_SUCCESS,
   })
   @ApiResponse({
-    status: STATUS_CODES.NOT_FOUND.code,
+    status: STATUS_CODES.UNAUTHORIZED.code,
     description: MESSAGES.SYNC_MAPPING.DELETE_SYNC_MAPPING_ERROR_USER_NOT_FOUND,
   })
   @ApiResponse({
@@ -172,7 +172,7 @@ export class SyncMappingController {
       };
     } else if (deleteMapping === 'ERROR_USER_NOT_FOUND') {
       return {
-        ...STATUS_CODES.NOT_FOUND,
+        ...STATUS_CODES.UNAUTHORIZED,
         message: MESSAGES.SYNC_MAPPING.DELETE_SYNC_MAPPING_ERROR_USER_NOT_FOUND,
       };
     } else {

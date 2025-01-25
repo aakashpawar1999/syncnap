@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { ApiResponse } from '../../../../shared/dto/api-response.dto';
 import { SyncMappingDto } from './dto';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { DashboardService } from '../../dashboard.service';
 
 @Component({
   selector: 'app-main',
@@ -41,12 +42,19 @@ export class MainComponent implements OnInit, OnDestroy {
     private mainService: MainService,
     private toastr: ToastrService,
     private router: Router,
+    private dashboardService: DashboardService,
   ) {}
 
   ngOnInit() {
-    this.getSupabaseConnections();
-    this.getAirtableConnections();
-    this.getMappings();
+    this.dashboardService.getUserDetails().subscribe({
+      next: (res: ApiResponse) => {
+        if (res.code === 200) {
+          this.getSupabaseConnections();
+          this.getAirtableConnections();
+          this.getMappings();
+        }
+      },
+    });
   }
 
   getSupabaseConnections() {

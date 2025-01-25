@@ -38,7 +38,7 @@ export class ConnectionController {
     description: MESSAGES.CONNECTION.ADD_SUPABASE_CONNECTION_SUCCESS,
   })
   @ApiResponse({
-    status: STATUS_CODES.NOT_FOUND.code,
+    status: STATUS_CODES.UNAUTHORIZED.code,
     description:
       MESSAGES.CONNECTION.ADD_SUPABASE_CONNECTION_ERROR_USER_NOT_FOUND,
   })
@@ -73,7 +73,7 @@ export class ConnectionController {
       };
     } else if (addSupabaseConnection.message === 'ERROR_USER_NOT_FOUND') {
       return {
-        ...STATUS_CODES.NOT_FOUND,
+        ...STATUS_CODES.UNAUTHORIZED,
         message:
           MESSAGES.CONNECTION.ADD_SUPABASE_CONNECTION_ERROR_USER_NOT_FOUND,
       };
@@ -103,7 +103,7 @@ export class ConnectionController {
     description: MESSAGES.CONNECTION.GET_SUPABASE_CONNECTIONS_SUCCESS,
   })
   @ApiResponse({
-    status: STATUS_CODES.NOT_FOUND.code,
+    status: STATUS_CODES.UNAUTHORIZED.code,
     description:
       MESSAGES.CONNECTION.GET_SUPABASE_CONNECTIONS_ERROR_USER_NOT_FOUND,
   })
@@ -123,7 +123,7 @@ export class ConnectionController {
       };
     } else if (getSupabaseConnections.message === 'ERROR_USER_NOT_FOUND') {
       return {
-        ...STATUS_CODES.NOT_FOUND,
+        ...STATUS_CODES.UNAUTHORIZED,
         message:
           MESSAGES.CONNECTION.GET_SUPABASE_CONNECTIONS_ERROR_USER_NOT_FOUND,
       };
@@ -209,7 +209,7 @@ export class ConnectionController {
     description: MESSAGES.CONNECTION.ADD_AIRTABLE_CONNECTION_SUCCESS,
   })
   @ApiResponse({
-    status: STATUS_CODES.NOT_FOUND.code,
+    status: STATUS_CODES.UNAUTHORIZED.code,
     description:
       MESSAGES.CONNECTION.ADD_AIRTABLE_CONNECTION_ERROR_USER_NOT_FOUND,
   })
@@ -244,7 +244,7 @@ export class ConnectionController {
       };
     } else if (addAirtableConnection.message === 'ERROR_USER_NOT_FOUND') {
       return {
-        ...STATUS_CODES.NOT_FOUND,
+        ...STATUS_CODES.UNAUTHORIZED,
         message:
           MESSAGES.CONNECTION.ADD_AIRTABLE_CONNECTION_ERROR_USER_NOT_FOUND,
       };
@@ -274,7 +274,7 @@ export class ConnectionController {
     description: MESSAGES.CONNECTION.GET_AIRTABLE_CONNECTIONS_SUCCESS,
   })
   @ApiResponse({
-    status: STATUS_CODES.NOT_FOUND.code,
+    status: STATUS_CODES.UNAUTHORIZED.code,
     description:
       MESSAGES.CONNECTION.GET_AIRTABLE_CONNECTIONS_ERROR_USER_NOT_FOUND,
   })
@@ -294,7 +294,7 @@ export class ConnectionController {
       };
     } else if (getAirtableConnections.message === 'ERROR_USER_NOT_FOUND') {
       return {
-        ...STATUS_CODES.NOT_FOUND,
+        ...STATUS_CODES.UNAUTHORIZED,
         message:
           MESSAGES.CONNECTION.GET_AIRTABLE_CONNECTIONS_ERROR_USER_NOT_FOUND,
       };

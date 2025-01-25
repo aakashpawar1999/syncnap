@@ -59,6 +59,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         next: (res: ApiResponse) => {
           if (res.code === 200) {
             this.userDetails = res.data;
+          } else if (res.code === 401) {
+            this.toastr.error(res.message, 'Unauthorized Access!');
+            this.logout();
           } else {
             this.toastr.error(res.message, 'Error!');
           }

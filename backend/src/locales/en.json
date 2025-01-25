@@ -23,8 +23,11 @@
     "DELETE_USER_BY_ID_FAILURE": "Error while deleting user.",
     "GET_CURRENT_USER_SUCCESS": "Get current user details successfully.",
     "GET_CURRENT_USER_FAILURE": "Error while getting current user details.",
+    "GET_CURRENT_USER_ERROR_USER_DELETED": "User deleted and no longer exists.",
     "DELETE_CURRENT_USER_SUCCESS": "User deleted successfully.",
     "DELETE_CURRENT_USER_FAILURE": "Error while deleting user.",
+    "DELETE_CURRENT_USER_ERROR_USER_NOT_FOUND": "User not found.",
+    "DELETE_CURRENT_USER_ERROR_USER_ALREADY_DELETED": "User deleted and no longer exists.",
     "GET_PUBLIC_KEY_SUCCESS": "Get public key successfully.",
     "GET_PUBLIC_KEY_FAILURE": "Error while getting public key."
   },

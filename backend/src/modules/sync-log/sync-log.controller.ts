@@ -32,7 +32,7 @@ export class SyncLogController {
     description: MESSAGES.SYNC_LOG.CREATE_SYNC_LOG_SUCCESS,
   })
   @ApiResponse({
-    status: STATUS_CODES.NOT_FOUND.code,
+    status: STATUS_CODES.UNAUTHORIZED.code,
     description: MESSAGES.SYNC_LOG.CREATE_SYNC_LOG_ERROR_USER_NOT_FOUND,
   })
   @ApiResponse({
@@ -59,7 +59,7 @@ export class SyncLogController {
       };
     } else if (log === 'ERROR_USER_NOT_FOUND') {
       return {
-        ...STATUS_CODES.NOT_FOUND,
+        ...STATUS_CODES.UNAUTHORIZED,
         message: MESSAGES.SYNC_LOG.CREATE_SYNC_LOG_ERROR_USER_NOT_FOUND,
       };
     } else {
@@ -79,7 +79,7 @@ export class SyncLogController {
     description: MESSAGES.SYNC_LOG.GET_SYNC_LOGS_SUCCESS,
   })
   @ApiResponse({
-    status: STATUS_CODES.NOT_FOUND.code,
+    status: STATUS_CODES.UNAUTHORIZED.code,
     description: MESSAGES.SYNC_LOG.GET_SYNC_LOGS_ERROR_USER_NOT_FOUND,
   })
   @ApiResponse({
@@ -97,7 +97,7 @@ export class SyncLogController {
       };
     } else if (logs === 'ERROR_USER_NOT_FOUND') {
       return {
-        ...STATUS_CODES.NOT_FOUND,
+        ...STATUS_CODES.UNAUTHORIZED,
         message: MESSAGES.SYNC_LOG.GET_SYNC_LOGS_ERROR_USER_NOT_FOUND,
       };
     } else {
@@ -117,7 +117,7 @@ export class SyncLogController {
     description: MESSAGES.SYNC_LOG.UPDATE_SYNC_LOG_SUCCESS,
   })
   @ApiResponse({
-    status: STATUS_CODES.NOT_FOUND.code,
+    status: STATUS_CODES.UNAUTHORIZED.code,
     description: MESSAGES.SYNC_LOG.UPDATE_SYNC_LOG_ERROR_USER_NOT_FOUND,
   })
   @ApiResponse({
@@ -148,7 +148,7 @@ export class SyncLogController {
       };
     } else if (log === 'ERROR_USER_NOT_FOUND') {
       return {
-        ...STATUS_CODES.NOT_FOUND,
+        ...STATUS_CODES.UNAUTHORIZED,
         message: MESSAGES.SYNC_LOG.UPDATE_SYNC_LOG_ERROR_USER_NOT_FOUND,
       };
     } else if (log === 'ERROR_USER_SYNC_LOG_NOT_FOUND') {

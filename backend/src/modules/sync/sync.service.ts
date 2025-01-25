@@ -402,21 +402,11 @@ export class SyncService {
       if (
         updateAirtableSchema === 'ERROR_AIRTABLE_SCHEMA_FIELD_REMOVAL_ISSUE'
       ) {
-        await this.syncLogService.updateLog(
-          log.data.id,
-          SyncStatus.FAILURE,
-          `Error removing field from Airtable.`,
-        );
         return 'ERROR_AIRTABLE_SCHEMA_FIELD_REMOVAL_ISSUE';
       }
       if (
         updateAirtableSchema === 'ERROR_AIRTABLE_SCHEMA_FIELD_ADDITION_ISSUE'
       ) {
-        await this.syncLogService.updateLog(
-          log.data.id,
-          SyncStatus.FAILURE,
-          `Error adding field to Airtable.`,
-        );
         return 'ERROR_AIRTABLE_SCHEMA_FIELD_ADDITION_ISSUE';
       }
 
@@ -515,7 +505,7 @@ export class SyncService {
         await this.syncLogService.updateLog(
           log.data.id,
           SyncStatus.SUCCESS,
-          `The total of ${newRecords.length} records were added to Airtable.`,
+          `A total of ${newRecords.length} records were added to Airtable.`,
         );
         return 'SUCCESS';
       } else {

@@ -29,17 +29,26 @@ export class UserController {
     description: MESSAGES.USER.GET_CURRENT_USER_SUCCESS,
   })
   @ApiResponse({
+    status: STATUS_CODES.UNAUTHORIZED.code,
+    description: MESSAGES.USER.GET_CURRENT_USER_ERROR_USER_DELETED,
+  })
+  @ApiResponse({
     status: STATUS_CODES.BAD_REQUEST.code,
     description: MESSAGES.USER.GET_CURRENT_USER_FAILURE,
   })
   async getCurrentUser() {
     const getUser: any = await this.userService.getCurrentUser();
 
-    if (getUser !== 'ERROR') {
+    if (getUser.email) {
       return {
         ...STATUS_CODES.OK,
         data: getUser || null,
         message: MESSAGES.USER.GET_CURRENT_USER_SUCCESS,
+      };
+    } else if (getUser === 'ERROR_USER_DELETED') {
+      return {
+        ...STATUS_CODES.UNAUTHORIZED,
+        message: MESSAGES.USER.GET_CURRENT_USER_ERROR_USER_DELETED,
       };
     } else {
       return {
@@ -58,10 +67,17 @@ export class UserController {
     description: MESSAGES.USER.DELETE_CURRENT_USER_SUCCESS,
   })
   @ApiResponse({
+    status: STATUS_CODES.UNAUTHORIZED.code,
+    description: MESSAGES.USER.DELETE_CURRENT_USER_ERROR_USER_NOT_FOUND,
+  })
+  @ApiResponse({
+    status: STATUS_CODES.UNAUTHORIZED.code,
+    description: MESSAGES.USER.DELETE_CURRENT_USER_ERROR_USER_ALREADY_DELETED,
+  })
+  @ApiResponse({
     status: STATUS_CODES.BAD_REQUEST.code,
     description: MESSAGES.USER.DELETE_CURRENT_USER_FAILURE,
   })
-  @ApiResponse({ status: 200, description: 'User deleted successfully.' })
   async deleteCurrentUser() {
     const deleteStatus: any = await this.userService.deleteCurrentUser();
 
@@ -70,10 +86,20 @@ export class UserController {
         ...STATUS_CODES.OK,
         message: MESSAGES.USER.DELETE_CURRENT_USER_SUCCESS,
       };
+    } else if (deleteStatus === 'ERROR_USER_NOT_FOUND') {
+      return {
+        ...STATUS_CODES.UNAUTHORIZED,
+        message: MESSAGES.USER.DELETE_CURRENT_USER_ERROR_USER_NOT_FOUND,
+      };
+    } else if (deleteStatus === 'ERROR_USER_ALREADY_DELETED') {
+      return {
+        ...STATUS_CODES.UNAUTHORIZED,
+        message: MESSAGES.USER.DELETE_CURRENT_USER_ERROR_USER_ALREADY_DELETED,
+      };
     } else {
       return {
         ...STATUS_CODES.BAD_REQUEST,
-        message: MESSAGES.USER.DELETE_USER_BY_ID_FAILURE,
+        message: MESSAGES.USER.DELETE_CURRENT_USER_FAILURE,
       };
     }
   }

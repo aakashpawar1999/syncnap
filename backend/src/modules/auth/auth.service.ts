@@ -39,15 +39,29 @@ export class AuthService {
       const existingUser = await this.prisma.user.findUnique({
         where: {
           email: userData.user.email,
+          deletedAt: null,
         },
         select: {
           email: true,
           name: true,
         },
       });
-
       if (existingUser) {
         return existingUser;
+      } else {
+        const existingUserDeleted = await this.prisma.user.findUnique({
+          where: {
+            email: userData.user.email,
+            deletedAt: { not: null },
+          },
+          select: {
+            email: true,
+            name: true,
+          },
+        });
+        if (existingUserDeleted) {
+          return 'ERROR';
+        }
       }
 
       const createdUser = await this.prisma.user.create({

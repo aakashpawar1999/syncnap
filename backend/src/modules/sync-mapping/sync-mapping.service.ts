@@ -26,7 +26,7 @@ export class SyncMappingService {
       }
 
       const userDataFromDb = await this.prisma.user.findUnique({
-        where: { email: userData.email },
+        where: { email: userData.email, deletedAt: null },
       });
       if (!userDataFromDb) {
         return 'ERROR_USER_NOT_FOUND';
@@ -82,7 +82,7 @@ export class SyncMappingService {
       }
 
       const userDataFromDb = await this.prisma.user.findUnique({
-        where: { email: userData.email },
+        where: { email: userData.email, deletedAt: null },
       });
       if (!userDataFromDb) {
         return 'ERROR_USER_NOT_FOUND';
@@ -132,7 +132,7 @@ export class SyncMappingService {
       }
 
       const userDataFromDb = await this.prisma.user.findUnique({
-        where: { email: userData.email },
+        where: { email: userData.email, deletedAt: null },
       });
       if (!userDataFromDb) {
         return 'ERROR_USER_NOT_FOUND';
