@@ -9,12 +9,14 @@ import { CryptoService } from 'src/common/services/crypto/crypto.service';
 
 @Injectable()
 export class SyncService {
+  private readonly AirtableSchemaUrl = (baseId: string) =>
+    `https://api.airtable.com/v0/meta/bases/${baseId}/tables`;
   private readonly AirtableTablesUrl = (baseId: string, tableId: string) =>
     `https://api.airtable.com/v0/${baseId}/${tableId}`;
   private readonly AirtableFieldsUrl = (baseId: string, tableId: string) =>
     `https://api.airtable.com/v0/meta/bases/${baseId}/tables/${tableId}/fields`;
-  private readonly AirtableDeleteFieldUrl = (baseId: string, tableId: string) =>
-    `https://api.airtable.com/v0/meta/bases/${baseId}/tables/${tableId}/fields/{fieldId}`;
+  // private readonly AirtableDeleteFieldUrl = (baseId: string, tableId: string) =>
+  //   `https://api.airtable.com/v0/meta/bases/${baseId}/tables/${tableId}/fields/{fieldId}`;
 
   constructor(
     private readonly prisma: PrismaService,
@@ -147,9 +149,8 @@ export class SyncService {
     airtableTableId: string,
     airtableAccessToken: string,
   ) {
-    const url = this.AirtableTablesUrl(
+    const url = this.AirtableSchemaUrl(
       this.cryptoService.decrypt(airtableBaseId),
-      airtableTableId,
     );
     const headers = {
       Authorization: `Bearer ${this.cryptoService.decrypt(airtableAccessToken)}`,
@@ -157,17 +158,19 @@ export class SyncService {
     };
 
     try {
-      const response = await axios.get(url, { headers });
-      const records = response.data.records;
+      const response: any = await axios.get(url, { headers });
+      const filteredTable = response.data.tables.filter(
+        (table: any) => table.id === airtableTableId,
+      )[0];
+      const fields = filteredTable.fields.map((field: any) => field.name);
 
-      if (!records || records.length === 0) {
+      if (!fields || fields.length === 0) {
         return [];
       }
 
-      // Extract fields from the first record
-      return Object.keys(records[0].fields);
+      return fields;
     } catch (error) {
-      return [];
+      return null;
     }
   }
 
@@ -183,51 +186,50 @@ export class SyncService {
       this.cryptoService.decrypt(airtableBaseId),
       airtableTableId,
     );
-    const deleteFieldUrl = this.AirtableDeleteFieldUrl(
-      this.cryptoService.decrypt(airtableBaseId),
-      airtableTableId,
-    );
+    // const deleteFieldUrl = this.AirtableDeleteFieldUrl(
+    //   this.cryptoService.decrypt(airtableBaseId),
+    //   airtableTableId,
+    // );
     const headers = {
       Authorization: `Bearer ${this.cryptoService.decrypt(airtableAccessToken)}`,
       'Content-Type': 'application/json',
     };
 
     // Map Supabase schema to a set of field names
-    const supabaseFieldNames = new Set(
-      supabaseSchema.map((col) => col.column_name),
-    );
+    // const supabaseFieldNames = new Set(
+    //   supabaseSchema.map((col) => col.column_name),
+    // );
 
     // Remove unused fields in Airtable
-    for (const airtableField of airtableSchema) {
-      if (!supabaseFieldNames.has(airtableField.name)) {
-        try {
-          await axios.delete(
-            deleteFieldUrl.replace('{fieldId}', airtableField.id),
-            { headers },
-          );
-        } catch (error) {
-          await this.syncLogService.updateLog(
-            logId,
-            SyncStatus.FAILURE,
-            `Error removing field "${airtableField.name}" from Airtable.`,
-          );
-          return 'ERROR_AIRTABLE_SCHEMA_FIELD_REMOVAL_ISSUE';
-        }
-      }
-    }
+    // for (const airtableField of airtableSchema) {
+    //   if (!supabaseFieldNames.has(airtableField.name)) {
+    //     try {
+    //       await axios.delete(
+    //         deleteFieldUrl.replace('{fieldId}', airtableField.id),
+    //         { headers },
+    //       );
+    //     } catch (error) {
+    //       await this.syncLogService.updateLog(
+    //         logId,
+    //         SyncStatus.FAILURE,
+    //         `Error removing field "${airtableField.name}" from Airtable.`,
+    //       );
+    //       return 'ERROR_AIRTABLE_SCHEMA_FIELD_REMOVAL_ISSUE';
+    //     }
+    //   }
+    // }
 
     // Add missing fields to Airtable
     for (const column of supabaseSchema) {
       const { column_name, data_type } = column;
 
       // Skip if the column already exists in Airtable
-      if (airtableSchema.some((field) => field.name === column_name)) {
+      if (airtableSchema.includes(column_name)) {
         continue;
       }
 
       // Map Supabase data types to Airtable field types
       const airtableFieldType = this.mapDataTypeToAirtable(data_type);
-
       try {
         await axios.post(
           addFieldUrl,
@@ -245,40 +247,6 @@ export class SyncService {
         );
         return 'ERROR_AIRTABLE_SCHEMA_FIELD_ADDITION_ISSUE';
       }
-    }
-  }
-
-  async getAirtableSchemaWithIds(
-    logId: string,
-    airtableBaseId: string,
-    airtableTableId: string,
-    airtableAccessToken: string,
-  ) {
-    const url = this.AirtableTablesUrl(
-      this.cryptoService.decrypt(airtableBaseId),
-      airtableTableId,
-    );
-    const headers = {
-      Authorization: `Bearer ${this.cryptoService.decrypt(airtableAccessToken)}`,
-      'Content-Type': 'application/json',
-    };
-
-    try {
-      const response = await axios.get(url, { headers });
-      const fields = response.data.fields || [];
-
-      // Return fields with names and IDs
-      return fields.map((field: any) => ({
-        id: field.id,
-        name: field.name,
-      }));
-    } catch (error) {
-      await this.syncLogService.updateLog(
-        logId,
-        SyncStatus.FAILURE,
-        `Error fetching schema from Airtable.`,
-      );
-      return [];
     }
   }
 
@@ -321,8 +289,6 @@ export class SyncService {
             break;
           case 'json':
           case 'jsonb':
-            console.log(JSON.stringify(value), 'value');
-            console.log(typeof value, 'typeof value');
             convertedRow[column_name] =
               typeof value === 'string' ? value : JSON.stringify(value); // Ensure JSON format
             break;
@@ -385,6 +351,11 @@ export class SyncService {
         this.cryptoService.decrypt(supabaseConnections.anonApiKey),
       );
       if (!supabase) {
+        await this.syncLogService.updateLog(
+          log.data.id,
+          SyncStatus.FAILURE,
+          `Error fetching Supabase connection.`,
+        );
         return 'ERROR_SUPABASE_CONNECTION_ISSUE';
       }
       const supabaseSchema = await this.getSupabaseSchema(
@@ -393,15 +364,24 @@ export class SyncService {
         supabaseTable,
       );
       if (supabaseSchema.length === 0) {
+        await this.syncLogService.updateLog(
+          log.data.id,
+          SyncStatus.FAILURE,
+          `Error fetching Supabase schema.`,
+        );
         return 'ERROR_SUPABASE_SCHEMA_NOT_FOUND';
       }
-      const airtableSchema = await this.getAirtableSchemaWithIds(
-        log.data.id,
+      const airtableSchema = await this.getAirtableSchema(
         airtableConnections.baseId,
         airtableTable,
         airtableConnections.accessToken,
       );
-      if (airtableSchema.length === 0) {
+      if (airtableSchema === null) {
+        await this.syncLogService.updateLog(
+          log.data.id,
+          SyncStatus.FAILURE,
+          `Error fetching Airtable schema.`,
+        );
         return 'ERROR_AIRTABLE_SCHEMA_NOT_FOUND';
       }
 
@@ -416,11 +396,21 @@ export class SyncService {
       if (
         updateAirtableSchema === 'ERROR_AIRTABLE_SCHEMA_FIELD_REMOVAL_ISSUE'
       ) {
+        await this.syncLogService.updateLog(
+          log.data.id,
+          SyncStatus.FAILURE,
+          `Error removing field from Airtable.`,
+        );
         return 'ERROR_AIRTABLE_SCHEMA_FIELD_REMOVAL_ISSUE';
       }
       if (
         updateAirtableSchema === 'ERROR_AIRTABLE_SCHEMA_FIELD_ADDITION_ISSUE'
       ) {
+        await this.syncLogService.updateLog(
+          log.data.id,
+          SyncStatus.FAILURE,
+          `Error adding field to Airtable.`,
+        );
         return 'ERROR_AIRTABLE_SCHEMA_FIELD_ADDITION_ISSUE';
       }
 
@@ -482,42 +472,54 @@ export class SyncService {
         (row) => !existingFieldValues.includes(row[uniqueField]),
       );
 
-      const airtableData = this.convertDataForAirtable(
-        newRecords,
-        supabaseSchema,
-      );
-      if (airtableData.length === 0) {
-        return 'ERROR_AIRTABLE_DATA_CONVERSION_ISSUE';
-      }
-
-      const batchSize = 10;
-      const batches = [];
-      while (airtableData.length) {
-        batches.push(airtableData.splice(0, batchSize));
-      }
-
-      for (const batch of batches) {
-        const records = batch.map((row: any) => ({ fields: row }));
-
-        try {
-          await axios.post(airtableUrl, { records }, { headers });
-        } catch (error) {
-          console.log(error, 'error to sync table');
+      if (newRecords.length > 0) {
+        const airtableData = this.convertDataForAirtable(
+          newRecords,
+          supabaseSchema,
+        );
+        if (airtableData.length === 0) {
           await this.syncLogService.updateLog(
             log.data.id,
             SyncStatus.FAILURE,
-            `Error syncing table "${supabaseTable}" to Airtable.`,
+            `Error converting data to Airtable format.`,
           );
-          return 'ERROR_AIRTABLE_TABLE_DATA_SYNC_ISSUE';
+          return 'ERROR_AIRTABLE_DATA_CONVERSION_ISSUE';
         }
-      }
 
-      await this.syncLogService.updateLog(
-        log.data.id,
-        SyncStatus.SUCCESS,
-        `The total of ${newRecords.length} records were added to Airtable.`,
-      );
-      return 'SUCCESS';
+        const batchSize = 10;
+        const batches = [];
+        while (airtableData.length) {
+          batches.push(airtableData.splice(0, batchSize));
+        }
+
+        for (const batch of batches) {
+          const records = batch.map((row: any) => ({ fields: row }));
+
+          try {
+            await axios.post(airtableUrl, { records }, { headers });
+          } catch (error) {
+            await this.syncLogService.updateLog(
+              log.data.id,
+              SyncStatus.FAILURE,
+              `Error syncing table "${supabaseTable}" to Airtable.`,
+            );
+            return 'ERROR_AIRTABLE_TABLE_DATA_SYNC_ISSUE';
+          }
+        }
+        await this.syncLogService.updateLog(
+          log.data.id,
+          SyncStatus.SUCCESS,
+          `The total of ${newRecords.length} records were added to Airtable.`,
+        );
+        return 'SUCCESS';
+      } else {
+        await this.syncLogService.updateLog(
+          log.data.id,
+          SyncStatus.SUCCESS,
+          `No new records to add to Airtable.`,
+        );
+        return 'SUCCESS';
+      }
     } catch (error) {
       return 'ERROR';
     }
