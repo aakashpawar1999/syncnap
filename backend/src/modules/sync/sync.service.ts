@@ -25,24 +25,12 @@ export class SyncService {
   ) {}
 
   inferDataType(value: any): string {
-    if (typeof value === 'number') {
-      // Distinguish between integers and floating-point numbers
-      // return Number.isInteger(value) ? 'integer' : 'numeric';
-      return 'text';
+    if (typeof value === 'object' && value !== null) {
+      return 'text'; // Match for JSON or object values
     }
 
-    if (typeof value === 'string') {
-      // Check for specific string formats
-      if (!isNaN(Date.parse(value))) {
-        return 'text';
-      }
-      if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
-        return 'text'; // Matches YYYY-MM-DD
-      }
-      if (/^\d+$/.test(value)) {
-        return 'text'; // Strings containing only digits
-      }
-      return 'text';
+    if (Array.isArray(value)) {
+      return 'text'; // Supabase supports arrays
     }
 
     if (typeof value === 'boolean') {
@@ -53,13 +41,24 @@ export class SyncService {
       return 'text';
     }
 
-    if (Array.isArray(value)) {
-      return 'text'; // Supabase supports arrays
+    if (typeof value === 'number' || (!isNaN(value) && value !== null)) {
+      // Distinguish between integers and floating-point numbers
+      return Number.isInteger(value) ? 'integer' : 'numeric';
     }
 
-    if (typeof value === 'object' && value !== null) {
-      return 'text'; // Match for JSON or object values
-    }
+    // if (typeof value === 'string') {
+    //   // Check for specific string formats
+    //   if (!isNaN(Date.parse(value))) {
+    //     return 'date';
+    //   }
+    //   if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    //     return 'date'; // Matches YYYY-MM-DD
+    //   }
+    //   if (/^\d+$/.test(value)) {
+    //     return 'number'; // Strings containing only digits
+    //   }
+    //   return 'text';
+    // }
 
     return 'text'; // Default to text for unmapped types
   }
@@ -70,12 +69,12 @@ export class SyncService {
       case 'bigint':
       case 'smallint':
       case 'serial':
-        return 'singleLineText';
+        return 'number';
       case 'numeric':
       case 'decimal':
       case 'real':
       case 'double precision':
-        return 'singleLineText';
+        return 'number';
       case 'text':
       case 'character varying':
       case 'varchar':
@@ -230,15 +229,22 @@ export class SyncService {
 
       // Map Supabase data types to Airtable field types
       const airtableFieldType = this.mapDataTypeToAirtable(data_type);
+      const dataJson = {
+        name: column_name,
+        type: airtableFieldType,
+      };
+      if (data_type === 'integer') {
+        dataJson['options'] = {
+          precision: 0,
+        };
+      }
+      if (data_type === 'numeric') {
+        dataJson['options'] = {
+          precision: 2,
+        };
+      }
       try {
-        await axios.post(
-          addFieldUrl,
-          {
-            name: column_name,
-            type: airtableFieldType,
-          },
-          { headers },
-        );
+        await axios.post(addFieldUrl, dataJson, { headers });
       } catch (error) {
         await this.syncLogService.updateLog(
           logId,
@@ -270,6 +276,7 @@ export class SyncService {
         switch (data_type) {
           case 'integer':
           case 'numeric':
+          case 'number':
             convertedRow[column_name] = Number(value);
             break;
           case 'text':
@@ -289,8 +296,7 @@ export class SyncService {
             break;
           case 'json':
           case 'jsonb':
-            convertedRow[column_name] =
-              typeof value === 'string' ? value : JSON.stringify(value); // Ensure JSON format
+            convertedRow[column_name] = JSON.stringify(value); // Ensure JSON format
             break;
           case 'array':
             convertedRow[column_name] = Array.isArray(value) ? value : [value]; // Ensure array format
