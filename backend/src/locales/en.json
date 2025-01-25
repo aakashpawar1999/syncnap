@@ -31,35 +31,66 @@
   "CONNECTION": {
     "ADD_SUPABASE_CONNECTION_SUCCESS": "Supabase connection added successfully.",
     "ADD_SUPABASE_CONNECTION_FAILURE": "Error while adding supabase connection.",
+    "ADD_SUPABASE_CONNECTION_ERROR_USER_NOT_FOUND": "User not found.",
+    "ADD_SUPABASE_CONNECTION_ERROR_SUPABASE_CONNECTION_NOT_FOUND": "Supabase connection not found.",
     "GET_SUPABASE_CONNECTIONS_SUCCESS": "Supabase connections fetched successfully.",
     "GET_SUPABASE_CONNECTIONS_FAILURE": "Error while fetching supabase connections.",
+    "GET_SUPABASE_CONNECTIONS_ERROR_USER_NOT_FOUND": "User not found.",
+    "GET_SUPABASE_CONNECTIONS_ERROR_SUPABASE_CONNECTION_NOT_FOUND": "Supabase connection not found.",
     "ADD_AIRTABLE_CONNECTION_SUCCESS": "Airtable connection added successfully.",
     "ADD_AIRTABLE_CONNECTION_FAILURE": "Error while adding airtable connection.",
+    "ADD_AIRTABLE_CONNECTION_ERROR_USER_NOT_FOUND": "User not found.",
+    "ADD_AIRTABLE_CONNECTION_ERROR_AIRTABLE_CONNECTION_NOT_FOUND": "Airtable connection not found.",
     "GET_AIRTABLE_CONNECTIONS_SUCCESS": "Airtable connections fetched successfully.",
     "GET_AIRTABLE_CONNECTIONS_FAILURE": "Error while fetching airtable connections.",
+    "GET_AIRTABLE_CONNECTIONS_ERROR_USER_NOT_FOUND": "User not found.",
+    "GET_AIRTABLE_CONNECTIONS_ERROR_AIRTABLE_CONNECTION_NOT_FOUND": "Airtable connection not found.",
     "GET_SUPABASE_TABLES_SUCCESS": "Supabase tables fetched successfully.",
     "GET_SUPABASE_TABLES_FAILURE": "Error while fetching supabase tables.",
+    "GET_SUPABASE_TABLES_ERROR_SUPABASE_CONNECTION_NOT_FOUND": "Supabase connection not found.",
+    "GET_SUPABASE_TABLES_ERROR_SUPABASE_TABLE_NOT_FOUND": "Supabase table not found.",
     "GET_AIRTABLE_TABLES_SUCCESS": "Airtable tables fetched successfully.",
-    "GET_AIRTABLE_TABLES_FAILURE": "Error while fetching airtable tables."
+    "GET_AIRTABLE_TABLES_FAILURE": "Error while fetching airtable tables.",
+    "GET_AIRTABLE_TABLES_ERROR_AIRTABLE_CONNECTION_NOT_FOUND": "Airtable connection not found."
   },
   "SYNC_MAPPING": {
     "ADD_SYNC_MAPPING_SUCCESS": "Sync mapping added successfully.",
-    "ADD_SYNC_MAPPING_ERROR": "Error while adding sync mapping.",
+    "ADD_SYNC_MAPPING_FAILURE": "Error while adding sync mapping.",
+    "ADD_SYNC_MAPPING_ERROR_USER_NOT_FOUND": "User not found.",
+    "ADD_SYNC_MAPPING_ERROR_SUPABASE_CONNECTION_NOT_FOUND": "Supabase connection not found.",
+    "ADD_SYNC_MAPPING_ERROR_SUPABASE_TABLE_NOT_FOUND": "Supabase table not found.",
     "GET_SYNC_MAPPINGS_SUCCESS": "Sync mappings fetched successfully.",
-    "GET_SYNC_MAPPINGS_ERROR": "Error while fetching sync mappings.",
+    "GET_SYNC_MAPPINGS_FAILURE": "Error while fetching sync mappings.",
+    "GET_SYNC_MAPPINGS_ERROR_USER_NOT_FOUND": "User not found.",
     "DELETE_SYNC_MAPPING_SUCCESS": "Sync mapping deleted successfully.",
-    "DELETE_SYNC_MAPPING_ERROR": "Error while deleting sync mapping."
+    "DELETE_SYNC_MAPPING_FAILURE": "Error while deleting sync mapping.",
+    "DELETE_SYNC_MAPPING_ERROR_USER_NOT_FOUND": "User not found."
   },
   "SYNC_LOG": {
     "CREATE_SYNC_LOG_SUCCESS": "Sync log created successfully.",
-    "CREATE_SYNC_LOG_ERROR": "Error while creating sync log.",
+    "CREATE_SYNC_LOG_FAILURE": "Error while creating sync log.",
+    "CREATE_SYNC_LOG_ERROR_USER_NOT_FOUND": "User not found.",
     "GET_SYNC_LOGS_SUCCESS": "Sync logs fetched successfully.",
-    "GET_SYNC_LOGS_ERROR": "Error while fetching sync logs.",
+    "GET_SYNC_LOGS_FAILURE": "Error while fetching sync logs.",
+    "GET_SYNC_LOGS_ERROR_USER_NOT_FOUND": "User not found.",
     "UPDATE_SYNC_LOG_SUCCESS": "Sync log updated successfully.",
-    "UPDATE_SYNC_LOG_ERROR": "Error while updating sync log."
+    "UPDATE_SYNC_LOG_FAILURE": "Error while updating sync log.",
+    "UPDATE_SYNC_LOG_ERROR_USER_NOT_FOUND": "User not found.",
+    "UPDATE_SYNC_LOG_ERROR_USER_SYNC_LOG_NOT_FOUND": "User sync log not found."
   },
   "SYNC": {
     "SYNC_TABLE_SUCCESS": "Sync table successfully.",
-    "SYNC_TABLE_ERROR": "Error while syncing table."
+    "SYNC_TABLE_FAILURE": "Error while syncing table.",
+    "SYNC_TABLE_ERROR_SYNC_MAPPING_NOT_FOUND": "Sync mapping not found.",
+    "SYNC_TABLE_ERROR_SUPABASE_OR_AIRTABLE_CONNECTION_ISSUE": "Supabase or Airtable connection issue.",
+    "SYNC_TABLE_ERROR_SUPABASE_CONNECTION_ISSUE": "Supabase connection issue.",
+    "SYNC_TABLE_ERROR_SUPABASE_SCHEMA_NOT_FOUND": "Supabase schema not found.",
+    "SYNC_TABLE_ERROR_AIRTABLE_SCHEMA_NOT_FOUND": "Airtable schema not found.",
+    "SYNC_TABLE_ERROR_AIRTABLE_SCHEMA_FIELD_REMOVAL_ISSUE": "Airtable schema field removal issue.",
+    "SYNC_TABLE_ERROR_AIRTABLE_SCHEMA_FIELD_ADDITION_ISSUE": "Airtable schema field addition issue.",
+    "SYNC_TABLE_ERROR_SUPABASE_TABLE_DATA_FETCH_ISSUE": "Supabase table data fetch issue.",
+    "SYNC_TABLE_ERROR_AIRTABLE_TABLE_DATA_FETCH_ISSUE": "Airtable table data fetch issue.",
+    "SYNC_TABLE_ERROR_AIRTABLE_DATA_CONVERSION_ISSUE": "Airtable data conversion issue.",
+    "SYNC_TABLE_ERROR_AIRTABLE_TABLE_DATA_SYNC_ISSUE": "Airtable table data sync issue."
   }
 }

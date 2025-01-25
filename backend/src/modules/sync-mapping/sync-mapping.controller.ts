@@ -39,8 +39,23 @@ export class SyncMappingController {
     description: MESSAGES.SYNC_MAPPING.ADD_SYNC_MAPPING_SUCCESS,
   })
   @ApiResponse({
+    status: STATUS_CODES.NOT_FOUND.code,
+    description: MESSAGES.SYNC_MAPPING.ADD_SYNC_MAPPING_ERROR_USER_NOT_FOUND,
+  })
+  @ApiResponse({
+    status: STATUS_CODES.NOT_FOUND.code,
+    description:
+      MESSAGES.SYNC_MAPPING
+        .ADD_SYNC_MAPPING_ERROR_SUPABASE_CONNECTION_NOT_FOUND,
+  })
+  @ApiResponse({
+    status: STATUS_CODES.NOT_FOUND.code,
+    description:
+      MESSAGES.SYNC_MAPPING.ADD_SYNC_MAPPING_ERROR_SUPABASE_TABLE_NOT_FOUND,
+  })
+  @ApiResponse({
     status: STATUS_CODES.BAD_REQUEST.code,
-    description: MESSAGES.SYNC_MAPPING.ADD_SYNC_MAPPING_ERROR,
+    description: MESSAGES.SYNC_MAPPING.ADD_SYNC_MAPPING_FAILURE,
   })
   @ApiBody({
     description: 'Add sync mapping',
@@ -62,10 +77,28 @@ export class SyncMappingController {
         data: addMapping.data || null,
         message: MESSAGES.SYNC_MAPPING.ADD_SYNC_MAPPING_SUCCESS,
       };
+    } else if (addMapping === 'ERROR_USER_NOT_FOUND') {
+      return {
+        ...STATUS_CODES.NOT_FOUND,
+        message: MESSAGES.SYNC_MAPPING.ADD_SYNC_MAPPING_ERROR_USER_NOT_FOUND,
+      };
+    } else if (addMapping === 'ERROR_SUPABASE_CONNECTION_NOT_FOUND') {
+      return {
+        ...STATUS_CODES.NOT_FOUND,
+        message:
+          MESSAGES.SYNC_MAPPING
+            .ADD_SYNC_MAPPING_ERROR_SUPABASE_CONNECTION_NOT_FOUND,
+      };
+    } else if (addMapping === 'ERROR_SUPABASE_TABLE_NOT_FOUND') {
+      return {
+        ...STATUS_CODES.NOT_FOUND,
+        message:
+          MESSAGES.SYNC_MAPPING.ADD_SYNC_MAPPING_ERROR_SUPABASE_TABLE_NOT_FOUND,
+      };
     } else {
       return {
         ...STATUS_CODES.BAD_REQUEST,
-        message: MESSAGES.SYNC_MAPPING.ADD_SYNC_MAPPING_ERROR,
+        message: MESSAGES.SYNC_MAPPING.ADD_SYNC_MAPPING_FAILURE,
       };
     }
   }
@@ -79,8 +112,12 @@ export class SyncMappingController {
     description: MESSAGES.SYNC_MAPPING.GET_SYNC_MAPPINGS_SUCCESS,
   })
   @ApiResponse({
+    status: STATUS_CODES.NOT_FOUND.code,
+    description: MESSAGES.SYNC_MAPPING.GET_SYNC_MAPPINGS_ERROR_USER_NOT_FOUND,
+  })
+  @ApiResponse({
     status: STATUS_CODES.BAD_REQUEST.code,
-    description: MESSAGES.SYNC_MAPPING.GET_SYNC_MAPPINGS_ERROR,
+    description: MESSAGES.SYNC_MAPPING.GET_SYNC_MAPPINGS_FAILURE,
   })
   async getMappings() {
     const getMappings: any = await this.syncMappingService.getMappings();
@@ -91,10 +128,15 @@ export class SyncMappingController {
         data: getMappings.data || null,
         message: MESSAGES.SYNC_MAPPING.GET_SYNC_MAPPINGS_SUCCESS,
       };
+    } else if (getMappings === 'ERROR_USER_NOT_FOUND') {
+      return {
+        ...STATUS_CODES.NOT_FOUND,
+        message: MESSAGES.SYNC_MAPPING.GET_SYNC_MAPPINGS_ERROR_USER_NOT_FOUND,
+      };
     } else {
       return {
         ...STATUS_CODES.BAD_REQUEST,
-        message: MESSAGES.SYNC_MAPPING.GET_SYNC_MAPPINGS_ERROR,
+        message: MESSAGES.SYNC_MAPPING.GET_SYNC_MAPPINGS_FAILURE,
       };
     }
   }
@@ -108,8 +150,12 @@ export class SyncMappingController {
     description: MESSAGES.SYNC_MAPPING.DELETE_SYNC_MAPPING_SUCCESS,
   })
   @ApiResponse({
+    status: STATUS_CODES.NOT_FOUND.code,
+    description: MESSAGES.SYNC_MAPPING.DELETE_SYNC_MAPPING_ERROR_USER_NOT_FOUND,
+  })
+  @ApiResponse({
     status: STATUS_CODES.BAD_REQUEST.code,
-    description: MESSAGES.SYNC_MAPPING.DELETE_SYNC_MAPPING_ERROR,
+    description: MESSAGES.SYNC_MAPPING.DELETE_SYNC_MAPPING_FAILURE,
   })
   @ApiParam({
     name: 'id',
@@ -124,10 +170,15 @@ export class SyncMappingController {
         ...STATUS_CODES.OK,
         message: MESSAGES.SYNC_MAPPING.DELETE_SYNC_MAPPING_SUCCESS,
       };
+    } else if (deleteMapping === 'ERROR_USER_NOT_FOUND') {
+      return {
+        ...STATUS_CODES.NOT_FOUND,
+        message: MESSAGES.SYNC_MAPPING.DELETE_SYNC_MAPPING_ERROR_USER_NOT_FOUND,
+      };
     } else {
       return {
         ...STATUS_CODES.BAD_REQUEST,
-        message: MESSAGES.SYNC_MAPPING.DELETE_SYNC_MAPPING_ERROR,
+        message: MESSAGES.SYNC_MAPPING.DELETE_SYNC_MAPPING_FAILURE,
       };
     }
   }

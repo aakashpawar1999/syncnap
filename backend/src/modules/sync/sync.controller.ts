@@ -32,6 +32,53 @@ export class SyncController {
     description: MESSAGES.SYNC.SYNC_TABLE_SUCCESS,
   })
   @ApiResponse({
+    status: STATUS_CODES.NOT_FOUND.code,
+    description: MESSAGES.SYNC.SYNC_TABLE_ERROR_SYNC_MAPPING_NOT_FOUND,
+  })
+  @ApiResponse({
+    status: STATUS_CODES.BAD_REQUEST.code,
+    description:
+      MESSAGES.SYNC.SYNC_TABLE_ERROR_SUPABASE_OR_AIRTABLE_CONNECTION_ISSUE,
+  })
+  @ApiResponse({
+    status: STATUS_CODES.BAD_REQUEST.code,
+    description: MESSAGES.SYNC.SYNC_TABLE_ERROR_SUPABASE_CONNECTION_ISSUE,
+  })
+  @ApiResponse({
+    status: STATUS_CODES.NOT_FOUND.code,
+    description: MESSAGES.SYNC.SYNC_TABLE_ERROR_SUPABASE_SCHEMA_NOT_FOUND,
+  })
+  @ApiResponse({
+    status: STATUS_CODES.NOT_FOUND.code,
+    description: MESSAGES.SYNC.SYNC_TABLE_ERROR_AIRTABLE_SCHEMA_NOT_FOUND,
+  })
+  @ApiResponse({
+    status: STATUS_CODES.BAD_REQUEST.code,
+    description:
+      MESSAGES.SYNC.SYNC_TABLE_ERROR_AIRTABLE_SCHEMA_FIELD_REMOVAL_ISSUE,
+  })
+  @ApiResponse({
+    status: STATUS_CODES.BAD_REQUEST.code,
+    description:
+      MESSAGES.SYNC.SYNC_TABLE_ERROR_AIRTABLE_SCHEMA_FIELD_ADDITION_ISSUE,
+  })
+  @ApiResponse({
+    status: STATUS_CODES.BAD_REQUEST.code,
+    description: MESSAGES.SYNC.SYNC_TABLE_ERROR_SUPABASE_TABLE_DATA_FETCH_ISSUE,
+  })
+  @ApiResponse({
+    status: STATUS_CODES.BAD_REQUEST.code,
+    description: MESSAGES.SYNC.SYNC_TABLE_ERROR_AIRTABLE_TABLE_DATA_FETCH_ISSUE,
+  })
+  @ApiResponse({
+    status: STATUS_CODES.BAD_REQUEST.code,
+    description: MESSAGES.SYNC.SYNC_TABLE_ERROR_AIRTABLE_DATA_CONVERSION_ISSUE,
+  })
+  @ApiResponse({
+    status: STATUS_CODES.BAD_REQUEST.code,
+    description: MESSAGES.SYNC.SYNC_TABLE_ERROR_AIRTABLE_TABLE_DATA_SYNC_ISSUE,
+  })
+  @ApiResponse({
     status: STATUS_CODES.BAD_REQUEST.code,
     description: MESSAGES.SYNC.SYNC_TABLE_FAILURE,
   })
@@ -48,6 +95,64 @@ export class SyncController {
       return {
         ...STATUS_CODES.OK,
         message: MESSAGES.SYNC.SYNC_TABLE_SUCCESS,
+      };
+    } else if (syncTable === 'ERROR_SYNC_MAPPING_NOT_FOUND') {
+      return {
+        ...STATUS_CODES.NOT_FOUND,
+        message: MESSAGES.SYNC.SYNC_TABLE_ERROR_SYNC_MAPPING_NOT_FOUND,
+      };
+    } else if (syncTable === 'ERROR_SUPABASE_OR_AIRTABLE_CONNECTION_ISSUE') {
+      return {
+        ...STATUS_CODES.BAD_REQUEST,
+        message:
+          MESSAGES.SYNC.SYNC_TABLE_ERROR_SUPABASE_OR_AIRTABLE_CONNECTION_ISSUE,
+      };
+    } else if (syncTable === 'ERROR_SUPABASE_CONNECTION_ISSUE') {
+      return {
+        ...STATUS_CODES.BAD_REQUEST,
+        message: MESSAGES.SYNC.SYNC_TABLE_ERROR_SUPABASE_CONNECTION_ISSUE,
+      };
+    } else if (syncTable === 'ERROR_SUPABASE_SCHEMA_NOT_FOUND') {
+      return {
+        ...STATUS_CODES.NOT_FOUND,
+        message: MESSAGES.SYNC.SYNC_TABLE_ERROR_SUPABASE_SCHEMA_NOT_FOUND,
+      };
+    } else if (syncTable === 'ERROR_AIRTABLE_SCHEMA_NOT_FOUND') {
+      return {
+        ...STATUS_CODES.NOT_FOUND,
+        message: MESSAGES.SYNC.SYNC_TABLE_ERROR_AIRTABLE_SCHEMA_NOT_FOUND,
+      };
+    } else if (syncTable === 'ERROR_AIRTABLE_SCHEMA_FIELD_REMOVAL_ISSUE') {
+      return {
+        ...STATUS_CODES.BAD_REQUEST,
+        message:
+          MESSAGES.SYNC.SYNC_TABLE_ERROR_AIRTABLE_SCHEMA_FIELD_REMOVAL_ISSUE,
+      };
+    } else if (syncTable === 'ERROR_AIRTABLE_SCHEMA_FIELD_ADDITION_ISSUE') {
+      return {
+        ...STATUS_CODES.BAD_REQUEST,
+        message:
+          MESSAGES.SYNC.SYNC_TABLE_ERROR_AIRTABLE_SCHEMA_FIELD_ADDITION_ISSUE,
+      };
+    } else if (syncTable === 'ERROR_SUPABASE_TABLE_DATA_FETCH_ISSUE') {
+      return {
+        ...STATUS_CODES.BAD_REQUEST,
+        message: MESSAGES.SYNC.SYNC_TABLE_ERROR_SUPABASE_TABLE_DATA_FETCH_ISSUE,
+      };
+    } else if (syncTable === 'ERROR_AIRTABLE_TABLE_DATA_FETCH_ISSUE') {
+      return {
+        ...STATUS_CODES.BAD_REQUEST,
+        message: MESSAGES.SYNC.SYNC_TABLE_ERROR_AIRTABLE_TABLE_DATA_FETCH_ISSUE,
+      };
+    } else if (syncTable === 'ERROR_AIRTABLE_DATA_CONVERSION_ISSUE') {
+      return {
+        ...STATUS_CODES.BAD_REQUEST,
+        message: MESSAGES.SYNC.SYNC_TABLE_ERROR_AIRTABLE_DATA_CONVERSION_ISSUE,
+      };
+    } else if (syncTable === 'ERROR_AIRTABLE_TABLE_DATA_SYNC_ISSUE') {
+      return {
+        ...STATUS_CODES.BAD_REQUEST,
+        message: MESSAGES.SYNC.SYNC_TABLE_ERROR_AIRTABLE_TABLE_DATA_SYNC_ISSUE,
       };
     } else {
       return {

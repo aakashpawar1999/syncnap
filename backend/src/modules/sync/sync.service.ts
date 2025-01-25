@@ -211,6 +211,7 @@ export class SyncService {
             SyncStatus.FAILURE,
             `Error removing field "${airtableField.name}" from Airtable.`,
           );
+          return 'ERROR_AIRTABLE_SCHEMA_FIELD_REMOVAL_ISSUE';
         }
       }
     }
@@ -242,6 +243,7 @@ export class SyncService {
           SyncStatus.FAILURE,
           `Error adding field "${column_name}" to Airtable.`,
         );
+        return 'ERROR_AIRTABLE_SCHEMA_FIELD_ADDITION_ISSUE';
       }
     }
   }
@@ -359,7 +361,7 @@ export class SyncService {
           SyncStatus.FAILURE,
           `Error fetching mapping.`,
         );
-        return 'ERROR';
+        return 'ERROR_SYNC_MAPPING_NOT_FOUND';
       }
 
       const {
@@ -375,26 +377,35 @@ export class SyncService {
           SyncStatus.FAILURE,
           `Error fetching Supabase or Airtable connections.`,
         );
-        return 'ERROR';
+        return 'ERROR_SUPABASE_OR_AIRTABLE_CONNECTION_ISSUE';
       }
 
       const supabase = createClient(
         this.cryptoService.decrypt(supabaseConnections.projectUrl),
         this.cryptoService.decrypt(supabaseConnections.anonApiKey),
       );
+      if (!supabase) {
+        return 'ERROR_SUPABASE_CONNECTION_ISSUE';
+      }
       const supabaseSchema = await this.getSupabaseSchema(
         log.data.id,
         supabase,
         supabaseTable,
       );
+      if (supabaseSchema.length === 0) {
+        return 'ERROR_SUPABASE_SCHEMA_NOT_FOUND';
+      }
       const airtableSchema = await this.getAirtableSchemaWithIds(
         log.data.id,
         airtableConnections.baseId,
         airtableTable,
         airtableConnections.accessToken,
       );
+      if (airtableSchema.length === 0) {
+        return 'ERROR_AIRTABLE_SCHEMA_NOT_FOUND';
+      }
 
-      await this.updateAirtableSchema(
+      const updateAirtableSchema = await this.updateAirtableSchema(
         log.data.id,
         airtableConnections.baseId,
         airtableTable,
@@ -402,6 +413,16 @@ export class SyncService {
         supabaseSchema,
         airtableSchema,
       );
+      if (
+        updateAirtableSchema === 'ERROR_AIRTABLE_SCHEMA_FIELD_REMOVAL_ISSUE'
+      ) {
+        return 'ERROR_AIRTABLE_SCHEMA_FIELD_REMOVAL_ISSUE';
+      }
+      if (
+        updateAirtableSchema === 'ERROR_AIRTABLE_SCHEMA_FIELD_ADDITION_ISSUE'
+      ) {
+        return 'ERROR_AIRTABLE_SCHEMA_FIELD_ADDITION_ISSUE';
+      }
 
       const { data: supabaseData, error: supabaseError } = await supabase
         .from(supabaseTable)
@@ -413,7 +434,7 @@ export class SyncService {
           SyncStatus.FAILURE,
           `Error fetching data from table "${supabaseTable}" in Supabase.`,
         );
-        return 'ERROR';
+        return 'ERROR_SUPABASE_TABLE_DATA_FETCH_ISSUE';
       }
 
       const airtableUrl = this.AirtableTablesUrl(
@@ -448,7 +469,7 @@ export class SyncService {
           SyncStatus.FAILURE,
           `Error fetching existing Airtable records.`,
         );
-        return 'ERROR';
+        return 'ERROR_AIRTABLE_TABLE_DATA_FETCH_ISSUE';
       }
 
       // Extract unique field values from Airtable records
@@ -465,6 +486,9 @@ export class SyncService {
         newRecords,
         supabaseSchema,
       );
+      if (airtableData.length === 0) {
+        return 'ERROR_AIRTABLE_DATA_CONVERSION_ISSUE';
+      }
 
       const batchSize = 10;
       const batches = [];
@@ -484,7 +508,7 @@ export class SyncService {
             SyncStatus.FAILURE,
             `Error syncing table "${supabaseTable}" to Airtable.`,
           );
-          return 'ERROR';
+          return 'ERROR_AIRTABLE_TABLE_DATA_SYNC_ISSUE';
         }
       }
 

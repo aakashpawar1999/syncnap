@@ -22,14 +22,14 @@ export class SyncMappingService {
     try {
       const userData: any = await this.userService.getCurrentUser();
       if (!userData) {
-        return 'ERROR';
+        return 'ERROR_USER_NOT_FOUND';
       }
 
       const userDataFromDb = await this.prisma.user.findUnique({
         where: { email: userData.email },
       });
       if (!userDataFromDb) {
-        return 'ERROR';
+        return 'ERROR_USER_NOT_FOUND';
       }
 
       const supabaseConnections =
@@ -37,7 +37,7 @@ export class SyncMappingService {
           where: { id: supabaseConnectionId },
         });
       if (!supabaseConnections) {
-        return 'ERROR';
+        return 'ERROR_SUPABASE_CONNECTION_NOT_FOUND';
       }
       const supabase = createClient(
         this.cryptoService.decrypt(supabaseConnections.projectUrl),
@@ -48,10 +48,10 @@ export class SyncMappingService {
         .select('*')
         .limit(1);
       if (supabaseError) {
-        return 'ERROR';
+        return 'ERROR_SUPABASE_TABLE_NOT_FOUND';
       }
       if (!supabaseData || supabaseData.length === 0) {
-        return 'ERROR';
+        return 'ERROR_SUPABASE_TABLE_NOT_FOUND';
       }
 
       const mapping = await this.prisma.syncMapping.create({
@@ -78,14 +78,14 @@ export class SyncMappingService {
     try {
       const userData: any = await this.userService.getCurrentUser();
       if (!userData) {
-        return 'ERROR';
+        return 'ERROR_USER_NOT_FOUND';
       }
 
       const userDataFromDb = await this.prisma.user.findUnique({
         where: { email: userData.email },
       });
       if (!userDataFromDb) {
-        return 'ERROR';
+        return 'ERROR_USER_NOT_FOUND';
       }
 
       const mappings = await this.prisma.syncMapping.findMany({
@@ -128,14 +128,14 @@ export class SyncMappingService {
     try {
       const userData: any = await this.userService.getCurrentUser();
       if (!userData) {
-        return 'ERROR';
+        return 'ERROR_USER_NOT_FOUND';
       }
 
       const userDataFromDb = await this.prisma.user.findUnique({
         where: { email: userData.email },
       });
       if (!userDataFromDb) {
-        return 'ERROR';
+        return 'ERROR_USER_NOT_FOUND';
       }
 
       await this.prisma.syncMapping.update({

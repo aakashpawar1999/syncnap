@@ -14,14 +14,14 @@ export class SyncLogService {
     try {
       const userData: any = await this.userService.getCurrentUser();
       if (!userData) {
-        return 'ERROR';
+        return 'ERROR_USER_NOT_FOUND';
       }
 
       const userDataFromDb = await this.prisma.user.findUnique({
         where: { email: userData.email },
       });
       if (!userDataFromDb) {
-        return 'ERROR';
+        return 'ERROR_USER_NOT_FOUND';
       }
 
       const log = await this.prisma.syncLog.create({
@@ -43,14 +43,14 @@ export class SyncLogService {
     try {
       const userData: any = await this.userService.getCurrentUser();
       if (!userData) {
-        return 'ERROR';
+        return 'ERROR_USER_NOT_FOUND';
       }
 
       const userDataFromDb = await this.prisma.user.findUnique({
         where: { email: userData.email },
       });
       if (!userDataFromDb) {
-        return 'ERROR';
+        return 'ERROR_USER_NOT_FOUND';
       }
 
       const logs = await this.prisma.syncLog.findMany({
@@ -90,21 +90,21 @@ export class SyncLogService {
     try {
       const userData: any = await this.userService.getCurrentUser();
       if (!userData) {
-        return 'ERROR';
+        return 'ERROR_USER_NOT_FOUND';
       }
 
       const userDataFromDb = await this.prisma.user.findUnique({
         where: { email: userData.email },
       });
       if (!userDataFromDb) {
-        return 'ERROR';
+        return 'ERROR_USER_NOT_FOUND';
       }
 
       const log = await this.prisma.syncLog.findUnique({
         where: { id: logId, userId: userDataFromDb.id },
       });
       if (!log) {
-        return 'ERROR';
+        return 'ERROR_USER_SYNC_LOG_NOT_FOUND';
       }
 
       await this.prisma.syncLog.update({

@@ -24,14 +24,14 @@ export class ConnectionService {
     try {
       const userData: any = await this.userService.getCurrentUser();
       if (!userData) {
-        return 'ERROR';
+        return 'ERROR_USER_NOT_FOUND';
       }
 
       const userDataFromDb = await this.prisma.user.findUnique({
         where: { email: userData.email },
       });
       if (!userDataFromDb) {
-        return 'ERROR';
+        return 'ERROR_USER_NOT_FOUND';
       }
 
       const supabaseConnection = await this.prisma.supabaseConnection.create({
@@ -49,7 +49,7 @@ export class ConnectionService {
       if (supabaseConnection) {
         return { data: supabaseConnection };
       } else {
-        return 'ERROR';
+        return 'ERROR_SUPABASE_CONNECTION_NOT_FOUND';
       }
     } catch (error) {
       return 'ERROR';
@@ -60,14 +60,14 @@ export class ConnectionService {
     try {
       const userData: any = await this.userService.getCurrentUser();
       if (!userData) {
-        return 'ERROR';
+        return 'ERROR_USER_NOT_FOUND';
       }
 
       const userDataFromDb = await this.prisma.user.findUnique({
         where: { email: userData.email },
       });
       if (!userDataFromDb) {
-        return 'ERROR';
+        return 'ERROR_USER_NOT_FOUND';
       }
 
       const supabaseConnections = await this.prisma.supabaseConnection.findMany(
@@ -97,7 +97,7 @@ export class ConnectionService {
         });
 
       if (!supabaseConnection) {
-        return 'ERROR';
+        return 'ERROR_SUPABASE_CONNECTION_NOT_FOUND';
       }
 
       const supabase = createClient(
@@ -114,7 +114,7 @@ export class ConnectionService {
       });
 
       if (error) {
-        return 'ERROR';
+        return 'ERROR_SUPABASE_TABLE_NOT_FOUND';
       }
 
       return { data: tables };
@@ -131,14 +131,14 @@ export class ConnectionService {
     try {
       const userData: any = await this.userService.getCurrentUser();
       if (!userData) {
-        return 'ERROR';
+        return 'ERROR_USER_NOT_FOUND';
       }
 
       const userDataFromDb = await this.prisma.user.findUnique({
         where: { email: userData.email },
       });
       if (!userDataFromDb) {
-        return 'ERROR';
+        return 'ERROR_USER_NOT_FOUND';
       }
 
       const airtableConnection = await this.prisma.airtableConnection.create({
@@ -156,7 +156,7 @@ export class ConnectionService {
       if (airtableConnection) {
         return { data: airtableConnection };
       } else {
-        return 'ERROR';
+        return 'ERROR_AIRTABLE_CONNECTION_NOT_FOUND';
       }
     } catch (error) {
       return 'ERROR';
@@ -167,14 +167,14 @@ export class ConnectionService {
     try {
       const userData: any = await this.userService.getCurrentUser();
       if (!userData) {
-        return 'ERROR';
+        return 'ERROR_USER_NOT_FOUND';
       }
 
       const userDataFromDb = await this.prisma.user.findUnique({
         where: { email: userData.email },
       });
       if (!userDataFromDb) {
-        return 'ERROR';
+        return 'ERROR_USER_NOT_FOUND';
       }
 
       const airtableConnections = await this.prisma.airtableConnection.findMany(
@@ -203,8 +203,7 @@ export class ConnectionService {
           },
         });
       if (!airtableConnection) {
-        console.log(airtableConnection, 'airtableConnection not found');
-        return 'ERROR';
+        return 'ERROR_AIRTABLE_CONNECTION_NOT_FOUND';
       }
 
       const headers = {
@@ -222,7 +221,6 @@ export class ConnectionService {
         data: tablesData,
       };
     } catch (error) {
-      console.log(error, 'error to get airtable tables');
       return 'ERROR';
     }
   }

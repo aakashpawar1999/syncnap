@@ -38,6 +38,17 @@ export class ConnectionController {
     description: MESSAGES.CONNECTION.ADD_SUPABASE_CONNECTION_SUCCESS,
   })
   @ApiResponse({
+    status: STATUS_CODES.NOT_FOUND.code,
+    description:
+      MESSAGES.CONNECTION.ADD_SUPABASE_CONNECTION_ERROR_USER_NOT_FOUND,
+  })
+  @ApiResponse({
+    status: STATUS_CODES.NOT_FOUND.code,
+    description:
+      MESSAGES.CONNECTION
+        .ADD_SUPABASE_CONNECTION_ERROR_SUPABASE_CONNECTION_NOT_FOUND,
+  })
+  @ApiResponse({
     status: STATUS_CODES.BAD_REQUEST.code,
     description: MESSAGES.CONNECTION.ADD_SUPABASE_CONNECTION_FAILURE,
   })
@@ -60,6 +71,21 @@ export class ConnectionController {
         data: addSupabaseConnection.data || null,
         message: MESSAGES.CONNECTION.ADD_SUPABASE_CONNECTION_SUCCESS,
       };
+    } else if (addSupabaseConnection.message === 'ERROR_USER_NOT_FOUND') {
+      return {
+        ...STATUS_CODES.NOT_FOUND,
+        message:
+          MESSAGES.CONNECTION.ADD_SUPABASE_CONNECTION_ERROR_USER_NOT_FOUND,
+      };
+    } else if (
+      addSupabaseConnection.message === 'ERROR_SUPABASE_CONNECTION_NOT_FOUND'
+    ) {
+      return {
+        ...STATUS_CODES.NOT_FOUND,
+        message:
+          MESSAGES.CONNECTION
+            .ADD_SUPABASE_CONNECTION_ERROR_SUPABASE_CONNECTION_NOT_FOUND,
+      };
     } else {
       return {
         ...STATUS_CODES.BAD_REQUEST,
@@ -77,6 +103,11 @@ export class ConnectionController {
     description: MESSAGES.CONNECTION.GET_SUPABASE_CONNECTIONS_SUCCESS,
   })
   @ApiResponse({
+    status: STATUS_CODES.NOT_FOUND.code,
+    description:
+      MESSAGES.CONNECTION.GET_SUPABASE_CONNECTIONS_ERROR_USER_NOT_FOUND,
+  })
+  @ApiResponse({
     status: STATUS_CODES.BAD_REQUEST.code,
     description: MESSAGES.CONNECTION.GET_SUPABASE_CONNECTIONS_FAILURE,
   })
@@ -89,6 +120,12 @@ export class ConnectionController {
         ...STATUS_CODES.OK,
         data: getSupabaseConnections.data || null,
         message: MESSAGES.CONNECTION.GET_SUPABASE_CONNECTIONS_SUCCESS,
+      };
+    } else if (getSupabaseConnections.message === 'ERROR_USER_NOT_FOUND') {
+      return {
+        ...STATUS_CODES.NOT_FOUND,
+        message:
+          MESSAGES.CONNECTION.GET_SUPABASE_CONNECTIONS_ERROR_USER_NOT_FOUND,
       };
     } else {
       return {
@@ -105,6 +142,17 @@ export class ConnectionController {
   @ApiResponse({
     status: STATUS_CODES.OK.code,
     description: MESSAGES.CONNECTION.GET_SUPABASE_TABLES_SUCCESS,
+  })
+  @ApiResponse({
+    status: STATUS_CODES.NOT_FOUND.code,
+    description:
+      MESSAGES.CONNECTION
+        .GET_SUPABASE_TABLES_ERROR_SUPABASE_CONNECTION_NOT_FOUND,
+  })
+  @ApiResponse({
+    status: STATUS_CODES.NOT_FOUND.code,
+    description:
+      MESSAGES.CONNECTION.GET_SUPABASE_TABLES_ERROR_SUPABASE_TABLE_NOT_FOUND,
   })
   @ApiResponse({
     status: STATUS_CODES.BAD_REQUEST.code,
@@ -128,6 +176,22 @@ export class ConnectionController {
         data: getSupabaseTables.data || null,
         message: MESSAGES.CONNECTION.GET_SUPABASE_TABLES_SUCCESS,
       };
+    } else if (
+      getSupabaseTables.message === 'ERROR_SUPABASE_CONNECTION_NOT_FOUND'
+    ) {
+      return {
+        ...STATUS_CODES.NOT_FOUND,
+        message:
+          MESSAGES.CONNECTION
+            .GET_SUPABASE_TABLES_ERROR_SUPABASE_CONNECTION_NOT_FOUND,
+      };
+    } else if (getSupabaseTables.message === 'ERROR_SUPABASE_TABLE_NOT_FOUND') {
+      return {
+        ...STATUS_CODES.NOT_FOUND,
+        message:
+          MESSAGES.CONNECTION
+            .GET_SUPABASE_TABLES_ERROR_SUPABASE_TABLE_NOT_FOUND,
+      };
     } else {
       return {
         ...STATUS_CODES.BAD_REQUEST,
@@ -143,6 +207,17 @@ export class ConnectionController {
   @ApiResponse({
     status: STATUS_CODES.OK.code,
     description: MESSAGES.CONNECTION.ADD_AIRTABLE_CONNECTION_SUCCESS,
+  })
+  @ApiResponse({
+    status: STATUS_CODES.NOT_FOUND.code,
+    description:
+      MESSAGES.CONNECTION.ADD_AIRTABLE_CONNECTION_ERROR_USER_NOT_FOUND,
+  })
+  @ApiResponse({
+    status: STATUS_CODES.NOT_FOUND.code,
+    description:
+      MESSAGES.CONNECTION
+        .ADD_AIRTABLE_CONNECTION_ERROR_AIRTABLE_CONNECTION_NOT_FOUND,
   })
   @ApiResponse({
     status: STATUS_CODES.BAD_REQUEST.code,
@@ -167,6 +242,21 @@ export class ConnectionController {
         data: addAirtableConnection.data || null,
         message: MESSAGES.CONNECTION.ADD_AIRTABLE_CONNECTION_SUCCESS,
       };
+    } else if (addAirtableConnection.message === 'ERROR_USER_NOT_FOUND') {
+      return {
+        ...STATUS_CODES.NOT_FOUND,
+        message:
+          MESSAGES.CONNECTION.ADD_AIRTABLE_CONNECTION_ERROR_USER_NOT_FOUND,
+      };
+    } else if (
+      addAirtableConnection.message === 'ERROR_AIRTABLE_CONNECTION_NOT_FOUND'
+    ) {
+      return {
+        ...STATUS_CODES.NOT_FOUND,
+        message:
+          MESSAGES.CONNECTION
+            .ADD_AIRTABLE_CONNECTION_ERROR_AIRTABLE_CONNECTION_NOT_FOUND,
+      };
     } else {
       return {
         ...STATUS_CODES.BAD_REQUEST,
@@ -184,6 +274,11 @@ export class ConnectionController {
     description: MESSAGES.CONNECTION.GET_AIRTABLE_CONNECTIONS_SUCCESS,
   })
   @ApiResponse({
+    status: STATUS_CODES.NOT_FOUND.code,
+    description:
+      MESSAGES.CONNECTION.GET_AIRTABLE_CONNECTIONS_ERROR_USER_NOT_FOUND,
+  })
+  @ApiResponse({
     status: STATUS_CODES.BAD_REQUEST.code,
     description: MESSAGES.CONNECTION.GET_AIRTABLE_CONNECTIONS_FAILURE,
   })
@@ -196,6 +291,12 @@ export class ConnectionController {
         ...STATUS_CODES.OK,
         data: getAirtableConnections.data || null,
         message: MESSAGES.CONNECTION.GET_AIRTABLE_CONNECTIONS_SUCCESS,
+      };
+    } else if (getAirtableConnections.message === 'ERROR_USER_NOT_FOUND') {
+      return {
+        ...STATUS_CODES.NOT_FOUND,
+        message:
+          MESSAGES.CONNECTION.GET_AIRTABLE_CONNECTIONS_ERROR_USER_NOT_FOUND,
       };
     } else {
       return {
@@ -212,6 +313,12 @@ export class ConnectionController {
   @ApiResponse({
     status: STATUS_CODES.OK.code,
     description: MESSAGES.CONNECTION.GET_AIRTABLE_TABLES_SUCCESS,
+  })
+  @ApiResponse({
+    status: STATUS_CODES.NOT_FOUND.code,
+    description:
+      MESSAGES.CONNECTION
+        .GET_AIRTABLE_TABLES_ERROR_AIRTABLE_CONNECTION_NOT_FOUND,
   })
   @ApiResponse({
     status: STATUS_CODES.BAD_REQUEST.code,
@@ -234,6 +341,15 @@ export class ConnectionController {
         ...STATUS_CODES.OK,
         data: getAirtableTables.data || null,
         message: MESSAGES.CONNECTION.GET_AIRTABLE_TABLES_SUCCESS,
+      };
+    } else if (
+      getAirtableTables.message === 'ERROR_AIRTABLE_CONNECTION_NOT_FOUND'
+    ) {
+      return {
+        ...STATUS_CODES.NOT_FOUND,
+        message:
+          MESSAGES.CONNECTION
+            .GET_AIRTABLE_TABLES_ERROR_AIRTABLE_CONNECTION_NOT_FOUND,
       };
     } else {
       return {

@@ -32,6 +32,10 @@ export class SyncLogController {
     description: MESSAGES.SYNC_LOG.CREATE_SYNC_LOG_SUCCESS,
   })
   @ApiResponse({
+    status: STATUS_CODES.NOT_FOUND.code,
+    description: MESSAGES.SYNC_LOG.CREATE_SYNC_LOG_ERROR_USER_NOT_FOUND,
+  })
+  @ApiResponse({
     status: STATUS_CODES.BAD_REQUEST.code,
     description: MESSAGES.SYNC_LOG.CREATE_SYNC_LOG_FAILURE,
   })
@@ -53,6 +57,11 @@ export class SyncLogController {
         data: log.data || null,
         message: MESSAGES.SYNC_LOG.CREATE_SYNC_LOG_SUCCESS,
       };
+    } else if (log === 'ERROR_USER_NOT_FOUND') {
+      return {
+        ...STATUS_CODES.NOT_FOUND,
+        message: MESSAGES.SYNC_LOG.CREATE_SYNC_LOG_ERROR_USER_NOT_FOUND,
+      };
     } else {
       return {
         ...STATUS_CODES.BAD_REQUEST,
@@ -70,6 +79,10 @@ export class SyncLogController {
     description: MESSAGES.SYNC_LOG.GET_SYNC_LOGS_SUCCESS,
   })
   @ApiResponse({
+    status: STATUS_CODES.NOT_FOUND.code,
+    description: MESSAGES.SYNC_LOG.GET_SYNC_LOGS_ERROR_USER_NOT_FOUND,
+  })
+  @ApiResponse({
     status: STATUS_CODES.BAD_REQUEST.code,
     description: MESSAGES.SYNC_LOG.GET_SYNC_LOGS_FAILURE,
   })
@@ -81,6 +94,11 @@ export class SyncLogController {
         ...STATUS_CODES.OK,
         data: logs.data || null,
         message: MESSAGES.SYNC_LOG.GET_SYNC_LOGS_SUCCESS,
+      };
+    } else if (logs === 'ERROR_USER_NOT_FOUND') {
+      return {
+        ...STATUS_CODES.NOT_FOUND,
+        message: MESSAGES.SYNC_LOG.GET_SYNC_LOGS_ERROR_USER_NOT_FOUND,
       };
     } else {
       return {
@@ -97,6 +115,15 @@ export class SyncLogController {
   @ApiResponse({
     status: STATUS_CODES.OK.code,
     description: MESSAGES.SYNC_LOG.UPDATE_SYNC_LOG_SUCCESS,
+  })
+  @ApiResponse({
+    status: STATUS_CODES.NOT_FOUND.code,
+    description: MESSAGES.SYNC_LOG.UPDATE_SYNC_LOG_ERROR_USER_NOT_FOUND,
+  })
+  @ApiResponse({
+    status: STATUS_CODES.NOT_FOUND.code,
+    description:
+      MESSAGES.SYNC_LOG.UPDATE_SYNC_LOG_ERROR_USER_SYNC_LOG_NOT_FOUND,
   })
   @ApiResponse({
     status: STATUS_CODES.BAD_REQUEST.code,
@@ -118,6 +145,17 @@ export class SyncLogController {
       return {
         ...STATUS_CODES.OK,
         message: MESSAGES.SYNC_LOG.UPDATE_SYNC_LOG_SUCCESS,
+      };
+    } else if (log === 'ERROR_USER_NOT_FOUND') {
+      return {
+        ...STATUS_CODES.NOT_FOUND,
+        message: MESSAGES.SYNC_LOG.UPDATE_SYNC_LOG_ERROR_USER_NOT_FOUND,
+      };
+    } else if (log === 'ERROR_USER_SYNC_LOG_NOT_FOUND') {
+      return {
+        ...STATUS_CODES.NOT_FOUND,
+        message:
+          MESSAGES.SYNC_LOG.UPDATE_SYNC_LOG_ERROR_USER_SYNC_LOG_NOT_FOUND,
       };
     } else {
       return {
