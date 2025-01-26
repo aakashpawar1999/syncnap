@@ -4,6 +4,8 @@ import express from 'express';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 import bootstrap from './src/main.server';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
@@ -48,7 +50,7 @@ export function app(): express.Express {
 }
 
 function run(): void {
-  const port = process.env['PORT'] || 4000;
+  const port = process.env['APP_PORT'] || 4000;
 
   // Start up the Node server
   const server = app();
