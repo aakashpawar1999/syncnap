@@ -30,7 +30,8 @@
             "prerender": true,
             "ssr": {
               "entry": "server.ts"
-            }
+            },
+            "allowedCommonJsDependencies": ["dotenv", "node-forge"]
           },
           "configurations": {
             "production": {
