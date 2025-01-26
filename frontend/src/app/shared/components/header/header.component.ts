@@ -39,7 +39,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         if (currentUrl.includes('auth/callback') && code) {
           this.verify(code || '');
         } else {
-          this.router.navigate(['/']);
+          // this.router.navigate(['/']);
         }
       }),
     );

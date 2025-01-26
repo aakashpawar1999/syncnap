@@ -20,6 +20,20 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'privacy-policy',
+    loadComponent: () =>
+      import(
+        './shared/components/privacy-policy/privacy-policy.component'
+      ).then((c) => c.PrivacyPolicyComponent),
+  },
+  {
+    path: 'terms',
+    loadComponent: () =>
+      import('./shared/components/terms/terms.component').then(
+        (c) => c.TermsComponent,
+      ),
+  },
+  {
     path: 'dashboard',
     canActivate: [authGuard],
     loadComponent: () =>
