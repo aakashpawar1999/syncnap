@@ -96,7 +96,7 @@ export class ConnectionComponent implements OnInit, OnDestroy {
       {
         question: 'What should I do if I have more questions or concerns?',
         answer:
-          'We’re here to help! If you have any questions or concerns, feel free to contact us at [support email/contact page link].',
+          'We’re here to help! If you have any questions or concerns, feel free to contact us at syncnap.info@gmail.com .',
       },
     ];
   }
