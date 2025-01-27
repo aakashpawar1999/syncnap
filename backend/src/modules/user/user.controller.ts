@@ -8,9 +8,9 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { loadMessages } from 'src/utils/load-messages.util';
-import { STATUS_CODES } from 'src/common/status-codes';
-import { AuthGuard } from 'src/common/guards/auth/auth.guard';
+import { loadMessages } from '../../utils/load-messages.util';
+import { STATUS_CODES } from '../../common/status-codes';
+import { AuthGuard } from '../../common/guards/auth/auth.guard';
 
 const MESSAGES = loadMessages();
 

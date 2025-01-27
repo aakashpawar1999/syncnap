@@ -17,9 +17,9 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { AuthGuard } from 'src/common/guards/auth/auth.guard';
-import { STATUS_CODES } from 'src/common/status-codes';
-import { loadMessages } from 'src/utils/load-messages.util';
+import { AuthGuard } from '../../common/guards/auth/auth.guard';
+import { STATUS_CODES } from '../../common/status-codes';
+import { loadMessages } from '../../utils/load-messages.util';
 import { AddSyncMappingDto } from './dto';
 
 const MESSAGES = loadMessages();

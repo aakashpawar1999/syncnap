@@ -5,6 +5,8 @@ describe('CryptoService', () => {
   let service: CryptoService;
 
   beforeEach(async () => {
+    process.env.PUBLIC_KEY = 'mockPublicKey';
+    process.env.PRIVATE_KEY = 'mockPrivateKey';
     const module: TestingModule = await Test.createTestingModule({
       providers: [CryptoService],
     }).compile();

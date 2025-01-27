@@ -9,10 +9,10 @@ import {
   Version,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { loadMessages } from 'src/utils/load-messages.util';
+import { loadMessages } from '../../utils/load-messages.util';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { STATUS_CODES } from 'src/common/status-codes';
-import { AuthGuard } from 'src/common/guards/auth/auth.guard';
+import { STATUS_CODES } from '../../common/status-codes';
+import { AuthGuard } from '../../common/guards/auth/auth.guard';
 
 const MESSAGES = loadMessages();
 

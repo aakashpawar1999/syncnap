@@ -4,8 +4,8 @@ import { SyncLogService } from '../sync-log/sync-log.service';
 import { createClient } from '@supabase/supabase-js';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { SyncStatus } from '@prisma/client';
+import { CryptoService } from '../../common/services/crypto/crypto.service';
 import axios from 'axios';
-import { CryptoService } from 'src/common/services/crypto/crypto.service';
 
 @Injectable()
 export class SyncService {

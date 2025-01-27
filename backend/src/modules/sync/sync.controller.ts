@@ -10,9 +10,9 @@ import { SyncService } from './sync.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiResponse } from '@nestjs/swagger';
 import { ApiBody } from '@nestjs/swagger';
-import { STATUS_CODES } from 'src/common/status-codes';
-import { AuthGuard } from 'src/common/guards/auth/auth.guard';
-import { loadMessages } from 'src/utils/load-messages.util';
+import { STATUS_CODES } from '../../common/status-codes';
+import { AuthGuard } from '../../common/guards/auth/auth.guard';
+import { loadMessages } from '../../utils/load-messages.util';
 import { SyncTableDto } from './dto';
 
 const MESSAGES = loadMessages();

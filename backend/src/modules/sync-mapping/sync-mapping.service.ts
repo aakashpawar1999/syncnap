@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'prisma/prisma.service';
+import { PrismaService } from '../../../prisma/prisma.service';
 import { UserService } from '../user/user.service';
 import { createClient } from '@supabase/supabase-js';
-import { CryptoService } from 'src/common/services/crypto/crypto.service';
+import { CryptoService } from '../../common/services/crypto/crypto.service';
 
 @Injectable()
 export class SyncMappingService {

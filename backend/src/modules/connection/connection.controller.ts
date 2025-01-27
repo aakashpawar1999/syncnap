@@ -9,7 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { ConnectionService } from './connection.service';
-import { AuthGuard } from 'src/common/guards/auth/auth.guard';
+import { AuthGuard } from '../../common/guards/auth/auth.guard';
 import {
   ApiBody,
   ApiOperation,
@@ -17,8 +17,8 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { STATUS_CODES } from 'src/common/status-codes';
-import { loadMessages } from 'src/utils/load-messages.util';
+import { STATUS_CODES } from '../../common/status-codes';
+import { loadMessages } from '../../utils/load-messages.util';
 import { AddSupabaseConnectionDto, AddAirtableConnectionDto } from './dto';
 
 const MESSAGES = loadMessages();

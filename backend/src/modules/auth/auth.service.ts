@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { SupabaseClient } from '@supabase/supabase-js';
-import { PrismaService } from 'prisma/prisma.service';
+import { PrismaService } from '../../../prisma/prisma.service';
 
 @Injectable()
 export class AuthService {
