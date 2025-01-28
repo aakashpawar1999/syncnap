@@ -89,8 +89,9 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.css"],
-            "scripts": []
+            "styles": ["src/styles.css", "node_modules/ngx-toastr/toastr.css"],
+            "scripts": ["node_modules/preline/preline.js"],
+            "karmaConfig": "karma.conf.js"
           }
         }
       }
