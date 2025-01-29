@@ -7,9 +7,10 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "build:ssr:dev": "ng build --configuration=development",
-    "build:ssr:prod": "ng build --configuration=production",
-    "serve:ssr": "node dist/frontend/server/server.mjs"
+    "build:ssr:dev": "yarn run prebuild && ng build --configuration=development",
+    "build:ssr:prod": "yarn run prebuild && ng build --configuration=production",
+    "serve:ssr": "node dist/frontend/server/server.mjs",
+    "prebuild": "ng test --no-watch --browsers=ChromeHeadless"
   },
   "private": true,
   "dependencies": {
