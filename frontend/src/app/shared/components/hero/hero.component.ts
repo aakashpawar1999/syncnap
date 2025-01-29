@@ -9,12 +9,12 @@ import { Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-hero',
   standalone: true,
-  imports: [CommonModule, ToastrModule],
+  imports: [CommonModule, ToastrModule, RouterModule],
   templateUrl: './hero.component.html',
   styleUrl: './hero.component.css',
 })
