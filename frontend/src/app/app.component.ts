@@ -17,7 +17,7 @@ declare global {
   styleUrl: './app.component.css',
 })
 export class AppComponent {
-  title = 'Frontend';
+  title = 'SyncNap';
 
   constructor(private router: Router) {
     afterNextRender(() => {
