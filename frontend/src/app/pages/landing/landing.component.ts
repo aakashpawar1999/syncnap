@@ -31,11 +31,10 @@ export class LandingComponent implements OnInit {
         content:
           'Simplify your workflows by connecting Supabase with Airtable in just a few clicks. Sync tables seamlessly and stay in control of your data.',
       },
-      // {
-      //   name: 'twitter:image',
-      //   content:
-      //     'https://',
-      // },
+      {
+        name: 'twitter:image',
+        content: 'https://syncnap.com/assets/logo/logo.png',
+      },
     ]);
     this.seoService.setMetaPropertyTags([
       { property: 'og:title', content: 'SyncNap' },
@@ -44,11 +43,10 @@ export class LandingComponent implements OnInit {
         content:
           'Simplify your workflows by connecting Supabase with Airtable in just a few clicks. Sync tables seamlessly and stay in control of your data.',
       },
-      // {
-      //   property: 'og:image',
-      //   content:
-      //     'https://',
-      // },
+      {
+        property: 'og:image',
+        content: 'https://syncnap.com/assets/logo/logo.png',
+      },
       { property: 'og:url', content: 'https://syncnap.com' },
     ]);
     this.seoService.setCanonicalURL('https://syncnap.com');
