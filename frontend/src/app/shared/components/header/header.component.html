@@ -14,7 +14,7 @@
       >
         <img
           src="assets/logo/logo.png"
-          alt="SyncNap"
+          alt="SyncNap Logo"
           class="w-[40px] h-[40px] rounded-md me-2"
           width="40px"
           height="40px"
@@ -27,6 +27,8 @@
         <div class="flex items-center me-2 sm:me-3">
           <button
             type="button"
+            name="Dark Mode"
+            aria-label="Dark Mode"
             class="hs-dark-mode hs-dark-mode-active:hidden inline-flex justify-center items-center gap-x-2 h-full py-2 px-3 sm:px-5 border border-gray-200 rounded-md text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
             data-hs-theme-click-value="dark"
           >
@@ -47,6 +49,8 @@
           </button>
           <button
             type="button"
+            name="Light Mode"
+            aria-label="Light Mode"
             class="hs-dark-mode hs-dark-mode-active:inline-flex hidden justify-center items-center gap-x-2 h-full py-2 px-3 sm:px-5 border border-neutral-700 bg-neutral-900 rounded-md text-sm text-white hover:bg-neutral-800 focus:outline-none focus:bg-gray-100"
             data-hs-theme-click-value="light"
           >
@@ -76,6 +80,7 @@
         </div>
         <button
           type="button"
+          name="Sign in"
           class="w-auto py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-900 bg-gray-900 text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:bg-gray-800 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
           (click)="login()"
         >
