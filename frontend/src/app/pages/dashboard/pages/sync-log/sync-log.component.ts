@@ -36,7 +36,6 @@ export class SyncLogComponent implements OnInit, OnDestroy {
           this.syncLogList = res.data;
         },
         error: (error: any) => {
-          console.log(error, 'error');
           if (error.error.statusCode === 403) {
             this.isLoadingSyncLog = false;
             this.toastr.error(
