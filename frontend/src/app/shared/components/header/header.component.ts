@@ -8,19 +8,24 @@ import {
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../shared/services/auth.service';
 import { isPlatformBrowser } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
+import { LocalStorageService } from '../../services/local-storage.service';
+import { DashboardService } from '../../../pages/dashboard/dashboard.service';
+import { ApiResponse } from '../../dto/api-response.dto';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, ToastrModule],
+  imports: [CommonModule, RouterModule, ToastrModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
+  userDetails: any = null;
+  isAuthenticated: boolean = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -28,7 +33,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private toastr: ToastrService,
-  ) {}
+    private readonly dashboardService: DashboardService,
+    private readonly localStorageService: LocalStorageService,
+  ) {
+    this.isAuthenticated = this.localStorageService.getItem('isAuthenticated');
+  }
 
   ngOnInit(): void {
     const currentUrl = this.router.url;
@@ -43,6 +52,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
       }),
     );
+
+    if (this.isAuthenticated) {
+      this.getUserDetails();
+    }
   }
 
   login() {
@@ -110,6 +123,75 @@ export class HeaderComponent implements OnInit, OnDestroy {
               );
             }
             this.router.navigate(['/']);
+          },
+          complete: () => {},
+        }),
+      );
+    }
+  }
+
+  getUserDetails() {
+    this.subscriptions.push(
+      this.dashboardService.getUserDetails().subscribe({
+        next: (res: ApiResponse) => {
+          if (res.code === 200) {
+            this.userDetails = res.data;
+          } else if (res.code === 401) {
+            this.toastr.error(res.message, 'Unauthorized Access!');
+            this.logout();
+          } else {
+            this.toastr.error(res.message, 'Error!');
+          }
+        },
+        error: (error: any) => {
+          if (error.error.statusCode === 403) {
+            this.toastr.error(
+              'Your session has expired. Please login again.',
+              'Error!',
+            );
+            this.router.navigate(['/']);
+          } else {
+            this.toastr.error(
+              Array.isArray(error.error.message) &&
+                error.error.message.length > 0
+                ? error.error.message[0]
+                : 'Unknown error occurred!',
+              'Error!',
+            );
+          }
+        },
+        complete: () => {},
+      }),
+    );
+  }
+
+  logout() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.subscriptions.push(
+        this.authService.logout().subscribe({
+          next: (res: ApiResponse) => {
+            if (res.code === 200) {
+              this.router.navigate(['/']);
+            } else {
+              this.toastr.error(res.message, 'Error!');
+            }
+          },
+          error: (error: any) => {
+            if (error.error.statusCode === 403) {
+              this.toastr.error(
+                'Your session has expired. Please login again.',
+                'Error!',
+              );
+              this.router.navigate(['/']);
+            } else {
+              this.toastr.error(
+                Array.isArray(error.error.message) &&
+                  error.error.message.length > 0
+                  ? error.error.message[0]
+                  : 'Unknown error occurred!',
+                'Error!',
+              );
+            }
           },
           complete: () => {},
         }),

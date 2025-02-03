@@ -79,6 +79,7 @@
           </button>
         </div>
         <button
+          *ngIf="!isAuthenticated || !userDetails"
           type="button"
           name="Sign in"
           class="w-auto py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-900 bg-gray-900 text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:bg-gray-800 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
@@ -110,6 +111,87 @@
           </svg>
           <span class="hidden sm:block">Sign in</span>
         </button>
+        <!-- Dropdown -->
+        <div
+          *ngIf="isAuthenticated && userDetails"
+          class="hs-dropdown [--placement:bottom-right] relative inline-flex"
+        >
+          <button
+            id="hs-dropdown-account"
+            type="button"
+            class="size-[38px] inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 focus:outline-none disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-200"
+            aria-haspopup="menu"
+            aria-expanded="false"
+            aria-label="Dropdown"
+          >
+            <img
+              class="shrink-0 size-[38px] rounded-full"
+              [src]="
+                userDetails?.avatar_url ||
+                'https://ui-avatars.com/api/?name=' + userDetails?.full_name
+              "
+              alt="Avatar"
+            />
+          </button>
+          <div
+            class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-60 bg-white shadow-md rounded-lg mt-2 dark:bg-neutral-800 dark:border dark:border-neutral-700 dark:divide-neutral-700 after:h-4 after:absolute after:-bottom-4 after:start-0 after:w-full before:h-4 before:absolute before:-top-4 before:start-0 before:w-full z-[100]"
+            role="menu"
+            aria-orientation="vertical"
+            aria-labelledby="hs-dropdown-account"
+          >
+            <div class="py-3 px-5 bg-gray-100 rounded-t-lg dark:bg-neutral-700">
+              <p class="text-sm text-gray-500 dark:text-neutral-500">
+                Signed in as
+              </p>
+              <p
+                class="text-sm font-medium text-gray-800 dark:text-neutral-200"
+              >
+                {{ userDetails?.email }}
+              </p>
+            </div>
+            <div class="p-1.5 space-y-0.5">
+              <a
+                class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
+                href="javascript:void(0)"
+                routerLink="/dashboard"
+              >
+                <svg
+                  class="shrink-0 size-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24px"
+                  viewBox="0 -960 960 960"
+                  width="24px"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"
+                  />
+                </svg>
+                Dashboard
+              </a>
+              <a
+                class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
+                href="javascript:void(0)"
+                (click)="logout()"
+              >
+                <svg
+                  class="shrink-0 size-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24px"
+                  viewBox="0 -960 960 960"
+                  width="24px"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"
+                  />
+                </svg>
+                Logout
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- End Dropdown -->
       </div>
       <!-- End Login Button -->
     </div>
