@@ -5,6 +5,7 @@ import { tap } from 'rxjs/operators';
 import { isPlatformServer } from '@angular/common';
 import { ApiResponse } from '../dto/index';
 import { environment } from '../../../environments/environment';
+import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +19,7 @@ export class AuthService {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private http: HttpClient,
+    private localStorageService: LocalStorageService,
   ) {
     if (isPlatformServer(this.platformId)) {
       this.restoreAuthenticationState();
@@ -52,13 +54,23 @@ export class AuthService {
   verifyLogin(code: string): Observable<any> {
     return this.http
       .get<ApiResponse>(this.resolveApiUrl('v1', `auth/callback?code=${code}`))
-      .pipe(tap(() => this.authenticated.next(true)));
+      .pipe(
+        tap(() => {
+          this.authenticated.next(true);
+          this.localStorageService.setItem('isAuthenticated', true);
+        }),
+      );
   }
 
   logout(): Observable<any> {
     const reqJSON = {};
     return this.http
       .get<ApiResponse>(this.resolveApiUrl('v1', 'auth/logout'))
-      .pipe(tap(() => this.authenticated.next(false)));
+      .pipe(
+        tap(() => {
+          this.authenticated.next(false);
+          this.localStorageService.setItem('isAuthenticated', false);
+        }),
+      );
   }
 }
